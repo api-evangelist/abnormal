@@ -1,23 +1,137 @@
 aid: abnormal
 name: Abnormal AI
-description: 'Abnormal AI is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Abnormal AI (formerly Abnormal Security) is a San Francisco based cloud email
+  and human-behavior security company whose behavioral AI platform protects Microsoft 365 and
+  Google Workspace against phishing, business email compromise, vendor fraud, account takeover
+  and misdirected email. The platform is API-first: it integrates with Microsoft and Google
+  over their APIs rather than by rewriting MX records, and every capability in the Abnormal
+  Portal — threats, cases, AI Security Mailbox, employee and vendor insights, audit logs,
+  RBAC roles and users, security posture management and dashboard aggregations — is also
+  reachable through the Abnormal Security Client API, a bearer-token REST API published as
+  OpenAPI 3.0.3 on SwaggerHub with separate US and EU production hosts. Abnormal also streams
+  the same event data to SIEM and SOAR platforms over near-real-time webhooks.'
+image: https://www.abnormal.ai/og/home.png
 url: https://raw.githubusercontent.com/api-evangelist/abnormal/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-02'
 modified: '2026-08-02'
 tags:
 - Company
-apis: []
+- Security
+- Email Security
+- Cybersecurity
+- Threat Intelligence
+- Artificial Intelligence
+- SOAR
+- Identity
+- Compliance
+apis:
+- aid: abnormal:client-api
+  name: Abnormal Security Client API
+  description: 'REST API for managing the security threats, cases and posture that Abnormal AI
+    detects for an organization. Covers threats and threat actions, Abnormal cases and case
+    analysis, message detail and attachment download, the AI Security Mailbox (formerly Abuse
+    Mailbox), employee identity and login insights, VendorBase vendors and vendor cases,
+    Detection 360 reports, search and remediation, audit logs, RBAC roles and users, SOAR
+    tokens, security settings, URL-rewrite click events, Security Posture Management (SPM v2)
+    and the dashboard aggregation metrics. Bearer-token authenticated, with IP allowlisting
+    and a Mock-Data test mode.'
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Threats
+  - Cases
+  - Email Security
+  - Audit Logs
+  - Vendors
+  - Security Posture Management
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-client-api-openapi-original.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: TrustCenter
+  url: security/abnormal-trust-center.yml
+- type: DomainSecurity
+  url: security/abnormal-domain-security.yml
 - type: Website
-  url: https://www.hiive.com/securities/abnormal-stock
+  url: https://abnormal.ai/
+- type: DeveloperPortal
+  url: https://portal.abnormalsecurity.com/home/settings/integrations
+- type: Documentation
+  url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- type: APIReference
+  url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- type: GettingStarted
+  url: https://abnormalsecurity.my.site.com/knowledgebase/s/article/Abnormal-REST-API-Integration
+- type: Support
+  url: https://abnormal.ai/contact
+- type: HelpCenter
+  url: https://abnormalsecurity.my.site.com/knowledgebase/s/
+- type: Blog
+  url: https://abnormal.ai/blog
+- type: GitHubOrganization
+  url: https://github.com/abnormal-ai
+- type: SignUp
+  url: https://portal.abnormalsecurity.com/
+- type: TermsOfService
+  url: https://abnormal.ai/legal/terms-of-use
+- type: PrivacyPolicy
+  url: https://abnormal.ai/legal/privacy
+- type: Integrations
+  url: https://abnormal.ai/resources/abnormal-technology-integrations
+- type: Subprocessors
+  url: https://abnormal.ai/legal/subprocessors
+- type: Patents
+  url: https://abnormal.ai/legal/patents
+- type: Authentication
+  url: authentication/abnormal-authentication.yml
+- type: VulnerabilityDisclosure
+  url: security/abnormal-vulnerability-disclosure.yml
+- type: Security
+  url: https://abnormal.ai/legal/disclosure
+- type: Compliance
+  url: https://security.abnormal.ai/
+- type: Conformance
+  url: conformance/abnormal-conformance.yml
+- type: Conventions
+  url: conventions/abnormal-conventions.yml
+- type: ErrorCatalog
+  url: errors/abnormal-problem-types.yml
+- type: DataModel
+  url: data-model/abnormal-data-model.yml
+- type: Lifecycle
+  url: lifecycle/abnormal-lifecycle.yml
+- type: StatusPage
+  url: https://status.abnormalsecurity.com/
+- type: ChangeLog
+  url: changelog/abnormal-changelog.yml
+- type: Sandbox
+  url: sandbox/abnormal-sandbox.yml
+- type: Webhooks
+  url: asyncapi/abnormal-webhooks.yml
+- type: Packages
+  url: packages/abnormal-packages.yml
+- type: WellKnown
+  url: well-known/abnormal-well-known.yml
+- type: LLMsTxt
+  url: llms/abnormal-llms.txt
+- type: Overlay
+  url: overlays/abnormal-client-api-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-08-02'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v1

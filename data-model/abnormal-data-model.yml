@@ -1,0 +1,134 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/abnormal-client-api-openapi-original.yml
+description: >-
+  Entity-relationship graph derived from the Abnormal Security Client API OpenAPI 3.0.3
+  (187 component schemas, 64 paths, 67 operations). Relationships are read from schema $ref
+  links and from id-reference fields (threatId, abxMessageId, campaignId, vendorCaseId,
+  vendorDomain, posture_id, case_id) that cross entity boundaries. Abnormal identifiers are
+  opaque UUID-style strings with no type prefix, so entity type is carried by the field name
+  rather than by the id value.
+identifiers:
+  style: opaque
+  note: >-
+    No id prefixes. Threats are addressed by threatId (a UUID); individual emails inside a
+    threat carry both a numeric abxMessageId and a string abxMessageIdStr; the portal deep
+    link for a message is returned as abxPortalUrl.
+entities:
+- name: Threat
+  description: A detected attack campaign; the top-level unit of the Abnormal Threat Log.
+  id_field: threatId
+  schemas: [Threat, ThreatDetails, ThreatMessage, ThreatAttachments, ThreatLinks]
+  operations: [v1_threats_retrieve, v1_threats_retrieve_2, v1_threats_create,
+    v1_threats_actions_retrieve, v1_threats_attachments_retrieve, v1_threats_links_retrieve,
+    v1_threats_export_csv_retrieve]
+- name: ThreatMessage
+  description: One email belonging to a threat, with sender, recipient and remediation status.
+  id_field: abxMessageId
+  schemas: [ThreatMessage]
+  operations: [v1_threats_retrieve_2, v1_messages_download_retrieve,
+    v1_messages_remediation_history_retrieve, v1_messages_attachment_retrieve,
+    v1_messages_attachment_download_retrieve]
+- name: Case
+  description: An Abnormal case — a correlated account-takeover or compromise investigation.
+  id_field: case_id
+  schemas: [CaseAnalysis, CaseInsights, CaseEvent, CaseStatusEnum]
+  operations: [v1_cases_retrieve, v1_cases_retrieve_2, v1_cases_create,
+    v1_cases_actions_retrieve, v1_cases_analysis_retrieve]
+- name: AbuseCampaign
+  description: An AI Security Mailbox (formerly Abuse Mailbox) user-reported campaign.
+  id_field: campaignId
+  schemas: [AbuseCampaign, AbuseCampaignDetails, AbuseMailboxUnanalyzedMessage]
+  operations: [v1_abusecampaigns_retrieve, v1_abusecampaigns_retrieve_2,
+    v1_abuse_mailbox_not_analyzed_retrieve]
+- name: Vendor
+  description: A VendorBase vendor domain tracked for supply-chain compromise.
+  id_field: vendorDomain
+  schemas: [Vendors, VendorDetail, VendorActivity, VendorFederatedEventTimeline,
+    VendorInvestigationEventTimeline]
+  operations: [v1_vendors_retrieve, v1_vendors_details_retrieve, v1_vendors_activity_retrieve]
+- name: VendorCase
+  description: An investigation opened against a compromised vendor.
+  id_field: vendorCaseId
+  schemas: [VendorCases, VendorCaseDetails, VendorCaseInsights, VendorCaseTimeline]
+  operations: [v1_vendor_cases_retrieve, v1_vendor_cases_retrieve_2]
+- name: Employee
+  description: An employee identity, with login history and behavioural genome attributes.
+  id_field: email_address
+  schemas: [EmployeeDetails, EmployeeIdentityDetails, EmployeeGenomeDetails,
+    EmployeeGenomeCategory]
+  operations: [v1_employee_retrieve, v1_employee_identity_retrieve, v1_employee_logins_retrieve]
+- name: Detection360Case
+  description: A Detection 360 false-positive / false-negative report submitted to Abnormal.
+  id_field: id
+  schemas: [Detection360Case, Detection360Report, Detection360ReportRequest,
+    Detection360CaseStatusEnum]
+  operations: [v1_detection360_reports_retrieve, v1_detection360_reports_create]
+- name: Posture
+  description: A Security Posture Management (SPM v2) posture check against a platform space.
+  id_field: posture_id
+  schemas: [PostureItem, PostureListItem, PostureDetail, PostureArea, PostureHighlight,
+    PostureStats, PostureTimelineResponse, PostureCatalogResponse]
+  operations: [v1_spm_v2_posture_catalog_retrieve, v1_spm_v2_postures_retrieve,
+    v1_spm_v2_postures_timeline_retrieve, v1_spm_v2_postures_query_create,
+    v1_spm_v2_reports_summary_retrieve, v1_spm_v2_workflow_logs_raw_json_retrieve]
+- name: Resource
+  description: An RBAC resource scope that permissions are granted against.
+  id_field: resourceId
+  schemas: [Resource, ResourcePermissionSwagger]
+  operations: [v1_resources_retrieve, v1_resources_retrieve_2, v1_resources_create_create,
+    v1_resources_update_partial_update, v1_resources_actions_create]
+- name: Role
+  description: An RBAC role with a policy set.
+  id_field: id
+  schemas: [RoleSwagger, RoleListResponse]
+  operations: [v1_roles_retrieve]
+- name: PortalUser
+  description: A user of the Abnormal Portal, with role and resource permissions.
+  id_field: user_id
+  schemas: [UserSwagger, UserListResponse, User]
+  operations: [v1_users_retrieve]
+- name: AuditLog
+  description: A portal audit event.
+  id_field: null
+  schemas: [AuditLog, AuditLogActionDetails, AuditLogUser, AuditLogResponse]
+  operations: [v1_auditlogs_retrieve]
+- name: SearchActivity
+  description: An asynchronous search-and-remediate activity over the message corpus.
+  id_field: activity_log_id
+  schemas: []
+  operations: [v1_search_create, v1_search_activities_retrieve,
+    v1_search_activities_status_retrieve, v1_search_remediate_create,
+    v1_search_messages_eml_retrieve, v1_search_messages_attachments_download_retrieve]
+relationships:
+- {from: Threat, to: ThreatMessage, kind: has_many, via: messages}
+- {from: ThreatMessage, to: Threat, kind: belongs_to, via: threatId}
+- {from: Threat, to: ThreatAttachments, kind: has_many, via: attachments}
+- {from: Threat, to: ThreatLinks, kind: has_many, via: links}
+- {from: ThreatAttachments, to: ThreatMessage, kind: belongs_to, via: abxMessageId}
+- {from: ThreatLinks, to: ThreatMessage, kind: belongs_to, via: abxMessageId}
+- {from: Case, to: CaseAnalysis, kind: has_one, via: analysis}
+- {from: CaseAnalysis, to: CaseInsights, kind: has_many, via: insights}
+- {from: CaseAnalysis, to: CaseEvent, kind: has_many, via: eventTimeline}
+- {from: AbuseCampaign, to: AbuseCampaignDetails, kind: has_one, via: campaignId}
+- {from: AbuseCampaignDetails, to: ThreatMessage, kind: belongs_to, via: messageId}
+- {from: Vendor, to: VendorDetail, kind: has_one, via: vendorDomain}
+- {from: Vendor, to: VendorActivity, kind: has_one, via: vendorDomain}
+- {from: VendorCase, to: Vendor, kind: belongs_to, via: vendorDomain}
+- {from: VendorCase, to: VendorCaseInsights, kind: has_many, via: insights}
+- {from: VendorCase, to: VendorCaseTimeline, kind: has_many, via: timeline}
+- {from: VendorCaseTimeline, to: Threat, kind: belongs_to, via: threatId}
+- {from: VendorInvestigationEventTimeline, to: Threat, kind: belongs_to, via: threatId}
+- {from: Employee, to: EmployeeIdentityDetails, kind: has_one, via: email_address}
+- {from: Employee, to: EmployeeGenomeDetails, kind: has_many, via: data}
+- {from: EmployeeDetails, to: Employee, kind: belongs_to, via: manager}
+- {from: Detection360Case, to: ThreatMessage, kind: has_many, via: messages}
+- {from: Detection360Case, to: Detection360Report, kind: has_one, via: report}
+- {from: Posture, to: PostureArea, kind: belongs_to, via: posture_area}
+- {from: PostureHighlight, to: Posture, kind: belongs_to, via: posture_id}
+- {from: PortalUser, to: Role, kind: has_one, via: role}
+- {from: PortalUser, to: Resource, kind: has_many, via: resource_permissions}
+- {from: ResourcePermissionSwagger, to: Resource, kind: belongs_to, via: resource}
+- {from: AuditLog, to: PortalUser, kind: belongs_to, via: user}
+- {from: AuditLogActionDetails, to: ThreatMessage, kind: belongs_to, via: messageId}
+- {from: MessageToRemediate, to: ThreatMessage, kind: belongs_to, via: abnormal_message_id}

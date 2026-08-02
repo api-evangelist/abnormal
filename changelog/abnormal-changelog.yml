@@ -1,0 +1,56 @@
+generated: '2026-08-02'
+method: searched
+source: https://abnormal.ai/platform/whats-new
+spec_registry_source: https://api.swaggerhub.com/apis/abnormal-security/abx
+description: >-
+  Abnormal AI publishes a dated product changelog as "What's New" at
+  abnormal.ai/platform/whats-new, tagged by release type (Functional Release, Enhancement).
+  It is a platform changelog, not an API changelog — REST API changes are not called out there.
+  The machine-readable trail for the API itself is the published version history of the
+  Abnormal Security Client API on SwaggerHub, captured separately below.
+product_changelog:
+  url: https://abnormal.ai/platform/whats-new
+  scheme: dated entries, newest first, paginated
+  entry_types: [Functional Release, Enhancement]
+  cadence: >-
+    Weekly detection enhancements plus functional releases as shipped; roughly two to four
+    entries per week during 2026.
+  recent_entries:
+  - {date: '2026-07-31', type: Enhancement, title: Weekly Abnormal Detection Enhancements}
+  - {date: '2026-07-29', type: Functional Release, title: Outbound Email Protection Settings}
+  - {date: '2026-07-24', type: Enhancement, title: Weekly Abnormal Detection Enhancements}
+  - {date: '2026-07-17', type: Enhancement, title: Weekly Abnormal Detection Enhancements}
+  - {date: '2026-07-17', type: Functional Release, title: Suppressing AISM Auto-Responses for 'Not Junk' Reports}
+  - {date: '2026-07-15', type: Functional Release, title: Get Board-Ready Answers with Your AI Data Analyst (AIDA)}
+  - {date: '2026-07-10', type: Enhancement, title: Weekly Abnormal Detection Enhancements}
+  - {date: '2026-07-06', type: Functional Release, title: Safelisting for Teams Messaging Security}
+  - {date: '2026-07-02', type: Functional Release, title: Weekly Abnormal Detection Enhancements}
+  - {date: '2026-07-02', type: Functional Release, title: Microsoft Sentinel Integration Replacement}
+  - {date: '2026-06-30', type: Functional Release, title: Auto-Forwarding & Google Groups Protection for Google Workspace}
+  - {date: '2026-06-30', type: Functional Release, title: Pre-Delivery Mail Flow Dashboard}
+  - date: '2026-04-23'
+    type: Functional Release
+    title: Stream Abnormal Event Data in Near-Real Time with Webhooks
+    url: https://abnormal.ai/products/whats-new/stream-abnormal-event-data-in-near-real-time-with-webhooks
+    note: >-
+      The one entry in the observed window that is squarely an integration-surface change —
+      it introduced Webhook as a SIEM integration type. See asyncapi/abnormal-webhooks.yml.
+api_spec_history:
+  registry: SwaggerHub
+  api: abnormal-security/abx
+  uri_version: v1
+  current: 1.4.3
+  note: >-
+    Dates below are the SwaggerHub publication and last-modified timestamps for each published
+    revision, not a provider-authored release note. Abnormal publishes no per-version diff, so
+    breaking-vs-additive cannot be asserted from the registry alone.
+  versions:
+  - {version: 1.4.0, published: '2022-10-07', last_modified: '2023-02-21', state: published}
+  - {version: 1.4.1, published: '2023-05-23', last_modified: '2023-05-23', state: published}
+  - {version: 1.4.2, published: '2023-07-13', last_modified: '2024-01-25', state: published}
+  - {version: 1.4.3, published: '2024-04-26', last_modified: '2026-05-28', state: published, default: true}
+  observation: >-
+    1.4.3 has been the default since April 2024 and is still being edited in place — the
+    2026-05-28 modification is what added the Security Posture Management (SPM v2),
+    security-settings and URL-rewrite click-event surfaces. Consumers pinning "1.4.3" are
+    therefore pinning a moving document.

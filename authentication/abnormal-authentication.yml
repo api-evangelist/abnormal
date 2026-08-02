@@ -1,0 +1,64 @@
+generated: '2026-08-02'
+method: searched
+source: openapi/abnormal-client-api-openapi-original.yml
+docs: https://abnormalsecurity.my.site.com/knowledgebase/s/article/Abnormal-REST-API-Integration
+token_issuance: https://portal.abnormalsecurity.com/home/settings/integrations
+summary:
+  types:
+  - http
+  http_schemes:
+  - bearer
+  api_key_in: []
+  oauth2_flows: []
+  scopes: none
+  note: >-
+    Single global security requirement — every one of the 67 operations is protected by the
+    same bearer scheme. There is no OAuth, no OIDC, no API-key-in-query, no mutual TLS and no
+    scope model, so scopes/ is intentionally absent for this provider.
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  in: header
+  header: Authorization
+  format: 'Authorization: Bearer <ACCESS_TOKEN>'
+  description: >-
+    A long-lived organization API token generated in the Abnormal Portal under
+    Settings > Integrations > Abnormal REST API. The token grants access to the calling
+    organization's threat, case and posture data; Abnormal instructs customers to store it in
+    an encrypted vault and to contact their account manager if it is compromised.
+  scopes: []
+  sources:
+  - openapi/abnormal-client-api-openapi-original.yml
+  applied: global (root-level security requirement)
+  operations_protected: 67
+additional_controls:
+- name: source IP allowlist
+  required: false
+  configured_at: https://portal.abnormalsecurity.com/home/settings/integrations
+  accepts: [IPv4 address, IPv6 address, CIDR block]
+  failure_mode: >-
+    HTTP 403 (ForbiddenError — "Access to the resource is forbidden (e.g. IP not in
+    allowlist)") even when the bearer token is valid. This is the most common cause of 403 on
+    this API and should not be mistaken for a credential problem.
+  description: >-
+    Abnormal presents allowlisting as the second layer of API security, so that a compromised
+    token alone cannot reach the tenant's SOAR data from an unauthorized network.
+token_management:
+  rotation: manual, in the Abnormal Portal
+  expiry: not published
+  introspection_api: v1_soar_tokens_retrieve (GET /soar/tokens)
+  note: >-
+    The API can enumerate the tenant's SOAR API tokens, but issuance and revocation are
+    Portal-only operations — there is no programmatic token mint or revoke.
+regions:
+  note: >-
+    The token is bound to the tenant's region. US tenants authenticate against
+    https://api.abnormalplatform.com/v1; EU tenants must use
+    https://eu.rest.abnormalsecurity.com/v1.
+verification:
+  test_call: 'curl -H "Authorization: Bearer <ACCESS_TOKEN>" https://api.abnormalplatform.com/v1/threats'
+  mock_call: 'curl -H "Authorization: Bearer <ACCESS_TOKEN>" -H "Mock-Data: True" https://api.abnormalplatform.com/v1/threats'
+failure_codes:
+  '401': Access token is missing or invalid (UnauthorizedError) — declared on all 67 operations.
+  '403': Token valid but request forbidden, typically source IP not allowlisted (ForbiddenError) — declared on 66 operations.

@@ -1,0 +1,115 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Abnormal Security Client API
+  version: 1.0.0
+extends: openapi/abnormal-client-api-openapi-original.yml
+x-generated: '2026-08-02'
+x-method: generated
+x-source: >-
+  Enhancements derived from the harvested spec plus the artifacts in this repo. Applied as an
+  OpenAPI Overlay 1.0.0 document so the verbatim spec harvested from SwaggerHub is never
+  mutated.
+actions:
+  - target: $.info
+    description: Record provenance and the API Evangelist artifact set for this API.
+    update:
+      x-apievangelist-provenance:
+        harvested_from: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+        harvested: '2026-08-02'
+        registry: SwaggerHub
+        publisher: abnormal-security
+      x-apievangelist-artifacts:
+        authentication: authentication/abnormal-authentication.yml
+        conventions: conventions/abnormal-conventions.yml
+        errors: errors/abnormal-problem-types.yml
+        lifecycle: lifecycle/abnormal-lifecycle.yml
+        sandbox: sandbox/abnormal-sandbox.yml
+        data_model: data-model/abnormal-data-model.yml
+        conformance: conformance/abnormal-conformance.yml
+        webhooks: asyncapi/abnormal-webhooks.yml
+        skills: skills/_index.yml
+        security: security/abnormal-vulnerability-disclosure.yml
+        trust_center: security/abnormal-trust-center.yml
+
+  - target: $.info
+    description: >-
+      Add the machine-readable contact and terms links the spec omits, sourced from Abnormal's
+      published legal and support pages.
+    update:
+      termsOfService: https://abnormal.ai/legal/terms-of-use
+      x-apievangelist-support:
+        knowledge_base: https://abnormalsecurity.my.site.com/knowledgebase/s/
+        contact_form: https://abnormal.ai/contact
+        status_page: https://status.abnormalsecurity.com/
+
+  - target: $.info
+    description: Record the cross-cutting runtime semantics agents need but the spec does not state.
+    update:
+      x-apievangelist-conventions:
+        pagination:
+          style: page-number
+          request: [pageSize, pageNumber]
+          response: [pageNumber, nextPageNumber]
+          loop_rule: follow nextPageNumber until absent or null
+        idempotency:
+          supported: false
+          note: no Idempotency-Key contract; reconcile via the action-status operations before retrying a write
+        rate_limiting:
+          signal: HTTP 429
+          headers_published: false
+          model: concurrency per resource type per token
+        error_envelope:
+          media_type: application/json
+          shape: '{"error": "<message>"}'
+          rfc9457: false
+        test_mode:
+          header: 'Mock-Data: True'
+        async:
+          pattern: 202-accepted-then-poll
+          poll_with: v1_search_activities_status_retrieve
+
+  - target: $.servers
+    description: Label the two production regions so a client can bind the correct host per tenant.
+    update:
+      - url: https://api.abnormalplatform.com/v1
+        description: Production Server for managing threats
+        x-region: US
+        x-default: true
+      - url: https://eu.rest.abnormalsecurity.com/v1
+        description: EU Production Server for managing threats.
+        x-region: EU
+
+  - target: $.components.securitySchemes.BearerAuth
+    description: >-
+      Document how the bearer token is obtained and the second control (IP allowlisting) that
+      gates it, which the bare http/bearer scheme cannot express.
+    update:
+      description: >-
+        Long-lived organization API token issued in the Abnormal Portal under
+        Settings > Integrations > Abnormal REST API. Sent as `Authorization: Bearer <token>`.
+        Requests are additionally rejected with 403 when the source IP is not in the
+        organization's Portal-configured allowlist.
+      x-token-issuance: https://portal.abnormalsecurity.com/home/settings/integrations
+      x-token-rotation: manual, in the Portal
+      x-scopes: none
+      x-additional-control: source-ip allowlist (IPv4/IPv6 addresses or CIDR blocks)
+
+  - target: $.paths['/threats'].get
+    description: Make the paging contract explicit on the highest-traffic collection.
+    update:
+      x-apievangelist-pagination:
+        note: >-
+          pageNumber and nextPageNumber are only present in the response when a filter query
+          parameter is supplied. Without a filter the response is unpaged.
+
+  - target: $
+    description: Declare the webhook event surface, which is documented only outside the spec.
+    update:
+      x-apievangelist-webhooks:
+        published: true
+        announced: '2026-04-23'
+        source: https://abnormal.ai/products/whats-new/stream-abnormal-event-data-in-near-real-time-with-webhooks
+        asyncapi: false
+        events: [Threats, Vendor Cases, AI Security Mailbox, Audit Logs, Account Takeover,
+          Security Posture Management, URL Rewriting Clicked]
+        auth_methods: [API Key, Basic Authentication, Bearer Token, Custom Header]

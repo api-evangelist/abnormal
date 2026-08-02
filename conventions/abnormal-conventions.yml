@@ -1,0 +1,119 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/abnormal-client-api-openapi-original.yml
+docs: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+description: >-
+  Cross-cutting request/response semantics for the Abnormal Security Client API, derived from
+  the OpenAPI 3.0.3 document and from the integration guidance Abnormal publishes in the spec's
+  own info.description (token issuance, IP allowlisting, Mock-Data test mode, EU host).
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <ACCESS_TOKEN>'
+  scheme: BearerAuth (http/bearer)
+  issuance: >-
+    Tokens are generated per organization in the Abnormal Portal at
+    https://portal.abnormalsecurity.com/home/settings/integrations under "Abnormal REST API".
+  scopes: none
+  additional_control:
+    ip_allowlisting: >-
+      A second layer of control configured in the Portal. Requests from IPs outside the
+      organization's allowlist (IPv4/IPv6 addresses or CIDR blocks) are rejected with 403,
+      even with a valid token.
+  token_management_api: v1_soar_tokens_retrieve (GET /soar/tokens)
+  see: authentication/abnormal-authentication.yml
+regions:
+  style: separate-host-per-region
+  hosts:
+  - {region: US, base_url: 'https://api.abnormalplatform.com/v1', default: true}
+  - {region: EU, base_url: 'https://eu.rest.abnormalsecurity.com/v1', default: false}
+  note: >-
+    EU customers must call the EU host. There is no automatic redirect between the two; the
+    token is bound to the tenant's region.
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.4.3
+  spec_registry: https://app.swaggerhub.com/apis/abnormal-security/abx
+  note: >-
+    The URI path version (v1) has not changed across published spec revisions; the spec's own
+    semantic version (1.4.0 -> 1.4.3) is the version that moves. See
+    changelog/abnormal-changelog.yml.
+pagination:
+  style: page-number
+  request_params:
+  - {name: pageSize, in: query, description: Number of records per page}
+  - {name: pageNumber, in: query, description: 1-based page index to retrieve}
+  - {name: limit, in: query, description: Used instead of pageSize on a small number of SPM v2 endpoints}
+  - {name: offset, in: query, description: Used instead of pageNumber on a small number of SPM v2 endpoints}
+  response_fields:
+  - {name: pageNumber, description: The page that was returned}
+  - {name: nextPageNumber, description: The next page to request; absent or null on the last page}
+  loop_rule: >-
+    Follow nextPageNumber until it is absent or null. On the threats and audit-log endpoints
+    the pageNumber/nextPageNumber fields are only present when a filter query parameter is
+    supplied.
+filtering:
+  param: filter
+  style: >-
+    An OData-like expression string, most commonly a receivedTime or lastModifiedTime range
+    (for example: receivedTime gte 2026-01-01T00:00:00Z lte 2026-01-31T00:00:00Z).
+  date_params: [start, end, from_date, to_date]
+  constraint: >-
+    Endpoints reject a date range wider than their allowed window with 400 (see the
+    InvalidDateError named response), and reject a malformed filter with 404 (NotFoundError).
+  other_params: [source, recipient, sender, subject, attackType, action, status, reporter]
+idempotency:
+  supported: false
+  note: >-
+    The Abnormal Security Client API documents no idempotency key. No Idempotency-Key header or
+    parameter appears anywhere in the OpenAPI, and the docs describe no retry-deduplication
+    contract. Write operations (threat actions, case actions, Detection 360 report submission,
+    search remediation, resource create/update) are therefore not safe to blindly retry;
+    reconcile with the corresponding read/action-status operation
+    (v1_threats_actions_retrieve, v1_cases_actions_retrieve,
+    v1_search_activities_status_retrieve) before resubmitting.
+async_operations:
+  pattern: 202-accepted-then-poll
+  note: >-
+    Five operations return 202 Accepted rather than a result body — search and remediation are
+    asynchronous. Submit with v1_search_create or v1_search_remediate_create, then poll
+    v1_search_activities_status_retrieve with the returned activity_log_id.
+rate_limiting:
+  documented_in_spec: true
+  signal: HTTP 429
+  spec_description: >-
+    "Request count exceeds allowed number of concurrent requests for this resource type"
+    (TooManyRequestsError) / "Rate limit exceeded, please try again later".
+  response_headers_documented: false
+  operations_declaring_429: 61
+  guidance: >-
+    The limit is expressed by Abnormal as concurrency per resource type per token rather than
+    as a published requests-per-minute quota, and no Retry-After or X-RateLimit-* header is
+    declared in the spec. Serialize paging loops and apply exponential backoff on 429.
+error_envelope:
+  media_type: application/json
+  shape: '{"error": "<message>"}'
+  rfc9457: false
+  see: errors/abnormal-problem-types.yml
+request_tracing:
+  request_id_header: null
+  note: No correlation/request-id header is documented in the spec.
+test_mode:
+  header: 'Mock-Data: True'
+  applies_to_operations: 36
+  see: sandbox/abnormal-sandbox.yml
+content_types:
+  request: application/json
+  response: [application/json, text/csv, application/octet-stream, message/rfc822]
+  note: >-
+    Threat export returns text/csv; message and attachment downloads return
+    application/octet-stream; raw email download returns message/rfc822.
+events:
+  webhooks: true
+  see: asyncapi/abnormal-webhooks.yml
+related:
+  authentication: authentication/abnormal-authentication.yml
+  errors: errors/abnormal-problem-types.yml
+  lifecycle: lifecycle/abnormal-lifecycle.yml
+  sandbox: sandbox/abnormal-sandbox.yml
+  data_model: data-model/abnormal-data-model.yml

@@ -1,0 +1,176 @@
+generated: '2026-08-02'
+method: derived
+source: openapi/abnormal-client-api-openapi-original.yml
+format: json-error-object
+envelope:
+  media_type: application/json
+  shape: '{"error": "<message>"}'
+  schemas:
+  - Error
+  - BadRequestError
+  - NotFoundError
+  note: Abnormal does not use RFC 9457 application/problem+json. Error responses carry a flat JSON object
+    with a single "error" string; several 4xx responses in the spec are declared with a description only
+    and no schema.
+named_responses:
+- name: ActionDoesNotExistError
+  description: Action does not exist
+- name: CaseDoesNotExistError
+  description: Abnormal Case does not exist
+- name: ForbiddenError
+  description: Access to the resource is forbidden (e.g. IP not in allowlist)
+- name: InvalidDateError
+  description: A date provided is in the wrong format or the date range is wider than the allowed range
+    for this endpoint
+- name: NotFoundError
+  description: Invalid user input when using the filter query parameter. Will return various error messages
+- name: ThreatDoesNotExistError
+  description: Threat does not exist
+- name: TooManyRequestsError
+  description: Request count exceeds allowed number of concurrent requests for this resource type
+- name: UnauthorizedError
+  description: Access token is missing or invalid
+problems:
+- status: 400
+  title: Bad request
+  spec_descriptions:
+  - Bad Request
+  - Invalid request parameters
+  - Invalid activity_log_id parameter
+  - Bad request - invalid message ID format
+  - 'Invalid request. Common causes: missing required fields (`search_filters` when `remediate_all=true`,
+    `messages` when `remediate_all=false`, `target_folder` when `action=move_to_inbox`), incompatible
+    action/reason combination, `quarantine_release` reason with non-quarantine source, or invalid time
+    range.'
+  - Bad Request - Invalid query parameters
+  operation_count: 19
+  media_types:
+  - application/json
+  remediation: Correct the request payload or the filter query parameter and retry.
+  example_operations:
+  - v1_abuse_mailbox_not_analyzed_retrieve
+  - v1_resources_actions_create
+  - v1_resources_create_create
+  - v1_resources_retrieve
+  - v1_resources_update_partial_update
+- status: 401
+  title: Unauthorized
+  spec_descriptions:
+  - Authentication credentials were missing or invalid
+  - Authentication failed (invalid bearer token) or Authorization failed (requested tenant_ids not authorized
+    by bearer token)
+  - Authentication failed (invalid bearer token) or the activity does not belong to any tenant authorized
+    by your token
+  - Unauthorized - invalid or expired token
+  - Unauthorized
+  operation_count: 67
+  media_types:
+  - application/octet-stream
+  - message/rfc822
+  - text/csv
+  remediation: 'Supply a valid Abnormal API token in the Authorization: Bearer header. Tokens are issued
+    in the Abnormal Portal under Settings > Integrations > Abnormal REST API.'
+  example_operations:
+  - v1_abuse_mailbox_not_analyzed_retrieve
+  - v1_abusecampaigns_retrieve
+  - v1_abusecampaigns_retrieve_2
+  - v1_aggregations_attack_frequency_retrieve
+  - v1_aggregations_attack_stopped_retrieve
+- status: 403
+  title: Forbidden
+  spec_descriptions:
+  - The request was valid but the server is refusing to respond to it
+  - API not enabled for this customer
+  - Forbidden - Insufficient permissions
+  - Forbidden - Either insufficient permissions or feature not enabled for account
+  - Forbidden - API not enabled or unauthorized tenant access
+  operation_count: 66
+  media_types:
+  - application/octet-stream
+  - message/rfc822
+  - text/csv
+  remediation: The token is valid but the call is not permitted. The most common cause is that the calling
+    IP is not in the organization IP allowlist configured in the Abnormal Portal.
+  example_operations:
+  - v1_abuse_mailbox_not_analyzed_retrieve
+  - v1_abusecampaigns_retrieve
+  - v1_abusecampaigns_retrieve_2
+  - v1_aggregations_attack_frequency_retrieve
+  - v1_aggregations_attack_stopped_retrieve
+- status: 404
+  title: Not found
+  spec_descriptions:
+  - Activity not found
+  - Not found - message does not exist or EML not available
+  - Attachment not found
+  operation_count: 57
+  media_types:
+  - application/octet-stream
+  - message/rfc822
+  - text/csv
+  remediation: Verify the resource identifier (threat_id, case_id, message_id, resource_id, posture_id)
+    and that the resource belongs to the calling organization.
+  example_operations:
+  - v1_abusecampaigns_retrieve
+  - v1_abusecampaigns_retrieve_2
+  - v1_aggregations_attack_frequency_retrieve
+  - v1_aggregations_attack_stopped_retrieve
+  - v1_aggregations_attack_strategy_breakdown_retrieve
+- status: 409
+  title: Conflict
+  spec_descriptions:
+  - Concurrent remediation limit exceeded. Retry after the in-progress operation completes.
+  operation_count: 1
+  media_types:
+  - application/json
+  remediation: The resource already exists or is in a conflicting state; re-read it before retrying.
+  example_operations:
+  - v1_search_remediate_create
+- status: 429
+  title: Too many requests
+  spec_descriptions:
+  - Rate limit exceeded, please try again later
+  operation_count: 61
+  media_types:
+  - application/octet-stream
+  - message/rfc822
+  - text/csv
+  remediation: Back off and retry. The API limits concurrent requests per resource type per token; serialize
+    paging loops and apply exponential backoff.
+  example_operations:
+  - v1_abuse_mailbox_not_analyzed_retrieve
+  - v1_abusecampaigns_retrieve
+  - v1_abusecampaigns_retrieve_2
+  - v1_aggregations_attack_frequency_retrieve
+  - v1_aggregations_attack_stopped_retrieve
+- status: 500
+  title: Internal server error
+  spec_descriptions:
+  - Internal server error
+  - An unexpected error occurred on the server
+  - Internal Server Error
+  operation_count: 11
+  media_types:
+  - application/json
+  remediation: Transient server error. Retry with backoff; if it persists contact support@abnormalsecurity.com.
+  example_operations:
+  - v1_resources_actions_create
+  - v1_resources_create_create
+  - v1_resources_update_partial_update
+  - v1_search_activities_retrieve
+  - v1_search_activities_status_retrieve
+- status: 502
+  title: Bad gateway
+  spec_descriptions:
+  - Failed to communicate with upstream service
+  - Failed to retrieve attachment from cloud provider. The message or attachment may have been moved,
+    deleted, or remediated.
+  operation_count: 3
+  media_types:
+  - application/json
+  remediation: Upstream gateway error, typically on long-running export or download operations. Retry
+    with backoff.
+  example_operations:
+  - v1_resources_retrieve
+  - v1_resources_retrieve_2
+  - v1_search_messages_attachments_download_retrieve

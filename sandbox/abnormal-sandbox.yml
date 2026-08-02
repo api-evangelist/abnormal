@@ -1,0 +1,49 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  openapi/abnormal-client-api-openapi-original.yml (info.description, "Step 3: Try it out with
+  Test Data") and https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+description: >-
+  Abnormal AI does not operate a separate sandbox tenant or a test/live key pair. Test mode is
+  a per-request header on the production API: send Mock-Data: True with a real bearer token and
+  the production host returns the canned example payloads documented in the spec instead of the
+  organization's live threat data. Abnormal publishes this as the way to verify that token
+  issuance and IP allowlisting are configured correctly before writing real integration code.
+separation:
+  model: request-header
+  test_header: 'Mock-Data: True'
+  live_behaviour: omit the header (or send it false) to read the tenant's real data
+  key_prefixes: none
+  separate_test_credentials: false
+  note: >-
+    The same production token is used for both modes, so mock mode still requires a valid token
+    and an allowlisted source IP. There is no anonymous sandbox.
+verification_flow:
+- step: 1
+  action: Generate an API token in the Abnormal Portal
+  url: https://portal.abnormalsecurity.com/home/settings/integrations
+- step: 2
+  action: Add your egress IPv4/IPv6 addresses or CIDR blocks to the organization IP allowlist
+  url: https://portal.abnormalsecurity.com/home/settings/integrations
+- step: 3
+  action: Call the API with the mock-data header and confirm the documented example payload comes back
+  example: 'curl -H "Authorization: Bearer <ACCESS_TOKEN>" -H "Mock-Data: True" https://api.abnormalplatform.com/v1/threats'
+coverage:
+  operations_accepting_mock_data: 36
+  parameter:
+    name: mock-data
+    in: header
+  note: >-
+    The mock-data header is declared on 36 of the 67 operations, concentrated on the read
+    surfaces (threats, cases, messages, AI Security Mailbox, employees, vendors, audit logs and
+    the dashboard aggregations). Write operations and the SPM v2 endpoints do not declare it.
+test_values:
+  published: false
+  note: >-
+    Abnormal publishes no magic identifiers, test cards or synthetic accounts. The mock
+    responses are the example payloads embedded in the OpenAPI itself, so the spec's
+    components.schemas examples are the authoritative test fixtures.
+regions:
+  us: https://api.abnormalplatform.com/v1
+  eu: https://eu.rest.abnormalsecurity.com/v1
+  note: SwaggerHub's Servers dropdown exposes both hosts for interactive try-it-out calls.

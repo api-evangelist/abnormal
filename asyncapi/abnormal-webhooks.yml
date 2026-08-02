@@ -1,0 +1,65 @@
+generated: '2026-08-02'
+method: searched
+source: https://abnormal.ai/products/whats-new/stream-abnormal-event-data-in-near-real-time-with-webhooks
+spec_type: Webhooks
+asyncapi_published: false
+description: >-
+  Abnormal AI ships an event surface, but not an AsyncAPI document. Since April 2026 Webhook is
+  a first-class SIEM integration type in the Abnormal Portal: administrators point Abnormal at
+  any HTTPS endpoint and Abnormal streams event data in near real time, in the same JSON shape
+  the existing SIEM connectors emit. The webhook catalogue below is captured from Abnormal's
+  own What's New announcement; the payload schemas are not published outside the Portal, and
+  the OpenAPI carries no webhooks: block, so no AsyncAPI document could be harvested or
+  faithfully derived.
+announced: '2026-04-23'
+configuration:
+  location: Abnormal Portal, Settings > Integrations, "Webhook" SIEM integration type
+  url: https://portal.abnormalsecurity.com/home/settings/integrations
+  features:
+  - built-in validation and test-send from the Portal
+  - guaranteed retries on delivery failure
+  - IP allowlisting for the receiving endpoint
+transport:
+  protocol: https
+  direction: provider-to-subscriber (push)
+  format: application/json
+  schema_parity: >-
+    Payloads are documented as matching the structure of Abnormal's existing SIEM integration
+    exports, so the corresponding REST read models in the OpenAPI are the closest published
+    description of each event body.
+authentication:
+  supported_methods:
+  - API Key
+  - Basic Authentication
+  - Bearer Token
+  - Custom Header
+  note: The subscriber chooses how Abnormal authenticates to their receiving endpoint.
+events:
+- name: Threats
+  description: Detected attack campaigns from the Abnormal Threat Log.
+  rest_equivalent: v1_threats_retrieve
+- name: Vendor Cases
+  description: VendorBase supply-chain compromise cases.
+  rest_equivalent: v1_vendor_cases_retrieve
+- name: AI Security Mailbox
+  description: User-reported abuse campaigns and their judgements (formerly Abuse Mailbox).
+  rest_equivalent: v1_abusecampaigns_retrieve
+- name: Audit Logs
+  description: Abnormal Portal audit events.
+  rest_equivalent: v1_auditlogs_retrieve
+- name: Account Takeover
+  description: Account-takeover cases.
+  rest_equivalent: v1_cases_retrieve
+- name: Security Posture Management
+  description: SPM v2 posture state changes.
+  rest_equivalent: v1_spm_v2_postures_query_create
+- name: URL Rewriting Clicked
+  description: Click events on rewritten URLs.
+  rest_equivalent: v1_url_rewrite_clicked_events_retrieve
+event_count: 7
+gaps:
+- No AsyncAPI 2.x/3.x document is published for the webhook surface.
+- Per-event payload schemas are not published outside the Portal, so subscribers must infer
+  them from the matching REST response schemas in the OpenAPI.
+- No signature/HMAC verification scheme is documented; authentication is outbound-only
+  (Abnormal authenticates to the subscriber, not the reverse).

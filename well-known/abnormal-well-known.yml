@@ -1,0 +1,74 @@
+generated: '2026-08-02'
+method: searched
+source: live probes of every Abnormal AI host, 2026-08-02
+summary: >-
+  Abnormal AI publishes almost no /.well-known/ discovery surface. The API hosts
+  (api.abnormalplatform.com, eu.rest.abnormalsecurity.com) answer 401 to every path including
+  /.well-known/*, because the whole origin is bearer-token gated. The marketing site
+  (abnormal.ai) and the portal return 404/403. The single 200 is on the trust-center host
+  security.abnormal.ai, and that document belongs to SafeBase — the trust-center SaaS vendor
+  Abnormal runs there — not to the Abnormal Security Client API. No security.txt (RFC 9116),
+  no api-catalog (RFC 9727), no ai-plugin.json, and no A2A agent card was found on any host.
+hosts:
+- host: https://api.abnormalplatform.com
+  note: >-
+    US production API host. Every path returns 401 without a bearer token, including all
+    /.well-known/* paths, so the absence of a document here is not observable anonymously.
+  documents:
+  - {path: /.well-known/security.txt, status: 401}
+  - {path: /.well-known/openid-configuration, status: 401}
+  - {path: /.well-known/oauth-authorization-server, status: 401}
+  - {path: /.well-known/oauth-protected-resource, status: 401}
+  - {path: /.well-known/api-catalog, status: 401}
+  - {path: /.well-known/ai-plugin.json, status: 401}
+  - {path: /.well-known/agent-card.json, status: 401}
+  - {path: /.well-known/agent.json, status: 401}
+- host: https://eu.rest.abnormalsecurity.com
+  note: EU production API host. Same anonymous 401 on every path.
+  documents:
+  - {path: /.well-known/security.txt, status: 401}
+  - {path: /.well-known/agent-card.json, status: 401}
+  - {path: /.well-known/agent.json, status: 401}
+- host: https://abnormal.ai
+  note: Marketing site. 404 on the well-known surface; /llms.txt returns a 500 error page.
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /llms.txt, status: 500}
+- host: https://portal.abnormalsecurity.com
+  note: Customer portal. Cloudflare 403 to anonymous requests on every path.
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+  - {path: /.well-known/agent.json, status: 403}
+- host: https://security.abnormal.ai
+  note: >-
+    Trust center, operated on SafeBase. The two 200 documents are SafeBase's own MCP OAuth
+    metadata (issuer https://app.safebase.io/api/mcp) served under Abnormal's hostname — they
+    describe the trust-center vendor's agent surface, not any Abnormal API.
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: abnormal-trust-center-openid-configuration.json
+    first_party: false
+    vendor: SafeBase
+    issuer: https://app.safebase.io/api/mcp
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    first_party: false
+    vendor: SafeBase
+    note: returns the same SafeBase MCP authorization-server metadata document
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+gaps:
+- No /.well-known/security.txt on any host, although a responsible-disclosure policy is
+  published at https://abnormal.ai/legal/disclosure (see security/).
+- No /.well-known/api-catalog (RFC 9727) pointing at the OpenAPI.
+- No A2A agent card at either the canonical or legacy path.
+- No /llms.txt on any Abnormal host.

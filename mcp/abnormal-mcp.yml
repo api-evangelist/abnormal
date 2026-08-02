@@ -1,0 +1,299 @@
+generated: '2026-08-02'
+method: derived
+status: candidate
+source: openapi/abnormal-client-api-openapi-original.yml
+note: Abnormal AI publishes NO Model Context Protocol server. Searched the Abnormal docs and blog, npm
+  (@modelcontextprotocol and 'abnormal*' — nothing first-party), the GitHub orgs abnormal-security and
+  abnormal-ai, and probed mcp.abnormal.ai, mcp.abnormalsecurity.com and https://api.abnormalplatform.com/mcp
+  (DNS NXDOMAIN, NXDOMAIN, 401 respectively). Abnormal's own engineering blog (abnormal.ai/blog/abnormal-accelerates-developer-velocity-with-mcp,
+  fetched 2026-08-02) states their MCP server 'operates locally on developer machines' behind an internal
+  proxy — it is an internal developer-productivity tool, not a customer-facing surface. The only MCP metadata
+  reachable on an Abnormal hostname is SafeBase's, served at security.abnormal.ai/.well-known/openid-configuration
+  for the trust center (issuer https://app.safebase.io/api/mcp) — a vendor surface, not an Abnormal API
+  surface. The tools below are therefore a CANDIDATE agent surface derived one-per-operation from the
+  live Abnormal Security Client API OpenAPI 3.0.3; each tool inherits its real input schema from that
+  operation's parameters and requestBody. Nothing here is published by Abnormal, and no MCPServer pointer
+  is wired in apis.yml.
+server:
+  name: abnormal
+  transport: http
+  url: null
+  published: false
+auth:
+  model: bearer token issued in the Abnormal Portal
+  header: 'Authorization: Bearer <token>'
+  additional_control: source IP must be in the organization allowlist configured in the Portal
+tool_count: 67
+tools:
+- name: v1_abuse_mailbox_not_analyzed_retrieve
+  description: Get a list of messages submitted to AI Security Mailbox (formerly known as Abuse Mailbox)
+    that were not analyzed.
+  category: AI Security Mailbox (formerly known as Abuse Mailbox)
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_abuse_mailbox_not_analyzed_retrieve
+- name: v1_abusecampaigns_retrieve
+  description: Get a list of campaigns submitted to AI Security Mailbox (formerly known as Abuse Mailbox)
+  category: AI Security Mailbox (formerly known as Abuse Mailbox)
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_abusecampaigns_retrieve
+- name: v1_abusecampaigns_retrieve_2
+  description: Get details of an abuse campaign
+  category: AI Security Mailbox (formerly known as Abuse Mailbox)
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_abusecampaigns_retrieve_2
+- name: v1_aggregations_attack_frequency_retrieve
+  description: Retrieve the frequency of specific attack types for a given period.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_attack_frequency_retrieve
+- name: v1_aggregations_attack_stopped_retrieve
+  description: Retrieve aggregated counts of distinct attack types that were successfully stopped, including
+    current and previous periods.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_attack_stopped_retrieve
+- name: v1_aggregations_attack_strategy_breakdown_retrieve
+  description: Retrieve the breakdown of attacks based on their strategy.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_attack_strategy_breakdown_retrieve
+- name: v1_aggregations_attack_vector_breakdown_retrieve
+  description: Retrieve the breakdown of attacks based on their vectors.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_attack_vector_breakdown_retrieve
+- name: v1_aggregations_attacker_origin_retrieve
+  description: Retrieve the origin countries of attackers for a given period.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_attacker_origin_retrieve
+- name: v1_aggregations_dashboard_summary_retrieve
+  description: Retrieve an aggregated summary of multiple security data points for the dashboard.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_dashboard_summary_retrieve
+- name: v1_aggregations_most_impersonated_employee_retrieve
+  description: Retrieve the most impersonated employees for a specified period.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_most_impersonated_employee_retrieve
+- name: v1_aggregations_most_impersonated_employee_non_vip_retrieve
+  description: Retrieve the most impersonated non-VIP employees for a specified period.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_most_impersonated_employee_non_vip_retrieve
+- name: v1_aggregations_most_impersonated_employee_vip_retrieve
+  description: Retrieve the most impersonated VIP employees for a specified period.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_most_impersonated_employee_vip_retrieve
+- name: v1_aggregations_most_impersonated_vendor_retrieve
+  description: Retrieve a list of the most impersonated vendors in attacks.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_most_impersonated_vendor_retrieve
+- name: v1_aggregations_recipient_employees_retrieve
+  description: Retrieve a list of the employees who were recipients of attacks, based on their job titles.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_recipient_employees_retrieve
+- name: v1_aggregations_recipient_employees_non_vip_retrieve
+  description: Retrieve a list of the non-VIP employees who were recipients of attacks, based on their
+    job titles.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_recipient_employees_non_vip_retrieve
+- name: v1_aggregations_recipient_employees_vip_retrieve
+  description: Retrieve a list of the VIP employees who were recipients of attacks, based on their job
+    titles.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_recipient_employees_vip_retrieve
+- name: v1_aggregations_sender_impersonation_breakdown_retrieve
+  description: Retrieve a breakdown of attacks based on sender impersonation.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_sender_impersonation_breakdown_retrieve
+- name: v1_aggregations_trending_attacks_retrieve
+  description: Retrieve the list of trending attacks for a specified period.
+  category: Dashboard Aggregations
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_aggregations_trending_attacks_retrieve
+- name: v1_auditlogs_retrieve
+  description: Gets a list of Audit Logs for Portal
+  category: Audit Logs
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_auditlogs_retrieve
+- name: v1_cases_retrieve
+  description: Get a list of Abnormal cases identified by Abnormal Security
+  category: Cases
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_cases_retrieve
+- name: v1_cases_retrieve_2
+  description: Get details of an Abnormal case
+  category: Cases
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_cases_retrieve_2
+- name: v1_cases_create
+  description: Manage an Abnormal Case.
+  category: Cases
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_cases_create
+- name: v1_cases_actions_retrieve
+  description: Check the status of an action requested on a case.
+  category: Cases
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_cases_actions_retrieve
+- name: v1_cases_analysis_retrieve
+  description: Provides the analysis and timeline details of a case
+  category: Cases
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_cases_analysis_retrieve
+- name: v1_detection360_reports_retrieve
+  description: List Detection 360 reports for a specific type of detection misclassification.
+  category: Detection360
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_detection360_reports_retrieve
+- name: v1_detection360_reports_create
+  description: Submit a detection misclassification report
+  category: Detection360
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_detection360_reports_create
+- name: v1_employee_retrieve
+  description: Get employee information
+  category: Employee Insights
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_employee_retrieve
+- name: v1_employee_identity_retrieve
+  description: Get employee identity analysis (Genome) data
+  category: Employee Insights
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_employee_identity_retrieve
+- name: v1_employee_logins_retrieve
+  description: Get employee login information for last 30 days in csv format
+  category: Employee Insights
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_employee_logins_retrieve
+- name: v1_messages_attachment_retrieve
+  description: Get details of an attachment in an email message
+  category: Messages
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_messages_attachment_retrieve
+- name: v1_messages_attachment_download_retrieve
+  description: Download the attachment in an email as a file
+  category: Messages
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_messages_attachment_download_retrieve
+- name: v1_messages_download_retrieve
+  description: Download a message in EML format
+  category: Messages
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_messages_download_retrieve
+- name: v1_messages_remediation_history_retrieve
+  description: Get details of the remediation history for a threat log message
+  category: Messages
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_messages_remediation_history_retrieve
+- name: v1_resources_retrieve
+  description: List resources with pagination and filtering
+  category: Resources
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_resources_retrieve
+- name: v1_resources_retrieve_2
+  description: Get a single resource by ID
+  category: Resources
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_resources_retrieve_2
+- name: v1_resources_actions_create
+  description: Perform an action on a resource
+  category: Resources
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_resources_actions_create
+- name: v1_resources_update_partial_update
+  description: Update an existing resource
+  category: Resources
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_resources_update_partial_update
+- name: v1_resources_create_create
+  description: Create a new resource
+  category: Resources
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_resources_create_create
+- name: v1_roles_retrieve
+  description: Get a list of roles for an account from RBAC system
+  category: Roles
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_roles_retrieve
+- name: v1_search_create
+  description: Search for email messages
+  category: Search and Respond
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_search_create
+- name: v1_search_activities_retrieve
+  description: List activity logs
+  category: Search and Respond
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_search_activities_retrieve
+- name: v1_search_activities_status_retrieve
+  description: Get activity status
+  category: Search and Respond
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_search_activities_status_retrieve
+- name: v1_search_messages_eml_retrieve
+  description: Download EML file for a message
+  category: Search and Respond
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_search_messages_eml_retrieve
+- name: v1_search_messages_attachments_download_retrieve
+  description: Download email attachment
+  category: Search and Respond
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_search_messages_attachments_download_retrieve
+- name: v1_search_remediate_create
+  description: Remediate email messages
+  category: Search and Respond
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_search_remediate_create
+- name: v1_security_settings_retrieve
+  description: Get security settings including session timeout configuration
+  category: Security Settings
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_security_settings_retrieve
+- name: v1_soar_tokens_retrieve
+  description: Get a list of API tokens for the authenticated customer
+  category: Tokens
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_soar_tokens_retrieve
+- name: v1_spm_v2_posture_catalog_retrieve
+  description: Get posture catalog containing all available abnormal supported postures
+  category: SPM
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_spm_v2_posture_catalog_retrieve
+- name: v1_spm_v2_postures_retrieve
+  description: Get detailed information about a specific security posture evaluation
+  category: SPM
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_spm_v2_postures_retrieve
+- name: v1_spm_v2_postures_timeline_retrieve
+  description: Get timeline of events for a specific security posture
+  category: SPM
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_spm_v2_postures_timeline_retrieve
+- name: v1_spm_v2_postures_query_create
+  description: Get a list of all tenant postures
+  category: SPM
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_spm_v2_postures_query_create
+- name: v1_spm_v2_reports_summary_retrieve
+  description: Get summary report for all postures
+  category: SPM
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_spm_v2_reports_summary_retrieve
+- name: v1_spm_v2_workflow_logs_raw_json_retrieve
+  description: Get raw JSON for a workflow log
+  category: SPM
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_spm_v2_workflow_logs_raw_json_retrieve
+- name: v1_threats_retrieve
+  description: Get a list of threats
+  category: Threats
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_threats_retrieve
+- name: v1_threats_retrieve_2
+  description: Get details of a threat
+  category: Threats
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_threats_retrieve_2
+- name: v1_threats_create
+  description: Manage a Threat identified by Abnormal Security
+  category: Threats
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_threats_create
+- name: v1_threats_actions_retrieve
+  description: Check the status of an action requested on a threat.
+  category: Threats
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_threats_actions_retrieve
+- name: v1_threats_attachments_retrieve
+  description: Get attachment details of a threat campaign.
+  category: Threats
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_threats_attachments_retrieve
+- name: v1_threats_links_retrieve
+  description: Get information of links in a threat campagin.
+  category: Threats
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_threats_links_retrieve
+- name: v1_threats_export_csv_retrieve
+  description: Download data from Threat Log in .csv format
+  category: Threats
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_threats_export_csv_retrieve
+- name: v1_url_rewrite_clicked_events_retrieve
+  description: Get URL rewrite click and clickthrough events
+  category: URL Rewrite
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_url_rewrite_clicked_events_retrieve
+- name: v1_users_retrieve
+  description: Get a list of users from RBAC user management system
+  category: Users
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_users_retrieve
+- name: v1_vendor_cases_retrieve
+  description: Get a list of vendor cases.
+  category: Vendors
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_vendor_cases_retrieve
+- name: v1_vendor_cases_retrieve_2
+  description: Get details of a vendor case
+  category: Vendors
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_vendor_cases_retrieve_2
+- name: v1_vendors_retrieve
+  description: Get a list of vendors your organization has interacted with
+  category: Vendors
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_vendors_retrieve
+- name: v1_vendors_activity_retrieve
+  description: Get activity of a vendor your organization has interacted with
+  category: Vendors
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_vendors_activity_retrieve
+- name: v1_vendors_details_retrieve
+  description: Get details of a vendor your organization has interacted with
+  category: Vendors
+  source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_vendors_details_retrieve

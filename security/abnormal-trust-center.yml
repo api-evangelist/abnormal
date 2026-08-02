@@ -1,0 +1,57 @@
+generated: '2026-08-02'
+method: searched
+probe: true
+source: https://security.abnormal.ai/
+url: https://security.abnormal.ai/
+platform: SafeBase
+description: >-
+  Abnormal AI runs a public trust center at security.abnormal.ai (SafeBase). It publishes the
+  certification and compliance set below, gated security reports (US and EU penetration test
+  reports, a SOC 2 bridge letter, network and data-flow diagrams), and links to the
+  responsible-disclosure policy at abnormal.ai/legal/disclosure.
+certifications:
+- SOC 2
+- ISO/IEC 27001
+- ISO/IEC 27701
+- ISO/IEC 42001:2023
+- CSA STAR
+- FedRAMP Moderate
+- GovRAMP
+- TX-RAMP
+- CMMC
+- Cyber Essentials Plus
+- CJIS
+- ITAR
+- VPAT
+regulatory_frameworks:
+- GDPR
+- CCPA
+- PIPEDA
+- DORA
+- NIS 2
+reports:
+- name: US Penetration Test Report
+  access: gated
+- name: EU Penetration Test Report
+  access: gated
+- name: SOC 2 Bridge Letter
+  access: gated
+- name: Network and Data Flow Diagram
+  access: gated
+related:
+  disclosure: https://abnormal.ai/legal/disclosure
+  subprocessors: https://abnormal.ai/legal/subprocessors
+  privacy: https://abnormal.ai/legal/privacy
+  service_privacy_notice: https://abnormal.ai/legal/service-privacy-notice
+evidence:
+- source: https://security.abnormal.ai/
+  http_status: 200
+  fetched: '2026-08-02'
+  keywords:
+  - soc 2
+  - iso/iec 27001
+  - iso/iec 42001
+  - fedramp moderate
+  - csa star
+  - gdpr
+  - trust center

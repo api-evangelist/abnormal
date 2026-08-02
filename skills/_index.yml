@@ -1,0 +1,50 @@
+generated: '2026-08-02'
+method: generated
+source: openapi/abnormal-client-api-openapi-original.yml
+description: >-
+  Packaged Agent Skills for the Abnormal Security Client API. Each skill is grounded in real
+  operationIds verified against the harvested OpenAPI 3.0.3, and carries the runtime rules that
+  the spec does not state — no idempotency key, concurrency-based 429s, 403 meaning the IP
+  allowlist rather than a bad token, the 202-then-poll async pattern, and the SPM v2 paging
+  divergence. Abnormal publishes no API-facing agent skills or AGENTS.md of its own; the one
+  first-party skill package they ship (github.com/abnormal-ai/claude-plugins) covers careers
+  and internal spec tooling, not their API.
+provider_published_skills:
+  url: https://github.com/abnormal-ai/claude-plugins
+  covers_api: false
+  note: >-
+    Two Claude Code plugins — careers-abnormal-ai and spec-tool. Recorded for provenance in
+    packages/abnormal-packages.yml; not mirrored here because neither describes the API.
+skills:
+- file: abnormal-triage-and-remediate-threats.md
+  name: Triage and remediate Abnormal threats
+  api: openapi/abnormal-client-api-openapi-original.yml
+  operations: [v1_threats_retrieve, v1_threats_retrieve_2, v1_threats_create,
+    v1_threats_actions_retrieve, v1_threats_links_retrieve, v1_threats_attachments_retrieve,
+    v1_messages_remediation_history_retrieve, v1_threats_export_csv_retrieve]
+- file: abnormal-investigate-account-takeover-case.md
+  name: Investigate an Abnormal account takeover case
+  api: openapi/abnormal-client-api-openapi-original.yml
+  operations: [v1_cases_retrieve, v1_cases_retrieve_2, v1_cases_analysis_retrieve,
+    v1_cases_create, v1_cases_actions_retrieve, v1_employee_retrieve,
+    v1_employee_identity_retrieve, v1_employee_logins_retrieve]
+- file: abnormal-work-the-ai-security-mailbox.md
+  name: Work the Abnormal AI Security Mailbox
+  api: openapi/abnormal-client-api-openapi-original.yml
+  operations: [v1_abusecampaigns_retrieve, v1_abusecampaigns_retrieve_2,
+    v1_abuse_mailbox_not_analyzed_retrieve, v1_detection360_reports_create,
+    v1_detection360_reports_retrieve, v1_messages_download_retrieve]
+- file: abnormal-search-and-remediate-messages.md
+  name: Search and remediate messages across the mail estate
+  api: openapi/abnormal-client-api-openapi-original.yml
+  operations: [v1_search_create, v1_search_activities_retrieve,
+    v1_search_activities_status_retrieve, v1_search_messages_eml_retrieve,
+    v1_search_messages_attachments_download_retrieve, v1_search_remediate_create]
+- file: abnormal-audit-security-posture.md
+  name: Audit Abnormal security posture and portal access
+  api: openapi/abnormal-client-api-openapi-original.yml
+  operations: [v1_spm_v2_posture_catalog_retrieve, v1_spm_v2_postures_query_create,
+    v1_spm_v2_postures_retrieve, v1_spm_v2_postures_timeline_retrieve,
+    v1_spm_v2_reports_summary_retrieve, v1_spm_v2_workflow_logs_raw_json_retrieve,
+    v1_roles_retrieve, v1_users_retrieve, v1_auditlogs_retrieve,
+    v1_security_settings_retrieve]

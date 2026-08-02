@@ -1,0 +1,57 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  npm registry search, PyPI, github.com/abnormal-security, github.com/abnormal-ai,
+  https://abnormal.ai/resources/abnormal-technology-integrations
+description: >-
+  Abnormal AI publishes NO first-party client SDK in any language. Searched npm (registry
+  search for "abnormal-security", "abnormal ai", "abnormal api" — no first-party result), PyPI
+  (abnormal-security, abnormalsecurity, abnormal-security-api, abnormalsecurity-sdk,
+  abnormal-api all 404), and both GitHub organizations. github.com/abnormal-security holds four
+  public repos, all forks of third-party projects (Cortex XSOAR content, Bazel rules_python,
+  DuckDB postgres_scanner). github.com/abnormal-ai holds one repo, claude-plugins, which
+  packages Claude Code skills for careers and internal spec tooling — not API clients.
+  Integration with Abnormal is delivered instead through connectors that third-party SIEM/SOAR
+  and observability vendors build and maintain against the REST API.
+official_sdk_count: 0
+packages: []
+first_party_repos:
+- name: abnormal-ai/claude-plugins
+  url: https://github.com/abnormal-ai/claude-plugins
+  language: shell/markdown
+  description: >-
+    Claude Code plugin marketplace published by Abnormal AI. Two plugins —
+    careers-abnormal-ai (apply to open roles) and spec-tool (their internal spec-driven
+    development workflow). Not an API client; included here because it is the only
+    first-party developer-facing package Abnormal ships.
+  official: true
+  api_client: false
+third_party_connectors:
+- vendor: Palo Alto Networks (Cortex XSOAR)
+  name: Abnormal Security content pack
+  url: https://github.com/demisto/content
+  official: false
+  note: >-
+    Abnormal maintains a public fork of the XSOAR content repo at
+    github.com/abnormal-security/content and content-archive.
+- vendor: Elastic
+  name: Abnormal AI integration
+  url: https://www.elastic.co/docs/reference/integrations/abnormal_security
+  official: false
+- vendor: Datadog
+  name: Abnormal Security integration
+  url: https://docs.datadoghq.com/integrations/abnormal-security/
+  official: false
+- vendor: D3 Security
+  name: Abnormal Security SOAR integration
+  url: https://docs.d3security.com/integration-docs/integration-docs/abnormal-security
+  official: false
+- vendor: RunReveal
+  name: Abnormal source
+  url: https://github.com/runreveal/runreveal-docs/blob/main/pages/sources/source-types/abnormal.mdx
+  official: false
+gaps:
+- No official SDK in any language (JavaScript, Python, Go, Java, .NET, Ruby, PHP, Rust).
+- No official CLI.
+- No published Postman collection or workspace.
+- Consumers hand-roll HTTP against the SwaggerHub OpenAPI, or generate a client from it.

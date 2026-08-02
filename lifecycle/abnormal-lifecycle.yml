@@ -1,0 +1,56 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://status.abnormalsecurity.com/, https://abnormal.ai/platform/whats-new,
+  https://api.swaggerhub.com/apis/abnormal-security/abx,
+  openapi/abnormal-client-api-openapi-original.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.4.3
+  docs: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  registry: https://app.swaggerhub.com/apis/abnormal-security/abx
+  note: >-
+    The path version has stayed at v1 since the API was first published. Revisions are shipped
+    as new SwaggerHub semantic versions (1.4.0 -> 1.4.3) and, since 2024, as in-place edits to
+    1.4.3. Prior versions remain published and retrievable from SwaggerHub.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_operations: []
+  note: >-
+    No deprecation or sunset policy is published, and no RFC 8594 Sunset/Deprecation header
+    support is documented. No operation in the OpenAPI carries deprecated: true. The one
+    deprecation signal Abnormal does publish is product-side, in the What's New changelog
+    ("Microsoft Sentinel Integration Replacement", 2026-07-02), not API-side.
+status_page:
+  url: https://status.abnormalsecurity.com/
+  platform: Atlassian Statuspage
+  page_name: Abnormal AI
+  api: https://status.abnormalsecurity.com/api/v2/summary.json
+  components:
+  - Inbound Email Security (IES)
+  note: >-
+    Machine-readable component and incident status is available at the Statuspage v2 API
+    endpoints (summary.json, status.json, incidents.json) without authentication.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No public SLA or uptime commitment was found. Availability terms sit inside the
+    subscription agreement referenced from https://abnormal.ai/legal/terms-of-use.
+support:
+  contact: support@abnormalsecurity.com
+  source: openapi info.contact
+  knowledge_base: https://abnormalsecurity.my.site.com/knowledgebase/s/
+  form: https://abnormal.ai/contact
+regions:
+  us: https://api.abnormalplatform.com/v1
+  eu: https://eu.rest.abnormalsecurity.com/v1
+gaps:
+- No published API deprecation policy or sunset window.
+- No Sunset / Deprecation response headers (RFC 8594).
+- No API-level release notes; the What's New feed is product-scoped.
+- No public SLA / uptime target.

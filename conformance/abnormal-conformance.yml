@@ -1,0 +1,90 @@
+generated: '2026-08-02'
+method: derived
+source: >-
+  openapi/abnormal-client-api-openapi-original.yml, https://security.abnormal.ai/,
+  https://abnormal.ai/legal/disclosure
+description: >-
+  Cross-cutting standards conformance for the Abnormal Security Client API. Technical standards
+  are derived from the OpenAPI document; the compliance and certification block is searched
+  from Abnormal's public trust center at security.abnormal.ai.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: 'openapi: 3.0.3 document published on SwaggerHub as abnormal-security/abx 1.4.3'
+- id: openapi-3.1
+  conforms: false
+  evidence: document declares 3.0.3
+- id: rest-json
+  conforms: true
+  evidence: JSON request/response bodies over HTTPS with resource-oriented paths under /v1
+- id: http-bearer-rfc6750
+  conforms: true
+  evidence: securitySchemes BearerAuth type http scheme bearer, applied globally
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 securityScheme; tokens are long-lived, issued in the Portal
+- id: oidc
+  conforms: false
+  evidence: no openIdConnect securityScheme and no first-party /.well-known/openid-configuration
+- id: mutual-tls
+  conforms: false
+  evidence: no mutualTLS securityScheme
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    error responses are application/json with a flat {"error": "..."} object; no
+    application/problem+json media type appears in the document
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: no /.well-known/security.txt on any Abnormal host (see well-known/)
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: no /.well-known/api-catalog
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header support documented; no deprecated operations
+- id: json-api
+  conforms: false
+  evidence: responses are bespoke JSON, not JSON:API media type or envelope
+- id: odata
+  conforms: false
+  evidence: >-
+    partial only — the filter query parameter uses OData-like comparison operators
+    (gte/lte on receivedTime), but no $metadata, no OData media types, no OData query surface
+- id: pagination
+  conforms: true
+  evidence: pageSize/pageNumber request params with pageNumber/nextPageNumber response fields
+- id: idempotency
+  conforms: false
+  evidence: no Idempotency-Key header or parameter anywhere in the document
+- id: asyncapi
+  conforms: false
+  evidence: webhook event surface exists but no AsyncAPI document is published
+- id: rate-limiting-429
+  conforms: true
+  evidence: 61 of 67 operations declare a 429 response (TooManyRequestsError)
+- id: tls-1.3
+  conforms: true
+  evidence: api.abnormalplatform.com and eu.rest.abnormalsecurity.com negotiate TLSv1.3 (probed 2026-08-02)
+- id: gdpr-data-residency
+  conforms: true
+  evidence: separate EU production host (eu.rest.abnormalsecurity.com) documented in the spec
+compliance:
+  published: true
+  url: https://security.abnormal.ai/
+  certifications:
+  - SOC 2
+  - ISO/IEC 27001
+  - ISO/IEC 27701
+  - ISO/IEC 42001:2023
+  - CSA STAR
+  - FedRAMP Moderate
+  - GovRAMP
+  - TX-RAMP
+  - CMMC
+  - Cyber Essentials Plus
+  - CJIS
+  - ITAR
+  - VPAT
+  regulatory_frameworks: [GDPR, CCPA, PIPEDA, DORA, NIS 2]
+  see: security/abnormal-trust-center.yml
