@@ -28,28 +28,240 @@ tags:
 - Identity
 - Compliance
 apis:
-- aid: abnormal:client-api
-  name: Abnormal Security Client API
-  description: 'REST API for managing the security threats, cases and posture that Abnormal AI
-    detects for an organization. Covers threats and threat actions, Abnormal cases and case
-    analysis, message detail and attachment download, the AI Security Mailbox (formerly Abuse
-    Mailbox), employee identity and login insights, VendorBase vendors and vendor cases,
-    Detection 360 reports, search and remediation, audit logs, RBAC roles and users, SOAR
-    tokens, security settings, URL-rewrite click events, Security Posture Management (SPM v2)
-    and the dashboard aggregation metrics. Bearer-token authenticated, with IP allowlisting
-    and a Mock-Data test mode.'
+- aid: abnormal:abnormal-ai-security-mailbox-formerly-known-as-abuse-mailbox-api
+  name: Abnormal AI AI Security Mailbox (formerly known as Abuse Mailbox) API
+  description: API to manage AI Security Mailbox (formerly known as Abuse Mailbox)
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - AI Security Mailbox (formerly known as Abuse Mailbox)
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-ai-security-mailbox-formerly-known-as-abuse-mailbox-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-audit-logs-api
+  name: Abnormal AI Audit Logs API
+  description: API to retrieve audit logs for Portal
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Audit Logs
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-audit-logs-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-cases-api
+  name: Abnormal AI Cases API
+  description: APIs to manage Abnormal Cases
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Cases
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-cases-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-dashboard-aggregations-api
+  name: Abnormal AI Dashboard Aggregations API
+  description: APIs to manage Dashboard metrics
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Dashboard Aggregations
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-dashboard-aggregations-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-detection360-api
+  name: Abnormal AI Detection360 API
+  description: The Detection360 API from Abnormal AI — 1 operation(s) for detection360.
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Detection360
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-detection360-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-employee-insights-api
+  name: Abnormal AI Employee Insights API
+  description: API to manage employees
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Employee Insights
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-employee-insights-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-messages-api
+  name: Abnormal AI Messages API
+  description: API to manage message details
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-messages-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-resources-api
+  name: Abnormal AI Resources API
+  description: The Resources API from Abnormal AI — 5 operation(s) for resources.
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Resources
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-resources-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-roles-api
+  name: Abnormal AI Roles API
+  description: API to retrieve roles from RBAC system
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Roles
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-roles-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-search-and-respond-api
+  name: Abnormal AI Search and Respond API
+  description: The Search and Respond API from Abnormal AI — 6 operation(s) for search and respond.
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Search and Respond
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-search-and-respond-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-security-settings-api
+  name: Abnormal AI Security Settings API
+  description: API to retrieve security settings including session timeout configuration
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Security Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-security-settings-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-spm-api
+  name: Abnormal AI SPM API
+  description: The SPM API from Abnormal AI — 6 operation(s) for spm.
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - SPM
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-spm-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-threats-api
+  name: Abnormal AI Threats API
+  description: APIs to manage threats notified in the Abnormal Threat Log
   humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
   baseURL: https://api.abnormalplatform.com/v1
   tags:
   - Threats
-  - Cases
-  - Email Security
-  - Audit Logs
-  - Vendors
-  - Security Posture Management
   properties:
   - type: OpenAPI
-    url: openapi/abnormal-client-api-openapi-original.yml
+    url: openapi/abnormal-threats-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-tokens-api
+  name: Abnormal AI Tokens API
+  description: API to manage SOAR API tokens
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-tokens-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-url-rewrite-api
+  name: Abnormal AI URL Rewrite API
+  description: The URL Rewrite API from Abnormal AI — 1 operation(s) for url rewrite.
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - URL Rewrite
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-url-rewrite-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-users-api
+  name: Abnormal AI Users API
+  description: API to retrieve users from RBAC system
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-users-api-openapi.yml
+  - type: Swagger
+    url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
+  - type: APIReference
+    url: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+- aid: abnormal:abnormal-vendors-api
+  name: Abnormal AI Vendors API
+  description: API to manage Vendorbase and threats from Vendors
+  humanURL: https://app.swaggerhub.com/apis-docs/abnormal-security/abx/1.4.3
+  baseURL: https://api.abnormalplatform.com/v1
+  tags:
+  - Vendors
+  properties:
+  - type: OpenAPI
+    url: openapi/abnormal-vendors-api-openapi.yml
   - type: Swagger
     url: https://api.swaggerhub.com/apis/abnormal-security/abx/1.4.3
   - type: APIReference
@@ -60,6 +272,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/abnormal-mcp.yml
 - type: TrustCenter
   url: security/abnormal-trust-center.yml
 - type: DomainSecurity
