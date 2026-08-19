@@ -1,0 +1,2797 @@
+{
+  "item": [
+    {
+      "id": "4cb9aed5-6771-44b9-91e7-3fa1b6719db5",
+      "name": "Threats",
+      "description": {
+        "content": "APIs to manage threats notified in the Abnormal Threat Log",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "35332b2b-1ee9-4750-b087-38929fcae24f",
+          "name": "Get a list of threats",
+          "request": {
+            "name": "Get a list of threats",
+            "description": {},
+            "url": {
+              "path": [
+                "threats"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the keys that are supported for `/threats` are `receivedTime` and `latestTimeRemediated`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ format`."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": " Number of threats on each page. Each page of data will have at most pageSize threats. Has no effect if filter is not specified."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "1",
+                  "description": "1-indexed page number to get a particular page of threats. Has no effect if filter is not specified."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters threats based on the source of detection. 'all' returns threats from all sources, 'spam' returns only spam threats, 'attacks' returns only attack threats, and 'borderline' returns only borderline threats."
+                },
+                {
+                  "disabled": false,
+                  "key": "sender",
+                  "value": "<string>",
+                  "description": "Filters threats based on the name or email address of the sender"
+                },
+                {
+                  "disabled": false,
+                  "key": "recipient",
+                  "value": "<string>",
+                  "description": "Filters threats based on the name or email address of the recipient"
+                },
+                {
+                  "disabled": false,
+                  "key": "subject",
+                  "value": "<string>",
+                  "description": "Filters threats based on the email subject"
+                },
+                {
+                  "disabled": false,
+                  "key": "topic",
+                  "value": "<string>",
+                  "description": "Filters threats based on the topic of email contents"
+                },
+                {
+                  "disabled": false,
+                  "key": "attackType",
+                  "value": "<string>",
+                  "description": "Filters threats based on the type of attack"
+                },
+                {
+                  "disabled": false,
+                  "key": "attackVector",
+                  "value": "<string>",
+                  "description": "Filters threats based on the attack vector"
+                },
+                {
+                  "disabled": false,
+                  "key": "attackStrategy",
+                  "value": "<string>",
+                  "description": "Filters threats based on the attack strategy"
+                },
+                {
+                  "disabled": false,
+                  "key": "impersonatedParty",
+                  "value": "<string>",
+                  "description": "Filters threats based on the impersonated party"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b71ce514-4646-47e8-82ed-029e62129fa2",
+              "name": "A list of the IDs of the top 100 threats identified in Threat Log if no filter query parameter is specified, or a paginated list of threats if a filter query parameter is specified. The pageNumber and nextPageNumber fields will be absent if no filter query parameter is used. The nextPageNumber field will be absent if there are no more pages of data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    },
+                    {
+                      "key": "sender",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subject",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "topic",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackVector",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackStrategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "impersonatedParty",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"threats\": [\n    {\n      \"threatId\": \"184712ab-6d8b-47b3-89d3-a314efef79e2\"\n    },\n    {\n      \"threatId\": \"184712ab-6d8b-47b3-89d3-a314efef79e2\"\n    }\n  ],\n  \"pageNumber\": 1,\n  \"nextPageNumber\": 2\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4f01a8d-2966-4cc6-8b35-771809e7e736",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    },
+                    {
+                      "key": "sender",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subject",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "topic",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackVector",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackStrategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "impersonatedParty",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3fb48dfd-1eed-48e1-a587-29bd4de6d68d",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    },
+                    {
+                      "key": "sender",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subject",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "topic",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackVector",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackStrategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "impersonatedParty",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cd0beb1a-31b4-45cf-9bc9-04995a608a18",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    },
+                    {
+                      "key": "sender",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subject",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "topic",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackVector",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackStrategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "impersonatedParty",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "502b45d5-6695-4d5d-9d62-977edc432b6a",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    },
+                    {
+                      "key": "sender",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subject",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "topic",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackVector",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "attackStrategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "impersonatedParty",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5b0eb39a-c146-4bcd-b21b-df3dc4db51d3",
+          "name": "Get details of a threat",
+          "request": {
+            "name": "Get details of a threat",
+            "description": {},
+            "url": {
+              "path": [
+                "threats",
+                ":threat_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "Number of messages corresponding to threat in each page. Each page of data will have at most pageSize message. Total results returned cannot exceed 2000 due to database limitations"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "1",
+                  "description": "1-indexed page number to get a particular page of threat messages. Currently ignored, only 10 results for `messages` will show. Supported will be added in a future version. Total results returned cannot exceed 2000 due to database limitations"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "threat_id",
+                  "description": "(Required) A UUID representing the threat."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2e1213a2-a806-4cb8-bd88-af93f6bc0269",
+              "name": "A threat identified by Abnormal Security.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"messages\": [\n    {\n      \"abxMessageId\": 4551618356913732000,\n      \"abxMessageIdStr\": \"string\",\n      \"abxPortalUrl\": \"https://portal.abnormalsecurity.com/home/threat-center/remediation-history/4551618356913732076\",\n      \"attachmentCount\": 4545,\n      \"attachmentNames\": [\n        \"attachment.pdf\"\n      ],\n      \"attackStrategy\": \"Name Impersonation\",\n      \"attackType\": \"Extortion\",\n      \"attackVector\": \"Text\",\n      \"attackedParty\": \"VIP\",\n      \"autoRemediated\": true,\n      \"ccEmails\": [\n        \"cc@example.com\"\n      ],\n      \"fromAddress\": \"support@secure-reply.org\",\n      \"fromName\": \"Support\",\n      \"impersonatedParty\": \"None / Others\",\n      \"internetMessageId\": \"<5edfca1c.1c69fb81.4b055.8fd5@mx.google.com>\",\n      \"isRead\": true,\n      \"postRemediated\": true,\n      \"receivedTime\": \"2020-06-09T17:42:59Z\",\n      \"recipientAddress\": \"example@example.com\",\n      \"remediationStatus\": \"Auto Remediated\",\n      \"remediationTimestamp\": \"2020-06-09T17:42:59Z\",\n      \"replyToEmails\": [\n        \"reply-to@example.com\"\n      ],\n      \"returnPath\": \"support@secure-reply.org\",\n      \"senderDomain\": \"secure-reply.org\",\n      \"senderIpAddress\": \"100.101.102.103\",\n      \"sentTime\": \"2020-06-09T17:42:59Z\",\n      \"subject\": \"Phishing Email\",\n      \"summaryInsights\": [\n        \"Bitcoin Topics\",\n        \"Personal Information Theft\",\n        \"Unusual Sender\"\n      ],\n      \"threatId\": \"184712ab-6d8b-47b3-89d3-a314efef79e2\",\n      \"toAddresses\": \"example@example.com, another@example.com\",\n      \"urlCount\": 4557,\n      \"urls\": [\n        \"https://www.google.com/\"\n      ],\n      \"source\": \"Attack\",\n      \"tenantId\": 1000,\n      \"tenantName\": \"acme-corp\",\n      \"customerOverride\": {\n        \"overrideType\": \"Customer Blocklist\",\n        \"reason\": \"Sender Email\",\n        \"overrideJudgement\": \"malicious\",\n        \"value\": \"support@secure-reply.org\"\n      }\n    },\n    {\n      \"abxMessageId\": 4551618356913732000,\n      \"abxMessageIdStr\": \"string\",\n      \"abxPortalUrl\": \"https://portal.abnormalsecurity.com/home/threat-center/remediation-history/4551618356913732076\",\n      \"attachmentCount\": 8762,\n      \"attachmentNames\": [\n        \"attachment.pdf\"\n      ],\n      \"attackStrategy\": \"Name Impersonation\",\n      \"attackType\": \"Extortion\",\n      \"attackVector\": \"Text\",\n      \"attackedParty\": \"VIP\",\n      \"autoRemediated\": true,\n      \"ccEmails\": [\n        \"cc@example.com\"\n      ],\n      \"fromAddress\": \"support@secure-reply.org\",\n      \"fromName\": \"Support\",\n      \"impersonatedParty\": \"None / Others\",\n      \"internetMessageId\": \"<5edfca1c.1c69fb81.4b055.8fd5@mx.google.com>\",\n      \"isRead\": true,\n      \"postRemediated\": false,\n      \"receivedTime\": \"2020-06-09T17:42:59Z\",\n      \"recipientAddress\": \"example@example.com\",\n      \"remediationStatus\": \"Auto Remediated\",\n      \"remediationTimestamp\": \"2020-06-09T17:42:59Z\",\n      \"replyToEmails\": [\n        \"reply-to@example.com\"\n      ],\n      \"returnPath\": \"support@secure-reply.org\",\n      \"senderDomain\": \"secure-reply.org\",\n      \"senderIpAddress\": \"100.101.102.103\",\n      \"sentTime\": \"2020-06-09T17:42:59Z\",\n      \"subject\": \"Phishing Email\",\n      \"summaryInsights\": [\n        \"Bitcoin Topics\",\n        \"Personal Information Theft\",\n        \"Unusual Sender\"\n      ],\n      \"threatId\": \"184712ab-6d8b-47b3-89d3-a314efef79e2\",\n      \"toAddresses\": \"example@example.com, another@example.com\",\n      \"urlCount\": 3267,\n      \"urls\": [\n        \"https://www.google.com/\"\n      ],\n      \"source\": \"Attack\",\n      \"tenantId\": 1000,\n      \"tenantName\": \"acme-corp\",\n      \"customerOverride\": {\n        \"overrideType\": \"Customer Blocklist\",\n        \"reason\": \"Sender Email\",\n        \"overrideJudgement\": \"malicious\",\n        \"value\": \"support@secure-reply.org\"\n      }\n    }\n  ],\n  \"recipientCount\": 8841,\n  \"tenantId\": 1234,\n  \"tenantName\": \"example-tenant\",\n  \"threatId\": \"184712ab-6d8b-47b3-89d3-a314efef79e2\",\n  \"pageNumber\": 1,\n  \"nextPageNumber\": 2\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aad2e298-df29-409d-b381-c0bb2d1047c9",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5b456231-45ab-4855-a690-4370811e3f22",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b8f3653d-d205-46bb-8768-e70c7b398e6a",
+              "name": "Threat does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1218d2e5-3e34-4c89-b149-e1d02b7d1b97",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "24e6bd41-bcca-4fef-9c72-4546b7005333",
+          "name": "Manage a Threat identified by Abnormal Security",
+          "request": {
+            "name": "Manage a Threat identified by Abnormal Security",
+            "description": {
+              "content": "Use this to remediate or unremediate a threat. If the request is found to be something which can be processed, the server will return a '202 Accept' with an actionId and status URL in the response. This can be used to check the status of the request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "threats",
+                ":threat_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "threat_id",
+                  "description": "(Required) A UUID representing the threat."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed764042-3e71-4089-ac54-dc759e67736b",
+              "name": "Accepted for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"action_id\": \"a33a212a-89ff-461f-be34-ea52aff44a67\",\n  \"status_url\": \"https://api.abnormalplatform.com/v1/threats/184712ab-6d8b-47b3-89d3-a314efef79e2/actions/a33a212a-89ff-461f-be34-ea52aff44a73\",\n  \"tenantId\": 1234,\n  \"tenantName\": \"example-tenant\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f13ba9a4-a4cf-4c51-9718-6f21258e7321",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4f9ee695-5202-4040-975d-f065f82b4051",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b87b0e1e-80bd-40c0-9fb7-6cc6cec29c1d",
+              "name": "Threat does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a1d9477d-1f62-41cf-a374-5845a7b9cc6d",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "03eeb400-b772-4962-a266-def0b1342322",
+          "name": "Check the status of an action requested on a threat.",
+          "request": {
+            "name": "Check the status of an action requested on a threat.",
+            "description": {},
+            "url": {
+              "path": [
+                "threats",
+                ":threat_id",
+                "actions",
+                ":action_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "threat_id",
+                  "description": "(Required) A UUID representing the threat."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "action_id",
+                  "description": "(Required) A UUID representing the action id for a threat."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b9d0f0c4-3847-42ca-b8dc-634e9a7aef5c",
+              "name": "Status of the action requested on a threat. This API can be used to check the status of a request made to the threats. The response will return a descriptive string if the action on threat could not be completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "actions",
+                    ":action_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "action_id",
+                      "description": "(Required) A UUID representing the action id for a threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"description\": \"The request was completed successfully\",\n  \"status\": \"acknowledged\",\n  \"tenantId\": 1234,\n  \"tenantName\": \"example-tenant\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e1905c2-7ba6-4cad-8a63-d164f67a26a9",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "actions",
+                    ":action_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "action_id",
+                      "description": "(Required) A UUID representing the action id for a threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3e327cad-fa17-4556-af85-47501c187804",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "actions",
+                    ":action_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "action_id",
+                      "description": "(Required) A UUID representing the action id for a threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c3d02979-684d-4585-9a6d-be24f6558b2a",
+              "name": "Action does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "actions",
+                    ":action_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "action_id",
+                      "description": "(Required) A UUID representing the action id for a threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "95d8306a-625d-4ee1-8f53-e455f736a199",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "actions",
+                    ":action_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "action_id",
+                      "description": "(Required) A UUID representing the action id for a threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d6fd08db-ff78-42ec-b255-c7fd39412558",
+          "name": "Get attachment details of a threat campaign.",
+          "request": {
+            "name": "Get attachment details of a threat campaign.",
+            "description": {},
+            "url": {
+              "path": [
+                "threats",
+                ":threat_id",
+                "attachments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "threat_id",
+                  "description": "(Required) A UUID representing the threat."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "231739d2-fa20-4286-a3d3-dc2746cdd2c0",
+              "name": "Details of the attachments in a threat campaign. This API can be used to obtain the details of the links that are embedded in the email messages of a threat.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attachments\": [\n    {\n      \"abxMessageId\": 4551618356913732000,\n      \"abxMessageIdStr\": \"string\",\n      \"attachmentName\": \"attachment1.jpg\"\n    },\n    {\n      \"abxMessageId\": 4551618356913732000,\n      \"abxMessageIdStr\": \"string\",\n      \"attachmentName\": \"attachment1.jpg\"\n    }\n  ],\n  \"tenantId\": 1234,\n  \"tenantName\": \"example-tenant\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4416c06c-56b3-45a5-bf44-704a716cb224",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6a498ee3-112a-472f-bd16-528bfb78a84e",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6a27a94d-81ef-4ab4-a585-aa7002be3e59",
+              "name": "Threat does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "41b6dc36-06e9-4a8a-8b6e-2aff13736dcd",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "21d24bab-6eed-4687-b5eb-733400079e21",
+          "name": "Get information of links in a threat campagin.",
+          "request": {
+            "name": "Get information of links in a threat campagin.",
+            "description": {},
+            "url": {
+              "path": [
+                "threats",
+                ":threat_id",
+                "links"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "threat_id",
+                  "description": "(Required) A UUID representing the threat."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b6022cb7-2c3e-4208-8131-4ae5c0dc7928",
+              "name": "Details of the links in a threat campaign. This API can be used to obtain the details of the links that are embedded in the email messages of a threat.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "links"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"links\": [\n    {\n      \"abxMessageId\": 4551618356913732000,\n      \"abxMessageIdStr\": \"string\",\n      \"displayText\": \"This is not a spoof!\",\n      \"domainLink\": \"lamronba.com\",\n      \"linkType\": \"html href\",\n      \"linkUrl\": \"http://spoof.lamronba.com\",\n      \"source\": \"body\"\n    },\n    {\n      \"abxMessageId\": 4551618356913732000,\n      \"abxMessageIdStr\": \"string\",\n      \"displayText\": \"This is not a spoof!\",\n      \"domainLink\": \"lamronba.com\",\n      \"linkType\": \"html href\",\n      \"linkUrl\": \"http://spoof.lamronba.com\",\n      \"source\": \"body\"\n    }\n  ],\n  \"tenantId\": 1234,\n  \"tenantName\": \"example-tenant\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95609867-b79a-4441-a155-b4c192524e19",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "links"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7b7e6814-8862-4384-93f0-097ce03c31c9",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "links"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d202d6ed-b727-45a1-85fc-0b94621bf727",
+              "name": "Threat does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "links"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "12ed4377-6feb-4a5b-a0e5-07aa97dec99d",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats",
+                    ":threat_id",
+                    "links"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "threat_id",
+                      "description": "(Required) A UUID representing the threat."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "967cc435-8bf6-46e7-8a47-29d9416aae42",
+          "name": "Download data from Threat Log in .csv format",
+          "request": {
+            "name": "Download data from Threat Log in .csv format",
+            "description": {},
+            "url": {
+              "path": [
+                "threats_export",
+                "csv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Max time range is 14 days. If only one of the gte or lte filters are specified, the time range defaults to 1 day within the specified filter. If neither of the gte or lte filters are specified, the time range defaults to the previous date to the current date."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters threats based on the source of detection. 'all' returns threats from all sources, 'spam' returns only spam threats, 'attacks' returns only attack threats, and 'borderline' returns only borderline threats."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e25f428e-3369-482c-a508-f0430e361302",
+              "name": "A csv list of all messages in the Threat Log. Headers include the following in order: <br />- Date<br />- From Display Name<br />- From Email<br />- Subject<br />- Recipient Email<br />- Job Title of Sender<br />- Job Title of Recipient<br />- Abnormals best guess of attack type<br />- Abnormals best guess of attack strategy<br />- Abnormals best guess of impersonated entity<br />- Abnormals best guess of attack vector<br />- Remediation Status<br />- Remediation Time<br />- Judgement<br />- Abnormal Message ID<br />- Threat ID<br />- Tenant ID<br />- Tenant Name",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats_export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2023-01-01T01:01:01Z lte 2023-01-14T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Controls the response format. Use 'text/csv' to receive data in CSV format, or 'application/json' for JSON format (default).",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "Date,From Display Name,From Email,Subject,Recipient Email,Job Title of Sender,Job Title of Recipient,Abnormals best guess of attack type,Abnormals best guess of attack strategy,Abnormals best guess of impersonated entity,Abnormals best guess of attack vector,Remediation Status,Remediation Time,Judgement,Abnormal Message ID,Threat ID,Tenant ID,Tenant Name\n2020-06-09T17:42:59Z,,support@secure-reply.org,Phishing Email,example@example.com,,,Extortion,Name Impersonation,None / Others,Text,Auto-Remediated,2020-06-09T18:00:00Z,Malicious,4551618356913732000,42,acme-corp",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "93dc5f82-76a4-4b4d-93bd-cc3980f873e5",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats_export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2023-01-01T01:01:01Z lte 2023-01-14T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Controls the response format. Use 'text/csv' to receive data in CSV format, or 'application/json' for JSON format (default).",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "632e6ed3-681a-4be1-99fe-87be502c5e08",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats_export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2023-01-01T01:01:01Z lte 2023-01-14T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Controls the response format. Use 'text/csv' to receive data in CSV format, or 'application/json' for JSON format (default).",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c6ec4aeb-610a-4f1c-91e5-059f1119d261",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats_export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2023-01-01T01:01:01Z lte 2023-01-14T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Controls the response format. Use 'text/csv' to receive data in CSV format, or 'application/json' for JSON format (default).",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6cc02257-e34a-463b-a997-6bf7912f0ada",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "threats_export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2023-01-01T01:01:01Z lte 2023-01-14T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Controls the response format. Use 'text/csv' to receive data in CSV format, or 'application/json' for JSON format (default).",
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.abnormalplatform.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7648e06b-383a-49a9-9513-41fa50ec0057",
+    "name": "Abnormal Security Client Threats API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.\n<h2>Who is this API for?</h2>\nThis API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.\n<h2> Integration Steps </h2>\nGo to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`\n<h3> Step 1: Generating the authentication token </h3>\n\nRetrieve your authentication token via the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.\n\nKeep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.\n\nOnce obtained, the token can be used in a request from any HTTP client, such as cURL:\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" https://api.abnormalplatform.com/v1/threats </pre>\n\n<h3> Step 2: IP allowlisting </h3>\n\nIP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.\n\nTo allowlist your organization's IPs, please provide enter into the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href=\"https://www.ipaddressguide.com/cidr\"> CIDR block</a>.\n\n<h3> Step 3: Try it out with Test Data </h3>\n\nTo confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:\n\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" <b>-H \"Mock-Data: True\"</b> https://api.abnormalplatform.com/v1/threats </pre>\n\nThe server should respond with a body payload similar to the examples specified in this documentation.\n\n<h3> Note for EU Customers </h3>\n\nIf you're a customer in the EU, you'll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you'd like to test the API through SwaggerHub, you'll find both the default host and the EU host in the Servers dropdown menu below.\n\n\nContact Support:\n Name: Abnormal Security Support\n Email: support@abnormalsecurity.com",
+      "type": "text/plain"
+    }
+  }
+}

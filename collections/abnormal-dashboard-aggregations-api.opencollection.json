@@ -1,0 +1,399 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Dashboard Aggregations API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Dashboard Aggregations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve the frequency of specific attack types for a given period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/attack_frequency",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_frequency` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters attacks by frequency based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the frequency of specific attack types for a given period."
+        },
+        {
+          "info": {
+            "name": "Retrieve aggregated counts of distinct attack types that were successfully stopped, including current and previous periods.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/attack_stopped",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_stopped` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters attacks stopped based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve aggregated counts of distinct attack types that were successfully stopped, including current and previous periods."
+        },
+        {
+          "info": {
+            "name": "Retrieve the breakdown of attacks based on their strategy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/attack_strategy_breakdown",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_strategy_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters attack strategy breakdown based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the breakdown of attacks based on their strategy."
+        },
+        {
+          "info": {
+            "name": "Retrieve the breakdown of attacks based on their vectors.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/attack_vector_breakdown",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_vector_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters attack vector breakdown based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the breakdown of attacks based on their vectors."
+        },
+        {
+          "info": {
+            "name": "Retrieve the origin countries of attackers for a given period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/attacker_origin",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attacker_origin` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters attacker origins based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the origin countries of attackers for a given period."
+        },
+        {
+          "info": {
+            "name": "Retrieve an aggregated summary of multiple security data points for the dashboard.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/dashboard_summary",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/dashboard_summary` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters the dashboard summary based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve an aggregated summary of multiple security data points for the dashboard."
+        },
+        {
+          "info": {
+            "name": "Retrieve the most impersonated employees for a specified period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/most_impersonated_employee",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters impersonated employees based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the most impersonated employees for a specified period."
+        },
+        {
+          "info": {
+            "name": "Retrieve the most impersonated non-VIP employees for a specified period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/most_impersonated_employee_non_vip",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee_non_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters impersonated non-VIP employees based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the most impersonated non-VIP employees for a specified period."
+        },
+        {
+          "info": {
+            "name": "Retrieve the most impersonated VIP employees for a specified period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/most_impersonated_employee_vip",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters impersonated VIP employees based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the most impersonated VIP employees for a specified period."
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of the most impersonated vendors in attacks.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/most_impersonated_vendor",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_vendor` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters the most impersonated vendor data based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of the most impersonated vendors in attacks."
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of the employees who were recipients of attacks, based on their job titles.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/recipient_employees",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters the recipient employees data based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of the employees who were recipients of attacks, based on their job titles."
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of the non-VIP employees who were recipients of attacks, based on their job titles.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/recipient_employees_non_vip",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees_non_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters the recipient non-VIP employees data based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of the non-VIP employees who were recipients of attacks, based on their job titles."
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of the VIP employees who were recipients of attacks, based on their job titles.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/recipient_employees_vip",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters the recipient VIP employees data based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of the VIP employees who were recipients of attacks, based on their job titles."
+        },
+        {
+          "info": {
+            "name": "Retrieve a breakdown of attacks based on sender impersonation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/sender_impersonation_breakdown",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/sender_impersonation_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters sender impersonation breakdown based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve a breakdown of attacks based on sender impersonation."
+        },
+        {
+          "info": {
+            "name": "Retrieve the list of trending attacks for a specified period.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/aggregations/trending_attacks",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/trending_attacks` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters trending attacks based on the source of detection."
+              }
+            ]
+          },
+          "docs": "Retrieve the list of trending attacks for a specified period."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

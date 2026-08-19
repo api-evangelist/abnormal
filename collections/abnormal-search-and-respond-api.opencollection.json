@@ -1,0 +1,204 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Search and Respond API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search and Respond",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for email messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/search",
+            "params": [
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination (default: 1)"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (default: 100, max: 1000)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search for email messages across Abnormal and Quarantine sources. Optionally filter by tenant_ids in the request body. If tenant_ids is not provided, all authorized tenants are searched. The tenant_ids must be a subset of the tenants authorized by the bearer token.\n\n**Key Filter Fields:**\n- `body_link`: Filter by URLs found in the email body (e.g., phishing links, suspicious domains)\n- `judgement`: Filter by threat classification. Values: 'attack' (confirmed threats), 'borderline' (suspicious bu"
+        },
+        {
+          "info": {
+            "name": "List activity logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/search/activities",
+            "params": [
+              {
+                "name": "tenant_ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of tenant IDs to filter activities (e.g., '123,456' or '789'). If not provided, all authorized tenants are included."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination (default: 1)"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page (default: 100, max: 1000)"
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query",
+                "description": "Filter by remediation action (e.g., delete, move_to_inbox)"
+              }
+            ]
+          },
+          "docs": "List activity logs for search and remediation operations. Optionally filter by tenant_ids query parameter (e.g., ?tenant_ids=123&tenant_ids=456). If tenant_ids is not provided, all authorized tenants are included. The tenant_ids must be a subset of the tenants authorized by the bearer token."
+        },
+        {
+          "info": {
+            "name": "Get activity status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/search/activities/:activity_log_id/status",
+            "params": [
+              {
+                "name": "activity_log_id",
+                "value": "",
+                "type": "path",
+                "description": "The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+              }
+            ]
+          },
+          "docs": "Get detailed status of a specific activity including remediation results. Authorization is automatically determined by the bearer token - if the activity belongs to any tenant authorized by your token, you will be able to access it. The activity_log_id is returned in the response from the remediation endpoint. "
+        },
+        {
+          "info": {
+            "name": "Download EML file for a message",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/search/messages/:message_id/eml",
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+              },
+              {
+                "name": "quarantineIdentity",
+                "value": "",
+                "type": "query",
+                "description": "Quarantine identity for quarantined messages. Required along with 'recipientMailbox' to download quarantine messages from S3 cache."
+              },
+              {
+                "name": "recipientMailbox",
+                "value": "",
+                "type": "query",
+                "description": "Recipient mailbox email address for quarantined messages. Required along with 'quarantineIdentity' to download quarantine messages from S3 cache."
+              }
+            ]
+          },
+          "docs": "Download the EML file for a specific message by cloud_message_id. Returns the EML file content as message/rfc822 format. For quarantine messages, provide both 'quarantineIdentity' and 'recipientMailbox' query parameters."
+        },
+        {
+          "info": {
+            "name": "Download email attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/search/messages/attachments/download",
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "query",
+                "description": "Message ID"
+              },
+              {
+                "name": "attachment_name",
+                "value": "",
+                "type": "query",
+                "description": "Name of the attachment to download"
+              },
+              {
+                "name": "tenant_id",
+                "value": "",
+                "type": "query",
+                "description": "Tenant ID"
+              },
+              {
+                "name": "raw_message_id",
+                "value": "",
+                "type": "query",
+                "description": "Raw message ID from cloud provider"
+              },
+              {
+                "name": "native_user_id",
+                "value": "",
+                "type": "query",
+                "description": "Native user ID from cloud provider"
+              },
+              {
+                "name": "recipient_mailbox",
+                "value": "",
+                "type": "query",
+                "description": "Recipient mailbox email address"
+              }
+            ]
+          },
+          "docs": "Download an email attachment for a given message."
+        },
+        {
+          "info": {
+            "name": "Remediate email messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/search/remediate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Remediate email messages by deleting, moving, or submitting them for review. Returns an `activity_log_id` that can be polled via the **Get Activity Status** endpoint.\n\n---\n\n## Two modes of operation\n\n**Specific messages** (`remediate_all=false`):\nProvide a `messages` list. Each entry must include `tenant_id`, `raw_message_id`, `mailbox_name`, `native_user_id`, `subject`, `sender`, and `received_time`. The response returns an `activity_log_id`; poll **Get Activity Status** to retrieve per-message"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

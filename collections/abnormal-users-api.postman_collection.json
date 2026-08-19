@@ -1,0 +1,311 @@
+{
+  "item": [
+    {
+      "id": "be7a0190-5cb5-42a1-bf27-20c3759aa42a",
+      "name": "Users",
+      "description": {
+        "content": "API to retrieve users from RBAC system",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "be471462-d7f0-4b92-81f2-8aa7152c9a33",
+          "name": "Get a list of users from RBAC user management system",
+          "request": {
+            "name": "Get a list of users from RBAC user management system",
+            "description": {
+              "content": "Retrieves users for an account from the RBAC user management system.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0adc4dfc-ca90-48b8-ad3b-2826ea3f465d",
+              "name": "A list of users with their roles and resource permissions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"email\": \"tBKo0SiejuLwE@ZykYXylZfuPAugpqpGrPVmRg.yxks\",\n      \"user_id\": 5476,\n      \"local_login_enabled\": false,\n      \"sso_enabled\": true,\n      \"role\": {\n        \"id\": 8629,\n        \"name\": \"string\",\n        \"policies\": [\n          {\n            \"permissions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"resource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"permissions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"resource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"description\": \"\"\n      },\n      \"resource_permissions\": [\n        {\n          \"permissions\": [\n            \"string\",\n            \"string\"\n          ],\n          \"resource\": \"string\"\n        },\n        {\n          \"permissions\": [\n            \"string\",\n            \"string\"\n          ],\n          \"resource\": \"string\"\n        }\n      ]\n    },\n    {\n      \"email\": \"osE3Sv8z1BdQLT@yEurfQM.jd\",\n      \"user_id\": 3424,\n      \"local_login_enabled\": false,\n      \"sso_enabled\": true,\n      \"role\": {\n        \"id\": 6192,\n        \"name\": \"string\",\n        \"policies\": [\n          {\n            \"permissions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"resource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"permissions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"resource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"description\": \"\"\n      },\n      \"resource_permissions\": [\n        {\n          \"permissions\": [\n            \"string\",\n            \"string\"\n          ],\n          \"resource\": \"string\"\n        },\n        {\n          \"permissions\": [\n            \"string\",\n            \"string\"\n          ],\n          \"resource\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"status\": \"success\",\n  \"status_code\": 200\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "196a29e6-d023-4c9c-8e1f-49f949a87878",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9535de35-476a-40e7-810b-5bb4fe619d60",
+              "name": "Forbidden - Insufficient permissions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "83e8952d-db69-44c3-9851-37006d2d967f",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ab2f57a3-7661-43af-8df7-db1df55fed61",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.abnormalplatform.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "14ea80f4-0d3c-4ff1-a730-2113176ace69",
+    "name": "Abnormal Security Client Users API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.\n<h2>Who is this API for?</h2>\nThis API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.\n<h2> Integration Steps </h2>\nGo to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`\n<h3> Step 1: Generating the authentication token </h3>\n\nRetrieve your authentication token via the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.\n\nKeep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.\n\nOnce obtained, the token can be used in a request from any HTTP client, such as cURL:\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" https://api.abnormalplatform.com/v1/threats </pre>\n\n<h3> Step 2: IP allowlisting </h3>\n\nIP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.\n\nTo allowlist your organization's IPs, please provide enter into the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href=\"https://www.ipaddressguide.com/cidr\"> CIDR block</a>.\n\n<h3> Step 3: Try it out with Test Data </h3>\n\nTo confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:\n\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" <b>-H \"Mock-Data: True\"</b> https://api.abnormalplatform.com/v1/threats </pre>\n\nThe server should respond with a body payload similar to the examples specified in this documentation.\n\n<h3> Note for EU Customers </h3>\n\nIf you're a customer in the EU, you'll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you'd like to test the API through SwaggerHub, you'll find both the default host and the EU host in the Servers dropdown menu below.\n\n\nContact Support:\n Name: Abnormal Security Support\n Email: support@abnormalsecurity.com",
+      "type": "text/plain"
+    }
+  }
+}

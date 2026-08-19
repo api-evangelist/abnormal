@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Roles API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of roles for an account from RBAC system",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/roles",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Fetch all roles for an account from RBAC system.\n\nThis endpoint retrieves a union of both account-specific roles and\nglobal (Abnormal-defined) roles for the authenticated account from\nthe RBAC service."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

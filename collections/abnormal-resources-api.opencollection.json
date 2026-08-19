@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Resources API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Resources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List resources with pagination and filtering",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/resources",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return per page (default: 20, max: 100)"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "Page number to retrieve (1-indexed, default: 1)"
+              }
+            ]
+          },
+          "docs": "Retrieve a paginated list of resources with optional filtering using pageSize and pageNumber query parameters."
+        },
+        {
+          "info": {
+            "name": "Get a single resource by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/resources/:resource_id",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the resource"
+              }
+            ]
+          },
+          "docs": "Retrieve detailed information about a specific resource by its UUID."
+        },
+        {
+          "info": {
+            "name": "Perform an action on a resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/resources/:resource_id/actions",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the resource"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute a specific action on a resource (refresh or validate). Returns 202 Accepted with action ID for tracking."
+        },
+        {
+          "info": {
+            "name": "Update an existing resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.abnormalplatform.com/v1/resources/:resource_id/update",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the resource"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update an existing resource's fields (PATCH). Provide only the fields that need updating."
+        },
+        {
+          "info": {
+            "name": "Create a new resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/resources/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new resource with the specified name and optional description. Returns 201 Created with resource ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

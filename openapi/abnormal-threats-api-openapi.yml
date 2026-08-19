@@ -1,0 +1,1007 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Threats API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Threats
+  description: APIs to manage threats notified in the Abnormal Threat Log
+paths:
+  /threats:
+    get:
+      operationId: v1_threats_retrieve
+      summary: Get a list of threats
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the keys that are supported for `/threats` are `receivedTime` and `latestTimeRemediated`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ format`.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+          LatestTimeRemediated:
+            value: latestTimeRemediated gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: latestTimeRemediated
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: ' Number of threats on each page. Each page of data will have at most pageSize threats. Has no effect if filter is not specified.'
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of threats. Has no effect if filter is not specified.
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - attacks
+          - borderline
+          - spam
+        description: Filters threats based on the source of detection. 'all' returns threats from all sources, 'spam' returns only spam threats, 'attacks' returns only attack threats, and 'borderline' returns only borderline threats.
+      - in: query
+        name: sender
+        schema:
+          type: string
+        description: Filters threats based on the name or email address of the sender
+      - in: query
+        name: recipient
+        schema:
+          type: string
+        description: Filters threats based on the name or email address of the recipient
+      - in: query
+        name: subject
+        schema:
+          type: string
+        description: Filters threats based on the email subject
+      - in: query
+        name: topic
+        schema:
+          type: string
+          enum:
+          - Billing Account Update
+          - Covid-19 Related Attack
+          - Cryptocurrency
+          - Invoice
+          - Invoice Inquiry
+        description: Filters threats based on the topic of email contents
+      - in: query
+        name: attackType
+        schema:
+          type: string
+          enum:
+          - Internal-to-Internal Attacks (Email Account Takeover)
+          - Spam
+          - Reconnaissance
+          - Scam
+          - Social Engineering (BEC)
+          - 'Phishing: Credential'
+          - Invoice/Payment Fraud (BEC)
+          - Malware
+          - Extortion
+          - 'Phishing: Sensitive Data'
+          - Other
+        description: Filters threats based on the type of attack
+      - in: query
+        name: attackVector
+        schema:
+          type: string
+          enum:
+          - Link
+          - Attachment
+          - Text
+          - Others
+          - Attachment with Zipped File
+          - QR Code
+          - Calendar Invite
+          - Spam Bomb
+        description: Filters threats based on the attack vector
+      - in: query
+        name: attackStrategy
+        schema:
+          type: string
+          enum:
+          - Name Impersonation
+          - Internal Compromised Email Account
+          - External Compromised Email Account
+          - Spoofed Email
+          - Unknown Sender
+          - Covid 19 Related Attack
+        description: Filters threats based on the attack strategy
+      - in: query
+        name: impersonatedParty
+        schema:
+          type: string
+          enum:
+          - VIP
+          - Assistants
+          - Employee (other)
+          - Brand
+          - Known Partners
+          - Automated System (Internal)
+          - Automated System (External)
+          - Unknown Partner
+          - None / Others
+        description: Filters threats based on the impersonated party
+      tags:
+      - Threats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedThreats'
+          description: A list of the IDs of the top 100 threats identified in Threat Log if no filter query parameter is specified, or a paginated list of threats if a filter query parameter is specified. The pageNumber and nextPageNumber fields will be absent if no filter query parameter is used. The nextPageNumber field will be absent if there are no more pages of data.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /threats/{threat_id}:
+    get:
+      operationId: v1_threats_retrieve_2
+      summary: Get details of a threat
+      parameters:
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: Number of messages corresponding to threat in each page. Each page of data will have at most pageSize message. Total results returned cannot exceed 2000 due to database limitations
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of threat messages. Currently ignored, only 10 results for `messages` will show. Supported will be added in a future version. Total results returned cannot exceed 2000 due to database limitations
+      - in: path
+        name: threat_id
+        schema:
+          type: string
+        description: A UUID representing the threat.
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Threats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreatDetails'
+          description: A threat identified by Abnormal Security.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/ThreatDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+    post:
+      operationId: v1_threats_create
+      description: Use this to remediate or unremediate a threat. If the request is found to be something which can be processed, the server will return a '202 Accept' with an actionId and status URL in the response. This can be used to check the status of the request.
+      summary: Manage a Threat identified by Abnormal Security
+      parameters:
+      - in: path
+        name: threat_id
+        schema:
+          type: string
+        description: A UUID representing the threat.
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Threats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostThreatRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostThreatResponse'
+          description: Accepted for processing.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/ThreatDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /threats/{threat_id}/actions/{action_id}:
+    get:
+      operationId: v1_threats_actions_retrieve
+      summary: Check the status of an action requested on a threat.
+      parameters:
+      - in: path
+        name: threat_id
+        schema:
+          type: string
+        description: A UUID representing the threat.
+        required: true
+      - in: path
+        name: action_id
+        schema:
+          type: string
+        description: A UUID representing the action id for a threat.
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Threats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionStatus'
+          description: Status of the action requested on a threat. This API can be used to check the status of a request made to the threats. The response will return a descriptive string if the action on threat could not be completed.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/ActionDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /threats/{threat_id}/attachments:
+    get:
+      operationId: v1_threats_attachments_retrieve
+      summary: Get attachment details of a threat campaign.
+      parameters:
+      - in: path
+        name: threat_id
+        schema:
+          type: string
+        description: A UUID representing the threat.
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Threats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreatAttachmentsResponse'
+          description: Details of the attachments in a threat campaign. This API can be used to obtain the details of the links that are embedded in the email messages of a threat.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/ThreatDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /threats/{threat_id}/links:
+    get:
+      operationId: v1_threats_links_retrieve
+      summary: Get information of links in a threat campagin.
+      parameters:
+      - in: path
+        name: threat_id
+        schema:
+          type: string
+        description: A UUID representing the threat.
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Threats
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreatLinksResponse'
+          description: Details of the links in a threat campaign. This API can be used to obtain the details of the links that are embedded in the email messages of a threat.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/ThreatDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /threats_export/csv:
+    get:
+      operationId: v1_threats_export_csv_retrieve
+      summary: Download data from Threat Log in .csv format
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - csv
+          - json
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Max time range is 14 days. If only one of the gte or lte filters are specified, the time range defaults to 1 day within the specified filter. If neither of the gte or lte filters are specified, the time range defaults to the previous date to the current date.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2023-01-01T01:01:01Z lte 2023-01-14T01:01:01Z
+            summary: receivedTime
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - attacks
+          - borderline
+          - spam
+        description: Filters threats based on the source of detection. 'all' returns threats from all sources, 'spam' returns only spam threats, 'attacks' returns only attack threats, and 'borderline' returns only borderline threats.
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          enum:
+          - application/json
+          - text/csv
+          default: application/json
+        description: Controls the response format. Use 'text/csv' to receive data in CSV format, or 'application/json' for JSON format (default).
+      tags:
+      - Threats
+      responses:
+        '200':
+          content:
+            text/csv:
+              schema:
+                type: string
+                example: 'Date,From Display Name,From Email,Subject,Recipient Email,Job Title of Sender,Job Title of Recipient,Abnormals best guess of attack type,Abnormals best guess of attack strategy,Abnormals best guess of impersonated entity,Abnormals best guess of attack vector,Remediation Status,Remediation Time,Judgement,Abnormal Message ID,Threat ID,Tenant ID,Tenant Name
+
+                  2020-06-09T17:42:59Z,,support@secure-reply.org,Phishing Email,example@example.com,,,Extortion,Name Impersonation,None / Others,Text,Auto-Remediated,2020-06-09T18:00:00Z,Malicious,4551618356913732000,42,acme-corp'
+          description: 'A csv list of all messages in the Threat Log. Headers include the following in order: <br />- Date<br />- From Display Name<br />- From Email<br />- Subject<br />- Recipient Email<br />- Job Title of Sender<br />- Job Title of Recipient<br />- Abnormals best guess of attack type<br />- Abnormals best guess of attack strategy<br />- Abnormals best guess of impersonated entity<br />- Abnormals best guess of attack vector<br />- Remediation Status<br />- Remediation Time<br />- Judgement<br />- Abnormal Message ID<br />- Threat ID<br />- Tenant ID<br />- Tenant Name'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    ThreatLinks:
+      type: object
+      properties:
+        abxMessageId:
+          type: integer
+          description: An integer representing a unique identifier for an individual message within a threat (i.e email campaign). This is deprecated, use abxMessageIdStr instead.
+          deprecated: true
+          example: 4551618356913732000
+        abxMessageIdStr:
+          type: string
+          description: A string representing a unique identifier for an individual message within a threat (i.e email campaign).
+          example: 4551618356913732000
+        domainLink:
+          type: string
+          description: The domain name of the link
+          example: lamronba.com
+        linkType:
+          type: string
+          description: The type of link in the email
+          example: html href
+        source:
+          type: string
+          description: The location in the email where the link may be found
+          example: body
+        displayText:
+          type: string
+          description: The link's display text
+          example: This is not a spoof!
+        linkUrl:
+          type: string
+          description: The URL of the link
+          example: http://spoof.lamronba.com
+      required:
+      - abxMessageId
+      - abxMessageIdStr
+      - displayText
+      - domainLink
+      - linkType
+      - linkUrl
+      - source
+    ActionStatus:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ActionStatusStatusEnum'
+        description:
+          type: string
+          description: Description of the action
+          example: The request was completed successfully
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+      required:
+      - description
+      - status
+      - tenantId
+      - tenantName
+    Threat:
+      type: object
+      properties:
+        threatId:
+          type: string
+          description: An id which maps to a threat campaign. A threat campaign might be received by multiple users.
+          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
+      required:
+      - threatId
+    ThreatAttachments:
+      type: object
+      properties:
+        abxMessageId:
+          type: integer
+          description: An integer representing a unique identifier for an individual message within a threat (i.e email campaign). This is deprecated, use abxMessageIdStr instead.
+          deprecated: true
+          example: 4551618356913732000
+        abxMessageIdStr:
+          type: string
+          description: A string representing a unique identifier for an individual message within a threat (i.e email campaign).
+          example: 4551618356913732000
+        attachmentName:
+          type: string
+          description: Name of the attachment
+          example: attachment1.jpg
+      required:
+      - abxMessageId
+      - abxMessageIdStr
+      - attachmentName
+    CustomerOverride:
+      type: object
+      description: 'Serializes customer override attribution for a message.
+
+
+        Present when blocklist or Custom AI Model attribution is enabled.'
+      properties:
+        overrideType:
+          type: string
+          description: The type of customer override applied.
+          example: Customer Blocklist
+        reason:
+          type: string
+          description: The match type that triggered the blocklist override.
+          example: Sender Email
+        overrideJudgement:
+          type:
+          - string
+          - 'null'
+          description: The message judgement applied by the override.
+          example: malicious
+        value:
+          type:
+          - string
+          - 'null'
+          description: The matched blocklist entry value.
+          example: support@secure-reply.org
+      required:
+      - overrideType
+      - reason
+    PaginatedThreats:
+      type: object
+      properties:
+        threats:
+          type: array
+          items:
+            $ref: '#/components/schemas/Threat'
+          description: List of threat IDs.
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
+      required:
+      - threats
+    PostThreatRequestActionEnum:
+      enum:
+      - remediate
+      - unremediate
+      type: string
+    PostThreatResponse:
+      type: object
+      properties:
+        action_id:
+          type: string
+          description: The UUID representing the action id for a threat.
+          example: a33a212a-89ff-461f-be34-ea52aff44a67
+        status_url:
+          type: string
+          description: The URL for status of specific threat.
+          example: https://api.abnormalplatform.com/v1/threats/184712ab-6d8b-47b3-89d3-a314efef79e2/actions/a33a212a-89ff-461f-be34-ea52aff44a73
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+      required:
+      - action_id
+      - status_url
+      - tenantId
+      - tenantName
+    ThreatAttachmentsResponse:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreatAttachments'
+          description: List of attachments in the email messages of a threat
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+      required:
+      - attachments
+      - tenantId
+      - tenantName
+    ThreatMessage:
+      type: object
+      properties:
+        threatId:
+          type: string
+          description: An id which maps to a threat campaign. A threat campaign might be received by multiple users.
+          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
+        abxMessageId:
+          type: integer
+          description: An integer representing a unique identifier for an individual message within a threat (i.e email campaign). This is deprecated, use abxMessageIdStr instead.
+          deprecated: true
+          example: 4551618356913732000
+        abxMessageIdStr:
+          type: string
+          description: A string representing a unique identifier for an individual message within a threat (i.e email campaign).
+          example: 4551618356913732000
+        abxPortalUrl:
+          type: string
+          description: The URL at which the specific message details are viewable in Abnormal Security's Portal web interface.
+          example: https://portal.abnormalsecurity.com/home/threat-center/remediation-history/4551618356913732076
+        subject:
+          type: string
+          description: The email subject.
+          example: Phishing Email
+        fromAddress:
+          type: string
+          description: The email address of the sender.
+          example: support@secure-reply.org
+        fromName:
+          type: string
+          description: The display name of the sender.
+          example: Support
+        senderDomain:
+          type: string
+          description: Email domain of sender (only available for IESS customers)
+          example: secure-reply.org
+        toAddresses:
+          type: string
+          description: All the email addresses to which the message was sent, comma-separated & truncated at 255 chars.
+          example: example@example.com, another@example.com
+        recipientAddress:
+          type: string
+          description: The email address of the user who actually received the message.
+          example: example@example.com
+        receivedTime:
+          type: string
+          format: date-time
+          description: The timestamp at which this message arrived.
+          example: '2020-06-09T17:42:59Z'
+        sentTime:
+          type: string
+          format: date-time
+          description: The timestamp at which this message was sent.
+          example: '2020-06-09T17:42:59Z'
+        internetMessageId:
+          type: string
+          description: The internet message ID, per RFC 822
+          example: <5edfca1c.1c69fb81.4b055.8fd5@mx.google.com>
+        remediationStatus:
+          type: string
+          description: The remediation status of the email threat.
+          example: Auto Remediated
+        attackType:
+          type: string
+          description: The type of threat the message represents.
+          example: Extortion
+        attackStrategy:
+          type: string
+          description: The strategy of threat the message represents.
+          example: Name Impersonation
+        returnPath:
+          type: string
+          description: The path where this message was sent.
+          example: support@secure-reply.org
+        replyToEmails:
+          type: array
+          items:
+            type: string
+          description: The 'reply-to' list of emails.
+          example:
+          - reply-to@example.com
+        ccEmails:
+          type: array
+          items:
+            type: string
+          description: List of email addresses CC'ed.
+          example:
+          - cc@example.com
+        senderIpAddress:
+          type: string
+          description: IP address of sender.
+          example: 100.101.102.103
+        impersonatedParty:
+          type: string
+          description: Impersonated party, if any.
+          example: None / Others
+        attackVector:
+          type: string
+          description: The attack medium.
+          example: Text
+        attachmentNames:
+          type: array
+          items:
+            type: string
+          description: List of attachment names, if any.
+          example:
+          - attachment.pdf
+        attachmentCount:
+          type: integer
+          description: Number of attachments in email (only available for IESS customers)
+        urls:
+          type: array
+          items:
+            type: string
+          description: URLs present in the email body, if any.
+          example:
+          - https://www.google.com/
+        urlCount:
+          type: integer
+          description: Number of urls in email (only available for IESS customers)
+        summaryInsights:
+          type: array
+          items:
+            type: string
+          description: A summary of insights into this attack.
+          example:
+          - Bitcoin Topics
+          - Personal Information Theft
+          - Unusual Sender
+        remediationTimestamp:
+          type: string
+          format: date-time
+          description: The timestamp at which this message was remediated, or empty if it has not been remediated.
+          example: '2020-06-09T17:42:59Z'
+        isRead:
+          type: boolean
+          description: Whether an email has been read
+          example: 'true'
+        attackedParty:
+          type: string
+          description: The party that was targeted by an attack.
+          example: VIP
+        autoRemediated:
+          type: boolean
+          description: Indicates whether Abnormal has automatically detected and remediated the message from the user's Inbox. Note``:`` Abnormal has retained this field and the postRemediated field to support prior integrations, but in newly created integrations, you should capture this information from the remediationStatus field.
+          example: 'True'
+        postRemediated:
+          type: boolean
+          description: Indicates whether Abnormal remediated the campaign at a later time, after landing in the user's Inbox. Note``:`` Abnormal has retained this field and the autoRemediated field to support prior integrations, but in newly created integrations, you should capture this information from the remediationStatus field.
+          example: 'False'
+        source:
+          type:
+          - string
+          - 'null'
+          description: A string representing the judgement of the message.
+          example: Attack
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with this message.
+          example: 1000
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The tenant name associated with this message.
+          example: acme-corp
+        customerOverride:
+          allOf:
+          - $ref: '#/components/schemas/CustomerOverride'
+      required:
+      - abxMessageId
+      - abxMessageIdStr
+      - abxPortalUrl
+      - attachmentCount
+      - attachmentNames
+      - attackStrategy
+      - attackType
+      - attackVector
+      - attackedParty
+      - autoRemediated
+      - ccEmails
+      - fromAddress
+      - fromName
+      - impersonatedParty
+      - internetMessageId
+      - isRead
+      - postRemediated
+      - receivedTime
+      - recipientAddress
+      - remediationStatus
+      - remediationTimestamp
+      - replyToEmails
+      - returnPath
+      - senderDomain
+      - senderIpAddress
+      - sentTime
+      - subject
+      - summaryInsights
+      - threatId
+      - toAddresses
+      - urlCount
+      - urls
+    ThreatDetails:
+      type: object
+      properties:
+        threatId:
+          type: string
+          description: An id which maps to a threat campaign. A threat campaign might be received by multiple users.
+          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
+        recipientCount:
+          type: integer
+          description: The total number of unique recipients who received messages in this threat campaign.
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreatMessage'
+          description: A list of messages comprised in this threat (i.e email campaign).
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be includedin the response if there are no more pages of data
+      required:
+      - messages
+      - recipientCount
+      - tenantId
+      - tenantName
+      - threatId
+    PostThreatRequest:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/PostThreatRequestActionEnum'
+      required:
+      - action
+    ThreatLinksResponse:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreatLinks'
+          description: List of links in the email messages of a threat
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+      required:
+      - links
+      - tenantId
+      - tenantName
+    ActionStatusStatusEnum:
+      enum:
+      - acknowledged
+      - in_progress
+      - done
+      - error
+      type: string
+  responses:
+    ActionDoesNotExistError:
+      description: Action does not exist
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    ThreatDoesNotExistError:
+      description: Threat does not exist
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

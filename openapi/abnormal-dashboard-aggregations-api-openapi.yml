@@ -1,0 +1,1241 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Dashboard Aggregations API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Dashboard Aggregations
+  description: APIs to manage Dashboard metrics
+paths:
+  /aggregations/attack_frequency:
+    get:
+      operationId: v1_aggregations_attack_frequency_retrieve
+      summary: Retrieve the frequency of specific attack types for a given period.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_frequency` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters attacks by frequency based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttackFrequencyResponse'
+          description: A summary of attack frequencies. Represents the count of specific attack types for each reported timestamp.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/attack_stopped:
+    get:
+      operationId: v1_aggregations_attack_stopped_retrieve
+      summary: Retrieve aggregated counts of distinct attack types that were successfully stopped, including current and previous periods.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_stopped` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters attacks stopped based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttackStoppedResponse'
+          description: A summary of stopped attacks. Represents the count of attacks stopped for each attack type.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/attack_strategy_breakdown:
+    get:
+      operationId: v1_aggregations_attack_strategy_breakdown_retrieve
+      summary: Retrieve the breakdown of attacks based on their strategy.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_strategy_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters attack strategy breakdown based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttackStrategyBreakdownResponse'
+          description: A breakdown of attacks based on their strategy.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/attack_vector_breakdown:
+    get:
+      operationId: v1_aggregations_attack_vector_breakdown_retrieve
+      summary: Retrieve the breakdown of attacks based on their vectors.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_vector_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters attack vector breakdown based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttackVectorBreakdownResponse'
+          description: A breakdown of attacks based on their vectors.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/attacker_origin:
+    get:
+      operationId: v1_aggregations_attacker_origin_retrieve
+      summary: Retrieve the origin countries of attackers for a given period.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attacker_origin` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters attacker origins based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttackerOriginResponse'
+          description: A summary of attacker origins based on geographical regions and countries.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/dashboard_summary:
+    get:
+      operationId: v1_aggregations_dashboard_summary_retrieve
+      summary: Retrieve an aggregated summary of multiple security data points for the dashboard.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/dashboard_summary` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters the dashboard summary based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DashboardSummary'
+          description: An aggregated list of security data points.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/most_impersonated_employee:
+    get:
+      operationId: v1_aggregations_most_impersonated_employee_retrieve
+      summary: Retrieve the most impersonated employees for a specified period.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters impersonated employees based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MostImpersonatedEmployeeResponse'
+          description: A list of the most impersonated employees and related statistics.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/most_impersonated_employee_non_vip:
+    get:
+      operationId: v1_aggregations_most_impersonated_employee_non_vip_retrieve
+      summary: Retrieve the most impersonated non-VIP employees for a specified period.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee_non_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters impersonated non-VIP employees based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MostImpersonatedEmployeeNonVIPResponse'
+          description: A list of the most impersonated non-VIP employees and related statistics.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/most_impersonated_employee_vip:
+    get:
+      operationId: v1_aggregations_most_impersonated_employee_vip_retrieve
+      summary: Retrieve the most impersonated VIP employees for a specified period.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters impersonated VIP employees based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MostImpersonatedEmployeeVIPResponse'
+          description: A list of the most impersonated VIP employees and related statistics.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/most_impersonated_vendor:
+    get:
+      operationId: v1_aggregations_most_impersonated_vendor_retrieve
+      summary: Retrieve a list of the most impersonated vendors in attacks.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_vendor` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters the most impersonated vendor data based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MostImpersonatedVendorResponse'
+          description: A list of the most impersonated vendors in attacks.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/recipient_employees:
+    get:
+      operationId: v1_aggregations_recipient_employees_retrieve
+      summary: Retrieve a list of the employees who were recipients of attacks, based on their job titles.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters the recipient employees data based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipientEmployeeResponse'
+          description: A list of the employees who were recipients of attacks, based on their job titles.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/recipient_employees_non_vip:
+    get:
+      operationId: v1_aggregations_recipient_employees_non_vip_retrieve
+      summary: Retrieve a list of the non-VIP employees who were recipients of attacks, based on their job titles.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees_non_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters the recipient non-VIP employees data based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipientEmployeeNonVIPResponse'
+          description: A list of the non-VIP employees who were recipients of attacks, based on their job titles.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/recipient_employees_vip:
+    get:
+      operationId: v1_aggregations_recipient_employees_vip_retrieve
+      summary: Retrieve a list of the VIP employees who were recipients of attacks, based on their job titles.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters the recipient VIP employees data based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipientEmployeeVIPResponse'
+          description: A list of the VIP employees who were recipients of attacks, based on their job titles.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/sender_impersonation_breakdown:
+    get:
+      operationId: v1_aggregations_sender_impersonation_breakdown_retrieve
+      summary: Retrieve a breakdown of attacks based on sender impersonation.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/sender_impersonation_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters sender impersonation breakdown based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SenderImpersonationResponse'
+          description: A breakdown of attacks based on sender impersonation.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /aggregations/trending_attacks:
+    get:
+      operationId: v1_aggregations_trending_attacks_retrieve
+      summary: Retrieve the list of trending attacks for a specified period.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/trending_attacks` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned.
+        style: spaceDelimited
+        examples:
+          ReceivedTime:
+            value: receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: receivedTime
+      - in: query
+        name: source
+        schema:
+          type: string
+          default: all
+          enum:
+          - all
+          - advanced
+        description: Filters trending attacks based on the source of detection.
+      tags:
+      - Dashboard Aggregations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendingAttacksResponse'
+          description: A list of trending attacks and related statistics.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    AttackerOriginResponse:
+      type: object
+      properties:
+        attacker_origin:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackerOrigin'
+          description: List detailing the region, countries in that region, and the count of attacks originating from each country and region.
+      required:
+      - attacker_origin
+    SenderImpersonationBreakdown:
+      type: object
+      properties:
+        impersonatedPartyName:
+          type: string
+          description: The specific name or category of the party being impersonated in the attack.
+          example: VIP
+        attackCount:
+          type: integer
+          description: The number of detected attacks associated with the specific impersonated party
+          example: 200
+      required:
+      - attackCount
+      - impersonatedPartyName
+    AttackStrategyBreakdown:
+      type: object
+      properties:
+        attackStrategy:
+          type: string
+          description: The specific strategy employed by the attacker.
+          example: Name Impersonation
+        attackStrategyDescription:
+          type: string
+          description: A brief explanation of the attack strategy.
+          example: Uses sender name and/or email address to impersonate a party.
+        attackCount:
+          type: integer
+          description: The number of occurrences of the attack associated with the given strategy in the specified time frame.
+          example: 200
+      required:
+      - attackCount
+      - attackStrategy
+      - attackStrategyDescription
+    MostImpersonatedEmployeeVIP:
+      type: object
+      properties:
+        impersonatedEmployeeName:
+          type: string
+          description: The name of the VIP employee impersonated in attacks.
+          example: John Doe
+        attackCount:
+          type: integer
+          description: Number of detected attacks with the impersonated VIP employee in the defined time range.
+          example: 20
+        prevAttackCount:
+          type: integer
+          description: Number of detected impersonated attacks prior to the defined time range.
+          example: 20
+      required:
+      - attackCount
+      - impersonatedEmployeeName
+      - prevAttackCount
+    SenderImpersonationResponse:
+      type: object
+      properties:
+        sender_impersonation_breakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/SenderImpersonationBreakdown'
+          description: List detailing the breakdown of attacks by impersonated sender, along with the count for each impersonated sender type.
+      required:
+      - sender_impersonation_breakdown
+    TrendingAttacks:
+      type: object
+      properties:
+        attackCount:
+          type: integer
+          description: The number of occurrences of the attack for the specified attack type in the current time frame.
+          example: 200
+        attackType:
+          type: string
+          description: The name or type of the attack detected.
+          example: Scam
+        attackTypeDescription:
+          type: string
+          description: A detailed description of the attack type detected.
+          example: Advance fee fraud and similar scams
+        prevAttackCount:
+          type: integer
+          description: The number of occurrences of the attack in the previous time frame.
+          example: 201
+      required:
+      - attackCount
+      - attackType
+      - attackTypeDescription
+      - prevAttackCount
+    RecipientEmployeeVIPResponse:
+      type: object
+      properties:
+        recipient_employees_vip:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipientEmployeeVIP'
+          description: List detailing the recipient VIP employees, their job titles, and the attack counts against them for the current and previous periods.
+      required:
+      - recipient_employees_vip
+    MostImpersonatedEmployeeNonVIPResponse:
+      type: object
+      properties:
+        most_impersonated_employee_non_vip:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedEmployeeNonVIP'
+          description: List detailing the names of the most impersonated non-VIP employees, along with the current and previous attack count for each.
+      required:
+      - most_impersonated_employee_non_vip
+    AttackFrequencyResponse:
+      type: object
+      properties:
+        attack_frequency:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackFrequency'
+          description: List detailing the timestamp, the type of attack, and the count of that attack type for the given timestamp.
+      required:
+      - attack_frequency
+    AttackStoppedResponse:
+      type: object
+      properties:
+        attack_stopped:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackStopped'
+          description: List detailing the type of attacks stopped, the current count of attacks stopped, and the previous count of attacks stopped.
+      required:
+      - attack_stopped
+    AttackVectorBreakdownResponse:
+      type: object
+      properties:
+        attack_vector_breakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackVectorBreakdown'
+          description: List detailing the breakdown of attacks by vector, along with the count for each vector.
+      required:
+      - attack_vector_breakdown
+    RecipientEmployeeResponse:
+      type: object
+      properties:
+        recipient_employees:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipientEmployee'
+          description: List detailing the recipient employees, their job titles, and the attack counts against them for the current and previous periods.
+      required:
+      - recipient_employees
+    RecipientEmployeeNonVIP:
+      type: object
+      properties:
+        job_title:
+          type: string
+          description: The job title of the non-VIP employee who was the target of the attack.
+          example: Software Engineer
+        display_name:
+          type: string
+          description: The display name of the non-VIP employee who was the target of the attack.
+          example: Jane Doe
+        attack_count:
+          type: integer
+          description: The number of occurrences of the attack targeting the given non-VIP employee in the specified time frame.
+          example: 15
+        prev_attack_count:
+          type: integer
+          description: The number of occurrences of the attack targeting the given non-VIP employee in the previous period.
+          example: 10
+      required:
+      - attack_count
+      - display_name
+      - job_title
+      - prev_attack_count
+    MostImpersonatedEmployeeNonVIP:
+      type: object
+      properties:
+        impersonatedEmployeeName:
+          type: string
+          description: The name of the non-VIP employee impersonated in attacks.
+          example: John Doe
+        attackCount:
+          type: integer
+          description: Number of detected attacks with the impersonated non-VIP employee in the defined time range.
+          example: 20
+        prevAttackCount:
+          type: integer
+          description: Number of detected impersonated attacks prior to the defined time range.
+          example: 20
+      required:
+      - attackCount
+      - impersonatedEmployeeName
+      - prevAttackCount
+    DashboardSummary:
+      type: object
+      properties:
+        attackStopped:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackStopped'
+          description: List detailing the attacks stopped.
+        attackFrequency:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackFrequency'
+          description: List detailing the attack frequency.
+        attackerOrigin:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackerOrigin'
+          description: List detailing the origin of the attacker.
+        mostImpersonatedEmployee:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedEmployee'
+          description: List detailing the most impersonated employees.
+        mostImpersonatedEmployeeVIP:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedEmployeeVIP'
+          description: List detailing the most impersonated VIP employees.
+        mostImpersonatedEmployeeNonVIP:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedEmployeeNonVIP'
+          description: List detailing the most impersonated non-VIP employees.
+        trendingAttacks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendingAttacks'
+          description: List detailing the trending attacks.
+        attackVectorBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackVectorBreakdown'
+          description: List detailing the attack vectors.
+        attackStrategyBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackStrategyBreakdown'
+          description: List detailing the attack strategies.
+        senderImpersonationBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/SenderImpersonationBreakdown'
+          description: List detailing the impersonated sender breakdown.
+        mostImpersonatedVendor:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedVendor'
+          description: List detailing the most impersonated vendors.
+        recipientEmployees:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipientEmployee'
+          description: List detailing the recipient employees targeted in attacks.
+        recipientEmployeesVIP:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipientEmployeeVIP'
+          description: List detailing the VIP recipient employees targeted in attacks.
+        recipientEmployeesNonVIP:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipientEmployeeNonVIP'
+          description: List detailing the non-VIP recipient employees targeted in attacks.
+      required:
+      - attackFrequency
+      - attackStopped
+      - attackStrategyBreakdown
+      - attackVectorBreakdown
+      - attackerOrigin
+      - mostImpersonatedEmployee
+      - mostImpersonatedEmployeeNonVIP
+      - mostImpersonatedEmployeeVIP
+      - mostImpersonatedVendor
+      - recipientEmployees
+      - recipientEmployeesNonVIP
+      - recipientEmployeesVIP
+      - senderImpersonationBreakdown
+      - trendingAttacks
+    MostImpersonatedEmployeeVIPResponse:
+      type: object
+      properties:
+        most_impersonated_employee_vip:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedEmployeeVIP'
+          description: List detailing the names of the most impersonated VIP employees, along with the current and previous attack count for each.
+      required:
+      - most_impersonated_employee_vip
+    AttackVectorBreakdown:
+      type: object
+      properties:
+        attackVectorGroup:
+          type: string
+          description: The category or type of attack vectors used in cyber-attacks.
+          example: attachment
+        attackCount:
+          type: integer
+          description: The number of detected attacks associated with the specified attack vector.
+          example: 200
+      required:
+      - attackCount
+      - attackVectorGroup
+    MostImpersonatedEmployeeResponse:
+      type: object
+      properties:
+        most_impersonated_employee:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedEmployee'
+          description: List detailing the names of the most impersonated employees, along with the current and previous attack count for each.
+      required:
+      - most_impersonated_employee
+    RecipientEmployeeVIP:
+      type: object
+      properties:
+        job_title:
+          type: string
+          description: The job title of the VIP employee who was the target of the attack.
+          example: Software Engineer
+        display_name:
+          type: string
+          description: The display name of the VIP employee who was the target of the attack.
+          example: Jane Doe
+        attack_count:
+          type: integer
+          description: The number of occurrences of the attack targeting the given VIP employee in the specified time frame.
+          example: 15
+        prev_attack_count:
+          type: integer
+          description: The number of occurrences of the attack targeting the given VIP employee in the previous period.
+          example: 10
+      required:
+      - attack_count
+      - display_name
+      - job_title
+      - prev_attack_count
+    RecipientEmployee:
+      type: object
+      properties:
+        job_title:
+          type: string
+          description: The job title of the employee who was the target of the attack.
+          example: Software Engineer
+        display_name:
+          type: string
+          description: The display name of the employee who was the target of the attack.
+          example: Jane Doe
+        attack_count:
+          type: integer
+          description: The number of occurrences of the attack targeting the given employee in the specified time frame.
+          example: 15
+        prev_attack_count:
+          type: integer
+          description: The number of occurrences of the attack targeting the given employee in the previous period.
+          example: 10
+      required:
+      - attack_count
+      - display_name
+      - job_title
+      - prev_attack_count
+    MostImpersonatedEmployee:
+      type: object
+      properties:
+        impersonatedEmployeeName:
+          type: string
+          description: Name of the employee impersonated in attacks.
+          example: John Doe
+        attackCount:
+          type: integer
+          description: Number of detected attacks with the impersonated employee in the defined time range.
+          example: 20
+        prevAttackCount:
+          type: integer
+          description: Number of detected impersonated attacks prior to the defined time range.
+          example: 20
+      required:
+      - attackCount
+      - impersonatedEmployeeName
+      - prevAttackCount
+    MostImpersonatedVendor:
+      type: object
+      properties:
+        impersonatedBrandName:
+          type: string
+          description: The name of the vendor impersonated in attacks.
+          example: Apple
+        attackCount:
+          type: integer
+          description: The amount of attacks detected with the respective vendor impersonation.
+          example: 20
+        prevAttackCount:
+          type: integer
+          description: The amount of vendor impersonated attacks detected prior to the defined time range.
+          example: 20
+      required:
+      - attackCount
+      - impersonatedBrandName
+      - prevAttackCount
+    RecipientEmployeeNonVIPResponse:
+      type: object
+      properties:
+        recipient_employees_non_vip:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipientEmployeeNonVIP'
+          description: List detailing the recipient non-VIP employees, their job titles, and the attack counts against them for the current and previous periods.
+      required:
+      - recipient_employees_non_vip
+    AttackerOrigin:
+      type: object
+      properties:
+        regionName:
+          type: string
+          description: The geographical region name.
+          example: Asia
+        attackCount:
+          type: integer
+          description: The count of attacks originating from the specified region.
+          example: 1000
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Country'
+      required:
+      - attackCount
+      - countries
+      - regionName
+    AttackFrequency:
+      type: object
+      properties:
+        timeStamp:
+          type: string
+          format: date-time
+          description: The date and time the attack was received.
+          example: '2023-08-11T12:34:56Z'
+        attackType:
+          type: string
+          description: The type of attack detected.
+          example: Scam
+        attackCount:
+          type: integer
+          description: The amount of attacks detected for the specified attack type.
+          example: 200
+      required:
+      - attackCount
+      - attackType
+      - timeStamp
+    AttackStopped:
+      type: object
+      properties:
+        attackTypeName:
+          type: string
+          description: The type or category of the attack (e.g., 'all' for all types of attacks).
+          example: all
+        attackCount:
+          type: integer
+          description: The number of attacks detected over a specified period of time.
+          example: 2000
+        prevAttackCount:
+          type: integer
+          description: The number of attacks detected prior to the defined time range.
+          example: 2001
+      required:
+      - attackCount
+      - attackTypeName
+      - prevAttackCount
+    AttackStrategyBreakdownResponse:
+      type: object
+      properties:
+        attack_strategy_breakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttackStrategyBreakdown'
+          description: List detailing the breakdown of attacks by strategy, along with the count for each strategy.
+      required:
+      - attack_strategy_breakdown
+    MostImpersonatedVendorResponse:
+      type: object
+      properties:
+        most_impersonated_vendor:
+          type: array
+          items:
+            $ref: '#/components/schemas/MostImpersonatedVendor'
+          description: List detailing the most impersonated vendors, along with their attack counts for the current and previous periods.
+      required:
+      - most_impersonated_vendor
+    TrendingAttacksResponse:
+      type: object
+      properties:
+        trending_attacks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendingAttacks'
+          description: List detailing various trending attacks, along with the current and previous attack counts for each.
+      required:
+      - trending_attacks
+    Country:
+      type: object
+      properties:
+        regionName:
+          type: string
+          description: The geographical region name for the country. (This will be repetitive within the region array.)
+          example: Asia
+        country:
+          type: string
+          description: The name of the country.
+          example: India
+        countryCode:
+          type: string
+          description: The country code.
+          example: IN
+        latitude:
+          type: string
+          description: Latitude of the country.
+          example: 20.5937
+        longitude:
+          type: string
+          description: Longitude of the country.
+          example: 78.9629
+        attackCount:
+          type: integer
+          description: The count of attacks originating from the specified country.
+          example: 650
+      required:
+      - attackCount
+      - country
+      - countryCode
+      - latitude
+      - longitude
+      - regionName
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

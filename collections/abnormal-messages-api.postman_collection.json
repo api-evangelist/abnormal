@@ -1,0 +1,1357 @@
+{
+  "item": [
+    {
+      "id": "c4e6f7c2-3e55-4675-8999-b17eacfce555",
+      "name": "Messages",
+      "description": {
+        "content": "API to manage message details",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bdb87978-8394-4929-92a6-5a120d6c8c0c",
+          "name": "Get details of an attachment in an email message",
+          "request": {
+            "name": "Get details of an attachment in an email message",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":message_id",
+                "attachment",
+                ":attachment_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "message_id",
+                  "description": "(Required) The ABX Message Id of a message."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "attachment_name",
+                  "description": "(Required) The attachment name of an attachment belonging to an email message."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f2d32594-83fd-4f2a-ba60-f892b511f4bb",
+              "name": "Attachment details of an attachment in an email message.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attachmentName\": \"test_attachment.pdf\",\n  \"createdOn\": \"2020-01-01T00:00:00Z\",\n  \"details\": [\n    \"has Javascript\"\n  ],\n  \"keyPhrases\": [\n    \"view\",\n    \"completed document\"\n  ],\n  \"lastUpdated\": \"2020-01-01T00:00:00Z\",\n  \"md5\": \"a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6\",\n  \"sha1\": \"a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0\",\n  \"sha256\": \"a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2\",\n  \"size\": \"1KB\",\n  \"type\": \"JPEG\",\n  \"url\": [\n    \"http://malicious.lamronba.com\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c2c2760-8bf9-40c7-8029-70a95892e3ae",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "45e8fafd-ca97-491f-9fab-f1687ba434bd",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "11eabbd5-0c4a-416f-bf72-9bcfaa305003",
+              "name": "Threat does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5e9fcd22-f222-40b5-8818-4a4be9153563",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4dc49aa0-41ac-4b5e-a4b8-c1740ccaed37",
+          "name": "Download the attachment in an email as a file",
+          "request": {
+            "name": "Download the attachment in an email as a file",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":message_id",
+                "attachment",
+                ":attachment_name",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "message_id",
+                  "description": "(Required) The ABX Message Id of a message."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "attachment_name",
+                  "description": "(Required) The attachment name of an attachment belonging to an email message."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Returns test data if set to `True`",
+                "key": "mock-data",
+                "value": "False"
+              },
+              {
+                "key": "Accept",
+                "value": "application/octet-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48c15731-e1b1-478e-b658-0c8168b13775",
+              "name": "The attachment file as an octet-stream. Will resolve into a file in the file system of the machine calling the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9d470e80-f6aa-4053-9db2-71bf18602e68",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0dff6d6b-790f-439e-a3a3-549ff7a76399",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ac7fbe5b-89ef-48da-9dea-50e44dc7cf5b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a95de1ae-c02b-4665-a08c-5cb8b9d8014b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "attachment",
+                    ":attachment_name",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachment_name",
+                      "description": "(Required) The attachment name of an attachment belonging to an email message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Returns test data if set to `True`",
+                    "key": "mock-data",
+                    "value": "False"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e258b1c6-a9e6-420f-bc3c-926d8c3caac8",
+          "name": "Download a message in EML format",
+          "request": {
+            "name": "Download a message in EML format",
+            "description": {
+              "content": "Download the message contents in plaintext in the EML format. For security reasons, this API endpoint is disabled by default. Please talk to your customer specialist to get it enabled.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "messages",
+                ":message_id",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "message_id",
+                  "description": "(Required) The ABX Message Id of a message."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "message/rfc822"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6360e59a-85e1-465b-a481-74a7b3adf72e",
+              "name": "The EML file in plain text",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "message/rfc822"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "message/rfc822"
+                }
+              ],
+              "body": "From: sender@example.com\nTo: recipient@example.com\nSubject: Test Email\nDate: Thu, 23 Aug 2024 12:00:00 +0000\nContent-Type: text/plain; charset=\"UTF-8\"\n\nThis is the email body\n",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5b146b64-5dfb-4e98-9ddf-520890dca0c5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "message/rfc822"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "message/rfc822"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7cc85cc8-d543-421e-a981-4c44ede537da",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "message/rfc822"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "message/rfc822"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1f17d15b-4fc3-48fd-9f62-606ba33dd636",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "message/rfc822"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "message/rfc822"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "40ba0f5b-e742-479f-beda-526c285a7dae",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "message/rfc822"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "message/rfc822"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e18f4060-ffa7-4757-960c-36c84ba70c6d",
+          "name": "Get details of the remediation history for a threat log message",
+          "request": {
+            "name": "Get details of the remediation history for a threat log message",
+            "description": {},
+            "url": {
+              "path": [
+                "messages",
+                ":message_id",
+                "remediation_history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "message_id",
+                  "description": "(Required) The ABX Message Id of a message."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "800ee8aa-2d91-4420-a32f-03fe0b31a449",
+              "name": "Remediation history for a threat log message.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "remediation_history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"folder_locations\": [\n    \"Junk\"\n  ],\n  \"remediation_history\": {\n    \"key_0\": \"2024-06-11T11:35:13.651Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "054e4fda-0402-44da-82eb-a943cf679c53",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "remediation_history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1561e83c-ccf6-4a16-abfa-a53157d94e7e",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "remediation_history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a90d80c3-8088-4186-8cdb-80d9d22a3ed0",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "messages",
+                    ":message_id",
+                    "remediation_history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "message_id",
+                      "description": "(Required) The ABX Message Id of a message."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.abnormalplatform.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "efb521cb-d491-4291-8b4e-918224345c7e",
+    "name": "Abnormal Security Client Messages API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.\n<h2>Who is this API for?</h2>\nThis API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.\n<h2> Integration Steps </h2>\nGo to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`\n<h3> Step 1: Generating the authentication token </h3>\n\nRetrieve your authentication token via the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.\n\nKeep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.\n\nOnce obtained, the token can be used in a request from any HTTP client, such as cURL:\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" https://api.abnormalplatform.com/v1/threats </pre>\n\n<h3> Step 2: IP allowlisting </h3>\n\nIP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.\n\nTo allowlist your organization's IPs, please provide enter into the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href=\"https://www.ipaddressguide.com/cidr\"> CIDR block</a>.\n\n<h3> Step 3: Try it out with Test Data </h3>\n\nTo confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:\n\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" <b>-H \"Mock-Data: True\"</b> https://api.abnormalplatform.com/v1/threats </pre>\n\nThe server should respond with a body payload similar to the examples specified in this documentation.\n\n<h3> Note for EU Customers </h3>\n\nIf you're a customer in the EU, you'll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you'd like to test the API through SwaggerHub, you'll find both the default host and the EU host in the Servers dropdown menu below.\n\n\nContact Support:\n Name: Abnormal Security Support\n Email: support@abnormalsecurity.com",
+      "type": "text/plain"
+    }
+  }
+}

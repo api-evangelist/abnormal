@@ -1,0 +1,425 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client AI Security Mailbox (formerly known as Abuse Mailbox) AI Security Mailbox (formerly known as Abuse Mailbox) API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: AI Security Mailbox (formerly known as Abuse Mailbox)
+  description: API to manage AI Security Mailbox (formerly known as Abuse Mailbox)
+paths:
+  /abuse_mailbox/not_analyzed:
+    get:
+      operationId: v1_abuse_mailbox_not_analyzed_retrieve
+      summary: Get a list of messages submitted to AI Security Mailbox (formerly known as Abuse Mailbox) that were not analyzed.
+      parameters:
+      - in: query
+        name: start
+        schema:
+          type: string
+          format: date-time
+        description: The start of the datetime range, as an RFC 3339 timestamp, to fetch unanalyzed messages from. Defaults to 90 days before end.
+        examples:
+          Start:
+            value: '2022-01-01T00:00:00Z'
+            summary: start
+      - in: query
+        name: end
+        schema:
+          type: string
+          format: date-time
+        description: The end of the datetime range, as an RFC 3339 timestamp, to fetch unanalyzed messages from. Defaults to the current time.
+        examples:
+          End:
+            value: '2022-01-07T23:59:59Z'
+            summary: end
+      tags:
+      - AI Security Mailbox (formerly known as Abuse Mailbox)
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbuseMailboxUnanalyzedResponse'
+          description: Unanalyzed message information
+        '400':
+          $ref: '#/components/responses/InvalidDateError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /abusecampaigns:
+    get:
+      operationId: v1_abusecampaigns_retrieve
+      summary: Get a list of campaigns submitted to AI Security Mailbox (formerly known as Abuse Mailbox)
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the keys `lastReportedTime` and `receivedTime` are supported for `/abusecampaigns`. At least one of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. `lastReportedTime` defaults to the last 24h if unspecified. Do note that provided filter time is in UTC.
+        explode: false
+        style: spaceDelimited
+        examples:
+          LastReportedTime:
+            value: lastReportedTime gte 2020-01-01T00:00:00Z lte 2021-12-01T00:00:00Z
+            summary: lastReportedTime
+      - in: query
+        name: sender
+        schema:
+          type: string
+        description: Filters threats based on the name or email address of the sender
+      - in: query
+        name: recipient
+        schema:
+          type: string
+        description: Filters threats based on the name or email address of the recipient
+      - in: query
+        name: subject
+        schema:
+          type: string
+        description: Filters threats based on the email subject
+      - in: query
+        name: reporter
+        schema:
+          type: string
+        description: Filters threats based on the reporter name or email address
+      - in: query
+        name: attackType
+        schema:
+          type: string
+          enum:
+          - Internal-to-Internal Attacks (Email Account Takeover)
+          - Spam
+          - Reconnaissance
+          - Scam
+          - Social Engineering (BEC)
+          - 'Phishing: Credential'
+          - Invoice/Payment Fraud (BEC)
+          - Malware
+          - Extortion
+          - 'Phishing: Sensitive Data'
+          - Other
+        description: Filters threats based on the type of attack
+      - in: query
+        name: threatType
+        schema:
+          type: string
+          enum:
+          - All
+          - Malicious
+          - Safe
+          - Spam
+        description: Filters threats based on the type of threat
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: Number of abuse campaigns shown on each page. Each page of data will have at most pageSize abuse campaign IDs.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of abuse campaigns. Has no effect if filter is not specified.
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - AI Security Mailbox (formerly known as Abuse Mailbox)
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAbuseCampaings'
+          description: Returns a paginated list of abuse campaign IDs for each  campaign in AI Security Mailbox (formerly known as Abuse Mailbox). The nextPageNumber field will be absent if there are no more pages of data.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /abusecampaigns/{campaign_id}:
+    get:
+      operationId: v1_abusecampaigns_retrieve_2
+      summary: Get details of an abuse campaign
+      parameters:
+      - in: path
+        name: campaign_id
+        schema:
+          type: string
+        description: A UUID representing the abuse campaign id
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - AI Security Mailbox (formerly known as Abuse Mailbox)
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbuseCampaignDetails'
+          description: An abuse campaign identified by Abnormal Security.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    PaginatedAbuseCampaings:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbuseCampaign'
+          description: List of abuse campaign IDs.
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
+      required:
+      - campaigns
+    AbuseMailboxUnanalyzedResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbuseMailboxUnanalyzedMessage'
+          description: A list of representations of messages that were reported to AI Security Mailbox (formerly known as Abuse Mailbox) but not analyzed.
+      required:
+      - results
+    NotAnalyzedReasonEnum:
+      enum:
+      - PHISHING_SIMULATION
+      - EXCLUDED_SENDER
+      - CUSTOM_FILTER
+      - INVALID_MAILBOX
+      - ORIGINAL_EMAIL_NOT_LOCATED
+      - UNKNOWN_REPORTER
+      - INVALID_SUBMISSION
+      - ROUTED_SUBMISSION
+      - COULD_NOT_EXTRACT
+      - FROM_PHISHING_MAILBOX
+      - NOT_ANALYZED_POV_QUOTA_REACHED
+      - AI_CONVERSATION
+      type: string
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: Ching Li-Hsieh
+        email:
+          type: string
+          description: The email address of the user
+          example: lhching@bigcompany.com
+      required:
+      - name
+    AbuseCampaign:
+      type: object
+      properties:
+        campaignId:
+          type: string
+          description: An id which maps to an abuse campaign.
+          example: fff51768-c446-34e1-97a8-9802c29c3ebd
+      required:
+      - campaignId
+    AbuseCampaignDetails:
+      type: object
+      properties:
+        campaignId:
+          type: string
+          description: An id which maps to an abuse campaign.
+          example: fff51768-c446-34e1-97a8-9802c29c3ebd
+        firstReported:
+          type: string
+          format: date-time
+          description: Date abuse campaign was first reported.
+          example: '2020-11-11T13:11:40-08:00'
+        lastReported:
+          type: string
+          format: date-time
+          description: Date abuse campaign was last reported.
+          example: '2020-11-11T13:11:40-08:00'
+        messageId:
+          type: string
+          description: A unique identifier for the first message in the abuse campaign.
+          example: -1234567891011121314
+        subject:
+          type: string
+          description: Subject of the first email in the abuse campaign.
+          example: 'Fwd: This is spam'
+        fromName:
+          type: string
+          description: The display name of the sender.
+          example: Support
+        fromAddress:
+          type: string
+          description: The email address of the sender.
+          example: support@secure-reply.org
+        recipientName:
+          type: string
+          description: The display name of the recipient.
+          example: Tom
+        recipientAddress:
+          type: string
+          description: The email address of the recipient.
+          example: example@example.com
+        judgementStatus:
+          type: string
+          description: Judgement status of message.
+          example: Malicious
+        overallStatus:
+          type: string
+          description: Overall status of message.
+          example: Could not find original message
+        attackType:
+          type: string
+          description: The type of threat the message represents. This is only present for abuse campaigns judged Malicious or Spam
+          example: 'Malicious: Phishing'
+      required:
+      - attackType
+      - campaignId
+      - firstReported
+      - fromAddress
+      - fromName
+      - judgementStatus
+      - lastReported
+      - messageId
+      - overallStatus
+      - recipientAddress
+      - recipientName
+      - subject
+    AbuseMailboxUnanalyzedMessage:
+      type: object
+      properties:
+        subject:
+          type: string
+          description: Subject of the message
+          example: Read me
+        abx_message_id:
+          type: integer
+        reported_datetime:
+          type: string
+          format: date-time
+        recipient:
+          $ref: '#/components/schemas/User'
+        reporter:
+          $ref: '#/components/schemas/User'
+        not_analyzed_reason:
+          $ref: '#/components/schemas/NotAnalyzedReasonEnum'
+      required:
+      - abx_message_id
+      - not_analyzed_reason
+      - recipient
+      - reported_datetime
+      - reporter
+      - subject
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    InvalidDateError:
+      description: A date provided is in the wrong format or the date range is wider than the allowed range for this endpoint
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

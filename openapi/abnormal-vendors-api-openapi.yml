@@ -1,0 +1,609 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Vendors API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Vendors
+  description: API to manage Vendorbase and threats from Vendors
+paths:
+  /vendor-cases:
+    get:
+      operationId: v1_vendor_cases_retrieve
+      summary: Get a list of vendor cases.
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/vendor-cases` are `firstObservedTime` and `lastModifiedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ format`.
+        style: spaceDelimited
+        examples:
+          FirstObservedTime:
+            value: firstObservedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: firstObservedTime
+          LastModifiedTime:
+            value: lastModifiedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: lastModifiedTime
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: Number of vendor cases that are on each page. Each page of data will have at most pageSize vendor cases. Has no effect if filter is not specified.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of vendor cases. Has no effect if filter is not specified.
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Vendors
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVendorCases'
+          description: List of cases of the queried vendor
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /vendor-cases/{case_id}:
+    get:
+      operationId: v1_vendor_cases_retrieve_2
+      summary: Get details of a vendor case
+      parameters:
+      - in: path
+        name: case_id
+        schema:
+          type: string
+        description: The vendor case to query
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Vendors
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorCaseDetails'
+          description: Details of the queried vendor case
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /vendors:
+    get:
+      operationId: v1_vendors_retrieve
+      summary: Get a list of vendors your organization has interacted with
+      parameters:
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: Number of vendors that are on each page. Each page of data will have at most pageSize threats. Has no effect if filter is not specified.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of vendors. Has no effect if filter is not specified.
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Vendors
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVendors'
+          description: A paginated list of 100 vendors ordered by risk level (highest risk first) followed by domain name
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /vendors/{vendor_domain}/activity:
+    get:
+      operationId: v1_vendors_activity_retrieve
+      summary: Get activity of a vendor your organization has interacted with
+      parameters:
+      - in: path
+        name: vendor_domain
+        schema:
+          type: string
+        description: The vendor domain to query
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Vendors
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorActivity'
+          description: Activity history of the queried vendor
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /vendors/{vendor_domain}/details:
+    get:
+      operationId: v1_vendors_details_retrieve
+      summary: Get details of a vendor your organization has interacted with
+      parameters:
+      - in: path
+        name: vendor_domain
+        schema:
+          type: string
+        description: The vendor domain to query
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Vendors
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorDetail'
+          description: Details of the queried vendor
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    VendorCases:
+      type: object
+      properties:
+        vendorCaseId:
+          type: integer
+          description: Unique ID of vendor case.
+      required:
+      - vendorCaseId
+    VendorActivity:
+      type: object
+      properties:
+        eventTimeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorActivityEvent'
+      required:
+      - eventTimeline
+    VendorDetail:
+      type: object
+      properties:
+        vendorDomain:
+          type: string
+          readOnly: true
+          description: The domain used by the vendor.
+          example: vendor.com
+        riskLevel:
+          type: string
+          readOnly: true
+          description: The risk level of the vendor.
+          example: High
+        vendorContacts:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: Mailboxes from the vendor that had prior interaction with.
+          example:
+          - alice@vendor.com
+        companyContacts:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: Mailboxes from your organisation that had prior interaction with vendor.
+          example:
+          - bob@company.com
+        vendorCountries:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: Countries which vendor interactions originated from.
+          example:
+          - United States
+        analysis:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: Analysis provided by Abnormal Security.
+          example:
+          - Vendor compromise observed in Abnormal Community
+        vendorIpAddresses:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: IP addresses which vendor interactions originated from.
+          example:
+          - 127.0.0.1
+      required:
+      - analysis
+      - companyContacts
+      - riskLevel
+      - vendorContacts
+      - vendorCountries
+      - vendorDomain
+      - vendorIpAddresses
+    PaginatedVendorCases:
+      type: object
+      properties:
+        vendorCases:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorCases'
+          description: List of vendor cases.
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
+      required:
+      - vendorCases
+    VendorCaseTimeline:
+      type: object
+      properties:
+        eventTimestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp of event
+          example: '2021-01-01T00:00:00Z'
+        senderAddress:
+          type: string
+          description: Sender Address
+          example: alice@vendor.com
+        recipientAddress:
+          type: string
+          description: Recipient Address
+          example: bob@company.com
+        subject:
+          type: string
+          description: Subject of the event
+          example: Click Me!
+        markedAs:
+          type: string
+          readOnly: true
+          description: Indication if your organisation has interacted with email
+          example: Malicious
+        threatId:
+          type: string
+          description: Unique ID of email threat. May be used in /threats endpoint
+          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
+      required:
+      - eventTimestamp
+      - markedAs
+      - recipientAddress
+      - senderAddress
+      - subject
+      - threatId
+    PaginatedVendors:
+      type: object
+      properties:
+        vendors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vendors'
+          description: List of vendors.
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
+      required:
+      - vendors
+    VendorCaseDetails:
+      type: object
+      properties:
+        vendorCaseId:
+          type: integer
+          description: Unique ID of vendor case.
+          example: 0
+        vendorDomain:
+          type: string
+          description: Domain of vendor.
+          example: vendor.com
+        firstObservedTime:
+          type: string
+          format: date-time
+          description: The timestamp at which the first message associated with this vendor case arrived.
+          example: '2020-06-09T17:42:59Z'
+        lastModifiedTime:
+          type: string
+          format: date-time
+          description: The latest timestamp when details of the vendor case was last modified.
+          example: '2020-06-09T17:42:59Z'
+        insights:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorCaseInsights'
+          readOnly: true
+          description: List of insights generated by Abnormal Security.
+        timeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorCaseTimeline'
+          readOnly: true
+          description: List of timeline events relevant to case.
+      required:
+      - firstObservedTime
+      - insights
+      - lastModifiedTime
+      - timeline
+      - vendorCaseId
+      - vendorDomain
+    VendorInvestigationEventTimeline:
+      type: object
+      properties:
+        eventTimestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp of event
+          example: '2021-01-01T00:00:00Z'
+        eventType:
+          type: string
+          readOnly: true
+          description: Type of event detected
+          example: Targeted Attack
+        suspiciousDomain:
+          type: string
+          readOnly: true
+          description: Domain which event originated from
+          example: alice@vendor.com
+        attackGoal:
+          type: string
+          readOnly: true
+          description: Objectives behind event
+          example: malware and ransom
+        actionTaken:
+          type: string
+          readOnly: true
+          description: Actions taken by Abnormal Security
+          example: Post Remediated
+        hasEngagement:
+          type: boolean
+          readOnly: true
+          description: Indication if your organisation has interacted with email
+          example: 'False'
+        recipient:
+          type: string
+          readOnly: true
+          description: Recipient of email
+          example: bob@company.com
+        threatId:
+          type: string
+          readOnly: true
+          description: Unique ID of email threat. May be used in /threats endpoint
+          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
+      required:
+      - actionTaken
+      - attackGoal
+      - eventTimestamp
+      - eventType
+      - hasEngagement
+      - recipient
+      - suspiciousDomain
+      - threatId
+    VendorFederatedEventTimeline:
+      type: object
+      properties:
+        eventTimestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp of event
+          example: '2021-01-01T00:00:00Z'
+        eventType:
+          type: string
+          readOnly: true
+          description: Type of event detected
+          example: Federated Signal
+        suspiciousDomain:
+          type: string
+          readOnly: true
+          description: Domain which event originated from
+          example: alice@vendor.com
+        domainIp:
+          type: string
+          readOnly: true
+          description: IP address which event originated from
+          example: 127.0.0.1
+        ipGeolocation:
+          type: string
+          readOnly: true
+          description: Country Code which event originated from
+          example: US
+        attackGoal:
+          type: string
+          readOnly: true
+          description: Objectives behind event
+          example: malware and ransom
+      required:
+      - attackGoal
+      - domainIp
+      - eventTimestamp
+      - eventType
+      - ipGeolocation
+      - suspiciousDomain
+    VendorCaseInsights:
+      type: object
+      properties:
+        highlight:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+      required:
+      - description
+      - highlight
+    VendorActivityEvent:
+      oneOf:
+      - $ref: '#/components/schemas/VendorFederatedEventTimeline'
+      - $ref: '#/components/schemas/VendorInvestigationEventTimeline'
+    Vendors:
+      type: object
+      properties:
+        vendorDomain:
+          type: string
+          description: The domain used by the vendor.
+          example: vendor.com
+      required:
+      - vendorDomain
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

@@ -297,3 +297,9 @@ tools:
   description: Get details of a vendor your organization has interacted with
   category: Vendors
   source_operation: openapi/abnormal-client-api-openapi-original.yml#v1_vendors_details_retrieve
+deployment:
+  mode: none
+  verified: derived
+  tools: 67
+  checked: '2026-08-12'
+  source: catalog MCP census

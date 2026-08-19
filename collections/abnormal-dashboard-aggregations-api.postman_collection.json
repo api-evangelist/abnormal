@@ -1,0 +1,4466 @@
+{
+  "item": [
+    {
+      "id": "4182e74d-4972-4a20-9b4c-a1960c3ed750",
+      "name": "Dashboard Aggregations",
+      "description": {
+        "content": "APIs to manage Dashboard metrics",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f370cd44-357d-4e9f-bb88-f3cec1b62376",
+          "name": "Retrieve the frequency of specific attack types for a given period.",
+          "request": {
+            "name": "Retrieve the frequency of specific attack types for a given period.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "attack_frequency"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_frequency` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters attacks by frequency based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "473af1ee-e9e9-4037-b44b-04d2ab302168",
+              "name": "A summary of attack frequencies. Represents the count of specific attack types for each reported timestamp.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_frequency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attack_frequency\": [\n    {\n      \"attackCount\": 200,\n      \"attackType\": \"Scam\",\n      \"timeStamp\": \"2023-08-11T12:34:56Z\"\n    },\n    {\n      \"attackCount\": 200,\n      \"attackType\": \"Scam\",\n      \"timeStamp\": \"2023-08-11T12:34:56Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fbec82f3-7f67-45fa-96bf-aa82db1d3cc6",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_frequency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8f07997b-c39a-478e-a21d-6b9d7ec48e74",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_frequency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "749dc4b9-df22-48d6-b239-23dc8253933f",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_frequency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "448f49b8-2936-402b-a778-0a1e7fad19e6",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_frequency"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a3bed5a5-1eec-453f-84d3-643b35b73e86",
+          "name": "Retrieve aggregated counts of distinct attack types that were successfully stopped, including current and previous periods.",
+          "request": {
+            "name": "Retrieve aggregated counts of distinct attack types that were successfully stopped, including current and previous periods.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "attack_stopped"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_stopped` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters attacks stopped based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4752b8fb-2556-4c0f-ac08-06d73c9b3a3d",
+              "name": "A summary of stopped attacks. Represents the count of attacks stopped for each attack type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_stopped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attack_stopped\": [\n    {\n      \"attackCount\": 2000,\n      \"attackTypeName\": \"all\",\n      \"prevAttackCount\": 2001\n    },\n    {\n      \"attackCount\": 2000,\n      \"attackTypeName\": \"all\",\n      \"prevAttackCount\": 2001\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0c8106d-f87f-45ae-b495-477421888437",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_stopped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8953babe-fe4a-44c1-a8c7-b0c7712857ae",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_stopped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4df09357-f272-40e0-a529-5608a7a242d2",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_stopped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "90c7a9cf-5f45-43f6-a58c-8463157033ed",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_stopped"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e7862033-1e1e-4273-b73e-0c125f3e66bb",
+          "name": "Retrieve the breakdown of attacks based on their strategy.",
+          "request": {
+            "name": "Retrieve the breakdown of attacks based on their strategy.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "attack_strategy_breakdown"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_strategy_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters attack strategy breakdown based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6d809bf7-68a7-4c64-b568-161460767cae",
+              "name": "A breakdown of attacks based on their strategy.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_strategy_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attack_strategy_breakdown\": [\n    {\n      \"attackCount\": 200,\n      \"attackStrategy\": \"Name Impersonation\",\n      \"attackStrategyDescription\": \"Uses sender name and/or email address to impersonate a party.\"\n    },\n    {\n      \"attackCount\": 200,\n      \"attackStrategy\": \"Name Impersonation\",\n      \"attackStrategyDescription\": \"Uses sender name and/or email address to impersonate a party.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b83b6e4-d997-481f-8d31-dc11123ecd49",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_strategy_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cd88314f-fee9-45a2-911e-82882c990946",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_strategy_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ef2c6f4e-439f-49b0-bf38-0951717c511a",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_strategy_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d4baf284-a6e0-4cef-af8c-154fdd8876aa",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_strategy_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ff92927-6b67-4242-b2af-d4016470d76a",
+          "name": "Retrieve the breakdown of attacks based on their vectors.",
+          "request": {
+            "name": "Retrieve the breakdown of attacks based on their vectors.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "attack_vector_breakdown"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attack_vector_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters attack vector breakdown based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "93359d6c-7d9e-4f1a-8179-7a5d7f3256a1",
+              "name": "A breakdown of attacks based on their vectors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_vector_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attack_vector_breakdown\": [\n    {\n      \"attackCount\": 200,\n      \"attackVectorGroup\": \"attachment\"\n    },\n    {\n      \"attackCount\": 200,\n      \"attackVectorGroup\": \"attachment\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3ed01d0-b8bf-430f-a038-de8e75a43528",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_vector_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "245c40e1-967a-4dd0-a36a-885be4bae959",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_vector_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4ce10f69-c20a-4572-a4bf-9bae100f88a1",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_vector_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "31ff6b3b-5738-4f79-92f8-3f14a3ea12f0",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attack_vector_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7d7791dd-b033-4e9d-8ac9-33a819441649",
+          "name": "Retrieve the origin countries of attackers for a given period.",
+          "request": {
+            "name": "Retrieve the origin countries of attackers for a given period.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "attacker_origin"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/attacker_origin` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters attacker origins based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "02b4409d-8d48-442f-a5ef-7cf4da6f0da1",
+              "name": "A summary of attacker origins based on geographical regions and countries.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attacker_origin"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attacker_origin\": [\n    {\n      \"attackCount\": 1000,\n      \"countries\": [\n        {\n          \"attackCount\": 650,\n          \"country\": \"India\",\n          \"countryCode\": \"IN\",\n          \"latitude\": \"string\",\n          \"longitude\": \"string\",\n          \"regionName\": \"Asia\"\n        },\n        {\n          \"attackCount\": 650,\n          \"country\": \"India\",\n          \"countryCode\": \"IN\",\n          \"latitude\": \"string\",\n          \"longitude\": \"string\",\n          \"regionName\": \"Asia\"\n        }\n      ],\n      \"regionName\": \"Asia\"\n    },\n    {\n      \"attackCount\": 1000,\n      \"countries\": [\n        {\n          \"attackCount\": 650,\n          \"country\": \"India\",\n          \"countryCode\": \"IN\",\n          \"latitude\": \"string\",\n          \"longitude\": \"string\",\n          \"regionName\": \"Asia\"\n        },\n        {\n          \"attackCount\": 650,\n          \"country\": \"India\",\n          \"countryCode\": \"IN\",\n          \"latitude\": \"string\",\n          \"longitude\": \"string\",\n          \"regionName\": \"Asia\"\n        }\n      ],\n      \"regionName\": \"Asia\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b736ede-d91c-432f-bd0a-8c6a0bbf72be",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attacker_origin"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1e73057a-a15d-42e9-90c2-f5b2d7c49943",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attacker_origin"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d6d3e8a-727f-47f4-9971-3226082a5f48",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attacker_origin"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1a040bda-6151-4465-a24c-e2462c87015d",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "attacker_origin"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "05304095-66e4-494a-a3bb-81161274e00a",
+          "name": "Retrieve an aggregated summary of multiple security data points for the dashboard.",
+          "request": {
+            "name": "Retrieve an aggregated summary of multiple security data points for the dashboard.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "dashboard_summary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/dashboard_summary` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters the dashboard summary based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a51a7eec-6c0f-454a-b843-2a0516b8b1e2",
+              "name": "An aggregated list of security data points.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "dashboard_summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"attackFrequency\": [\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"timeStamp\": \"2023-08-11T12:34:56Z\"\n      },\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"timeStamp\": \"2023-08-11T12:34:56Z\"\n      }\n    ],\n    \"attackStopped\": [\n      {\n        \"attackCount\": 2000,\n        \"attackTypeName\": \"all\",\n        \"prevAttackCount\": 2001\n      },\n      {\n        \"attackCount\": 2000,\n        \"attackTypeName\": \"all\",\n        \"prevAttackCount\": 2001\n      }\n    ],\n    \"attackStrategyBreakdown\": [\n      {\n        \"attackCount\": 200,\n        \"attackStrategy\": \"Name Impersonation\",\n        \"attackStrategyDescription\": \"Uses sender name and/or email address to impersonate a party.\"\n      },\n      {\n        \"attackCount\": 200,\n        \"attackStrategy\": \"Name Impersonation\",\n        \"attackStrategyDescription\": \"Uses sender name and/or email address to impersonate a party.\"\n      }\n    ],\n    \"attackVectorBreakdown\": [\n      {\n        \"attackCount\": 200,\n        \"attackVectorGroup\": \"attachment\"\n      },\n      {\n        \"attackCount\": 200,\n        \"attackVectorGroup\": \"attachment\"\n      }\n    ],\n    \"attackerOrigin\": [\n      {\n        \"attackCount\": 1000,\n        \"countries\": [\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          },\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          }\n        ],\n        \"regionName\": \"Asia\"\n      },\n      {\n        \"attackCount\": 1000,\n        \"countries\": [\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          },\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          }\n        ],\n        \"regionName\": \"Asia\"\n      }\n    ],\n    \"mostImpersonatedEmployee\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"mostImpersonatedEmployeeNonVIP\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"mostImpersonatedEmployeeVIP\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"mostImpersonatedVendor\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedBrandName\": \"Apple\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedBrandName\": \"Apple\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"recipientEmployees\": [\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      },\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      }\n    ],\n    \"recipientEmployeesNonVIP\": [\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      },\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      }\n    ],\n    \"recipientEmployeesVIP\": [\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      },\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      }\n    ],\n    \"senderImpersonationBreakdown\": [\n      {\n        \"attackCount\": 200,\n        \"impersonatedPartyName\": \"VIP\"\n      },\n      {\n        \"attackCount\": 200,\n        \"impersonatedPartyName\": \"VIP\"\n      }\n    ],\n    \"trendingAttacks\": [\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"attackTypeDescription\": \"Advance fee fraud and similar scams\",\n        \"prevAttackCount\": 201\n      },\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"attackTypeDescription\": \"Advance fee fraud and similar scams\",\n        \"prevAttackCount\": 201\n      }\n    ]\n  },\n  {\n    \"attackFrequency\": [\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"timeStamp\": \"2023-08-11T12:34:56Z\"\n      },\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"timeStamp\": \"2023-08-11T12:34:56Z\"\n      }\n    ],\n    \"attackStopped\": [\n      {\n        \"attackCount\": 2000,\n        \"attackTypeName\": \"all\",\n        \"prevAttackCount\": 2001\n      },\n      {\n        \"attackCount\": 2000,\n        \"attackTypeName\": \"all\",\n        \"prevAttackCount\": 2001\n      }\n    ],\n    \"attackStrategyBreakdown\": [\n      {\n        \"attackCount\": 200,\n        \"attackStrategy\": \"Name Impersonation\",\n        \"attackStrategyDescription\": \"Uses sender name and/or email address to impersonate a party.\"\n      },\n      {\n        \"attackCount\": 200,\n        \"attackStrategy\": \"Name Impersonation\",\n        \"attackStrategyDescription\": \"Uses sender name and/or email address to impersonate a party.\"\n      }\n    ],\n    \"attackVectorBreakdown\": [\n      {\n        \"attackCount\": 200,\n        \"attackVectorGroup\": \"attachment\"\n      },\n      {\n        \"attackCount\": 200,\n        \"attackVectorGroup\": \"attachment\"\n      }\n    ],\n    \"attackerOrigin\": [\n      {\n        \"attackCount\": 1000,\n        \"countries\": [\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          },\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          }\n        ],\n        \"regionName\": \"Asia\"\n      },\n      {\n        \"attackCount\": 1000,\n        \"countries\": [\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          },\n          {\n            \"attackCount\": 650,\n            \"country\": \"India\",\n            \"countryCode\": \"IN\",\n            \"latitude\": \"string\",\n            \"longitude\": \"string\",\n            \"regionName\": \"Asia\"\n          }\n        ],\n        \"regionName\": \"Asia\"\n      }\n    ],\n    \"mostImpersonatedEmployee\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"mostImpersonatedEmployeeNonVIP\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"mostImpersonatedEmployeeVIP\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedEmployeeName\": \"John Doe\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"mostImpersonatedVendor\": [\n      {\n        \"attackCount\": 20,\n        \"impersonatedBrandName\": \"Apple\",\n        \"prevAttackCount\": 20\n      },\n      {\n        \"attackCount\": 20,\n        \"impersonatedBrandName\": \"Apple\",\n        \"prevAttackCount\": 20\n      }\n    ],\n    \"recipientEmployees\": [\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      },\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      }\n    ],\n    \"recipientEmployeesNonVIP\": [\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      },\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      }\n    ],\n    \"recipientEmployeesVIP\": [\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      },\n      {\n        \"attack_count\": 15,\n        \"display_name\": \"Jane Doe\",\n        \"job_title\": \"Software Engineer\",\n        \"prev_attack_count\": 10\n      }\n    ],\n    \"senderImpersonationBreakdown\": [\n      {\n        \"attackCount\": 200,\n        \"impersonatedPartyName\": \"VIP\"\n      },\n      {\n        \"attackCount\": 200,\n        \"impersonatedPartyName\": \"VIP\"\n      }\n    ],\n    \"trendingAttacks\": [\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"attackTypeDescription\": \"Advance fee fraud and similar scams\",\n        \"prevAttackCount\": 201\n      },\n      {\n        \"attackCount\": 200,\n        \"attackType\": \"Scam\",\n        \"attackTypeDescription\": \"Advance fee fraud and similar scams\",\n        \"prevAttackCount\": 201\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fd44260-7c66-4145-98ec-15134847242d",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "dashboard_summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6cfd88d1-61ff-4018-8832-d8d7b82b4f5c",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "dashboard_summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "17bc4666-0df2-4c02-8892-014a61be7929",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "dashboard_summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8e0248dd-8588-4a3d-a831-e1660d375515",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "dashboard_summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d8b8a1a-6b88-4f76-954f-608d38765999",
+          "name": "Retrieve the most impersonated employees for a specified period.",
+          "request": {
+            "name": "Retrieve the most impersonated employees for a specified period.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "most_impersonated_employee"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters impersonated employees based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "be9aca9e-d368-46d7-b8f3-c15338c7f9fe",
+              "name": "A list of the most impersonated employees and related statistics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"most_impersonated_employee\": [\n    {\n      \"attackCount\": 20,\n      \"impersonatedEmployeeName\": \"John Doe\",\n      \"prevAttackCount\": 20\n    },\n    {\n      \"attackCount\": 20,\n      \"impersonatedEmployeeName\": \"John Doe\",\n      \"prevAttackCount\": 20\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a5c3d99-bb3d-4439-a993-b52a697240e0",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "afa14cdd-d2fa-49f0-ba7c-f8fcd1160744",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "087c2467-bfc4-4b0f-9335-f1db191ac96b",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bbde6605-34a3-46ba-bbd7-8f0889527d0f",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3ee65c9b-5a9b-47a2-bf8c-c5af013cedeb",
+          "name": "Retrieve the most impersonated non-VIP employees for a specified period.",
+          "request": {
+            "name": "Retrieve the most impersonated non-VIP employees for a specified period.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "most_impersonated_employee_non_vip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee_non_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters impersonated non-VIP employees based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e1eb20ce-abe5-4554-b1c4-53625e304211",
+              "name": "A list of the most impersonated non-VIP employees and related statistics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"most_impersonated_employee_non_vip\": [\n    {\n      \"attackCount\": 20,\n      \"impersonatedEmployeeName\": \"John Doe\",\n      \"prevAttackCount\": 20\n    },\n    {\n      \"attackCount\": 20,\n      \"impersonatedEmployeeName\": \"John Doe\",\n      \"prevAttackCount\": 20\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a23f163-4cb9-41c3-b29e-5bb5d3de7f86",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "81080dfd-c370-4679-abab-8e841a0dd84e",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d42fa644-7e58-4773-a0a0-6a0297d5ecc7",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "76b695e7-f3fc-4d6f-8828-9db47ec1a13f",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b7daa29-50a1-4b6e-8581-73443318aaee",
+          "name": "Retrieve the most impersonated VIP employees for a specified period.",
+          "request": {
+            "name": "Retrieve the most impersonated VIP employees for a specified period.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "most_impersonated_employee_vip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_employee_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters impersonated VIP employees based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2ab33418-8700-4b95-a4a6-7afd9d5bf8ed",
+              "name": "A list of the most impersonated VIP employees and related statistics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"most_impersonated_employee_vip\": [\n    {\n      \"attackCount\": 20,\n      \"impersonatedEmployeeName\": \"John Doe\",\n      \"prevAttackCount\": 20\n    },\n    {\n      \"attackCount\": 20,\n      \"impersonatedEmployeeName\": \"John Doe\",\n      \"prevAttackCount\": 20\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d23cddd-6a41-4b76-9810-8faca924b482",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5b9a7164-9f2f-4b76-acb9-ef60bfb5ec60",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "be3ca93f-8f5a-488b-aa4d-a65e6de4072d",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5a9aea92-dedb-4e60-b5e8-9719c6c2424d",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_employee_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "be9621c2-fb1f-4995-ba44-3ab63f1a1de5",
+          "name": "Retrieve a list of the most impersonated vendors in attacks.",
+          "request": {
+            "name": "Retrieve a list of the most impersonated vendors in attacks.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "most_impersonated_vendor"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/most_impersonated_vendor` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters the most impersonated vendor data based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2005c6fa-1a0c-42f7-87cf-e78d7ba096a6",
+              "name": "A list of the most impersonated vendors in attacks.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_vendor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"most_impersonated_vendor\": [\n    {\n      \"attackCount\": 20,\n      \"impersonatedBrandName\": \"Apple\",\n      \"prevAttackCount\": 20\n    },\n    {\n      \"attackCount\": 20,\n      \"impersonatedBrandName\": \"Apple\",\n      \"prevAttackCount\": 20\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "199df33e-3caf-4acf-8b35-d2c3c6ecc479",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_vendor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5ddf3fb9-69dd-483d-b1fc-308fb835f4ae",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_vendor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4fc3196d-838c-4c3d-9745-a6b27009d2df",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_vendor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "23f97907-448a-4f12-a849-179642cac0b3",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "most_impersonated_vendor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e3cd145-019d-490f-a5c6-d7287f09fb91",
+          "name": "Retrieve a list of the employees who were recipients of attacks, based on their job titles.",
+          "request": {
+            "name": "Retrieve a list of the employees who were recipients of attacks, based on their job titles.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "recipient_employees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters the recipient employees data based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0208c160-b8a5-46d9-bc84-ec20b542aebe",
+              "name": "A list of the employees who were recipients of attacks, based on their job titles.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"recipient_employees\": [\n    {\n      \"attack_count\": 15,\n      \"display_name\": \"Jane Doe\",\n      \"job_title\": \"Software Engineer\",\n      \"prev_attack_count\": 10\n    },\n    {\n      \"attack_count\": 15,\n      \"display_name\": \"Jane Doe\",\n      \"job_title\": \"Software Engineer\",\n      \"prev_attack_count\": 10\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f27c28f-5505-42f1-bc1b-0196a229adde",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9295295e-d957-4278-bbaa-f464ab1b8253",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "81086c6b-304f-4bec-96c6-55b21f9f1b1d",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f9f98585-7bf2-4a91-9a51-7afa5fb4be85",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6f542b05-d2db-4895-af41-5a51e4415133",
+          "name": "Retrieve a list of the non-VIP employees who were recipients of attacks, based on their job titles.",
+          "request": {
+            "name": "Retrieve a list of the non-VIP employees who were recipients of attacks, based on their job titles.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "recipient_employees_non_vip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees_non_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters the recipient non-VIP employees data based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "84cda6d1-3d35-495c-8b1d-5b7bf906478e",
+              "name": "A list of the non-VIP employees who were recipients of attacks, based on their job titles.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"recipient_employees_non_vip\": [\n    {\n      \"attack_count\": 15,\n      \"display_name\": \"Jane Doe\",\n      \"job_title\": \"Software Engineer\",\n      \"prev_attack_count\": 10\n    },\n    {\n      \"attack_count\": 15,\n      \"display_name\": \"Jane Doe\",\n      \"job_title\": \"Software Engineer\",\n      \"prev_attack_count\": 10\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc4fba38-2a9c-4954-8bac-10b19864c513",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4a4ea775-fe2b-454e-a707-d14756beb199",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "05cfb96a-30be-442f-92a7-66fea573505f",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "532701da-7439-41bb-96cb-1318ae9edf51",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_non_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "23def0c1-7605-4dbe-bcdf-dfdeb47153a5",
+          "name": "Retrieve a list of the VIP employees who were recipients of attacks, based on their job titles.",
+          "request": {
+            "name": "Retrieve a list of the VIP employees who were recipients of attacks, based on their job titles.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "recipient_employees_vip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/recipient_employees_vip` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters the recipient VIP employees data based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2eb6b17d-d809-4551-a6d9-e1f40b803ee5",
+              "name": "A list of the VIP employees who were recipients of attacks, based on their job titles.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"recipient_employees_vip\": [\n    {\n      \"attack_count\": 15,\n      \"display_name\": \"Jane Doe\",\n      \"job_title\": \"Software Engineer\",\n      \"prev_attack_count\": 10\n    },\n    {\n      \"attack_count\": 15,\n      \"display_name\": \"Jane Doe\",\n      \"job_title\": \"Software Engineer\",\n      \"prev_attack_count\": 10\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9bee78dd-1c5e-4fe7-b178-80202dee1275",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "743320ac-2926-4cf0-a4f0-d9be01d5eb77",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7aede6c3-a1c6-434b-9444-e82aa4b59a70",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "226e6d89-9ac9-4c12-8860-53ee901852b0",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "recipient_employees_vip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0344a4c-3d0f-4962-ab48-f4fb86ec13a6",
+          "name": "Retrieve a breakdown of attacks based on sender impersonation.",
+          "request": {
+            "name": "Retrieve a breakdown of attacks based on sender impersonation.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "sender_impersonation_breakdown"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/sender_impersonation_breakdown` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters sender impersonation breakdown based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0a8f2f88-6828-48dd-bc1a-c33eb51b6c43",
+              "name": "A breakdown of attacks based on sender impersonation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "sender_impersonation_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sender_impersonation_breakdown\": [\n    {\n      \"attackCount\": 200,\n      \"impersonatedPartyName\": \"VIP\"\n    },\n    {\n      \"attackCount\": 200,\n      \"impersonatedPartyName\": \"VIP\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0fd6b4d-b418-40ca-bdde-98535feac50b",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "sender_impersonation_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3c0bc8ca-101f-4cd4-bbdd-1943832cb7a3",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "sender_impersonation_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6bcdab1c-dfc6-4f44-9fc2-d038042c8674",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "sender_impersonation_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0a3fab60-9349-4866-b272-a42a19e6ca91",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "sender_impersonation_breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a7e130b7-34be-45e2-8970-7748854e4e5c",
+          "name": "Retrieve the list of trending attacks for a specified period.",
+          "request": {
+            "name": "Retrieve the list of trending attacks for a specified period.",
+            "description": {},
+            "url": {
+              "path": [
+                "aggregations",
+                "trending_attacks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/trending_attacks` are `receivedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. If this parameter is omitted, the last 7 days of data will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "all",
+                  "description": "Filters trending attacks based on the source of detection."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c4fe79f0-2725-45b1-bbea-e263345c25ba",
+              "name": "A list of trending attacks and related statistics.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "trending_attacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"trending_attacks\": [\n    {\n      \"attackCount\": 200,\n      \"attackType\": \"Scam\",\n      \"attackTypeDescription\": \"Advance fee fraud and similar scams\",\n      \"prevAttackCount\": 201\n    },\n    {\n      \"attackCount\": 200,\n      \"attackType\": \"Scam\",\n      \"attackTypeDescription\": \"Advance fee fraud and similar scams\",\n      \"prevAttackCount\": 201\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d030423a-4958-4088-9e42-d811ebb43095",
+              "name": "Access token is missing or invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "trending_attacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dcedb76c-06db-469d-90d9-97e0cc032a6d",
+              "name": "Access to the resource is forbidden (e.g. IP not in allowlist)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "trending_attacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d882794-a6d6-468b-957d-114b45481ec2",
+              "name": "Invalid user input when using the filter query parameter. Will return various error messages",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "trending_attacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7c821a9e-fc77-41cd-b85f-16fc1b157387",
+              "name": "Request count exceeds allowed number of concurrent requests for this resource type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "aggregations",
+                    "trending_attacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "receivedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z"
+                    },
+                    {
+                      "key": "source",
+                      "value": "all"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.abnormalplatform.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a0d138b6-d5b6-4571-808e-975e772d67f4",
+    "name": "Abnormal Security Client Dashboard Aggregations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.\n<h2>Who is this API for?</h2>\nThis API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.\n<h2> Integration Steps </h2>\nGo to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`\n<h3> Step 1: Generating the authentication token </h3>\n\nRetrieve your authentication token via the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.\n\nKeep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.\n\nOnce obtained, the token can be used in a request from any HTTP client, such as cURL:\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" https://api.abnormalplatform.com/v1/threats </pre>\n\n<h3> Step 2: IP allowlisting </h3>\n\nIP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.\n\nTo allowlist your organization's IPs, please provide enter into the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href=\"https://www.ipaddressguide.com/cidr\"> CIDR block</a>.\n\n<h3> Step 3: Try it out with Test Data </h3>\n\nTo confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:\n\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" <b>-H \"Mock-Data: True\"</b> https://api.abnormalplatform.com/v1/threats </pre>\n\nThe server should respond with a body payload similar to the examples specified in this documentation.\n\n<h3> Note for EU Customers </h3>\n\nIf you're a customer in the EU, you'll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you'd like to test the API through SwaggerHub, you'll find both the default host and the EU host in the Servers dropdown menu below.\n\n\nContact Support:\n Name: Abnormal Security Support\n Email: support@abnormalsecurity.com",
+      "type": "text/plain"
+    }
+  }
+}

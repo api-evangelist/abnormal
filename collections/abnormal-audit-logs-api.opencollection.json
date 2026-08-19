@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Audit Logs API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit Logs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Gets a list of Audit Logs for Portal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/auditlogs",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only key that are supported for `/auditlogs` is `timestamp`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ format`. We limit the results returned to the last 90 days and will default to that if no filter is supplied."
+              },
+              {
+                "name": "action",
+                "value": "",
+                "type": "query",
+                "description": "Filters audit logs based on the action(s) taken. Accepts >= 1 options in a space-delimited string. Example: `view_message_content`"
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "Filters audit logs based on their category(ies).Accepts >= 1 options in a space-delimited string. Example: `abuse_mailbox threat_log`"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filters audit logs based on their status"
+              },
+              {
+                "name": "sourceIp",
+                "value": "",
+                "type": "query",
+                "description": "Filters audit logs based on their source IP address"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of audit logs that are on each page. Each page of data will have at most pageSize audit logs."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of audit logs."
+              }
+            ]
+          },
+          "docs": "Gets a list of Audit Logs for Portal"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

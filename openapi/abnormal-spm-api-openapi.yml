@@ -1,0 +1,832 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client SPM API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: SPM
+paths:
+  /spm-v2/posture-catalog:
+    get:
+      operationId: v1_spm_v2_posture_catalog_retrieve
+      description: Get posture catalog containing all available abnormal supported postures
+      summary: Get posture catalog containing all available abnormal supported postures
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: ' Number of items on each page.Default 100. Each page of data will have at most pageSize items. Has no effect if filter is not specified.'
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of items. Has no effect if filter is not specified.
+      tags:
+      - SPM
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostureCatalogResponse'
+          description: Returns the posture catalog with all available postures
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /spm-v2/postures/{posture_id}:
+    get:
+      operationId: v1_spm_v2_postures_retrieve
+      description: Get detailed information about a specific security posture evaluation
+      summary: Get detailed information about a specific security posture evaluation
+      parameters:
+      - in: path
+        name: posture_id
+        schema:
+          type: integer
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - SPM
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostureDetail'
+          description: Returns detailed posture information
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /spm-v2/postures/{posture_id}/timeline:
+    get:
+      operationId: v1_spm_v2_postures_timeline_retrieve
+      description: Get timeline of events for a specific security posture
+      summary: Get timeline of events for a specific security posture
+      parameters:
+      - in: path
+        name: posture_id
+        schema:
+          type: integer
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: ' Number of items on each page.Default 100. Each page of data will have at most pageSize items. Has no effect if filter is not specified.'
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of items. Has no effect if filter is not specified.
+      tags:
+      - SPM
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostureTimelineResponse'
+          description: Returns posture timeline events
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /spm-v2/postures/query:
+    post:
+      operationId: v1_spm_v2_postures_query_create
+      description: Get a list of all tenant postures
+      summary: Get a list of all tenant postures
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: ' Number of items on each page.Default 100. Each page of data will have at most pageSize items. Has no effect if filter is not specified.'
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of items. Has no effect if filter is not specified.
+      tags:
+      - SPM
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostureListParams'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostureListResponse'
+          description: Returns a list of all tenant postures
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /spm-v2/reports/summary:
+    get:
+      operationId: v1_spm_v2_reports_summary_retrieve
+      description: Get summary report for all postures
+      summary: Get summary report for all postures
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - SPM
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SPMReport'
+          description: Returns summary report for all postures
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /spm-v2/workflow-logs/{workflow_log_id}/raw-json:
+    get:
+      operationId: v1_spm_v2_workflow_logs_raw_json_retrieve
+      description: Get raw JSON for a workflow log
+      summary: Get raw JSON for a workflow log
+      parameters:
+      - in: path
+        name: workflow_log_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: workflow_log_id
+        schema:
+          type: integer
+        description: Workflow Log ID
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - SPM
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowLogRawJson'
+          description: Returns raw JSON data for the workflow log
+        '400':
+          description: Bad Request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    ResponseMetadata:
+      type: object
+      description: Serializer for response metadata containing pagination information.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMetadata'
+          description: Pagination information for the response
+      required:
+      - pagination
+    PostureListItem:
+      type: object
+      properties:
+        posture_id:
+          type: integer
+          description: Unique identifier for the posture
+          example: 421
+        posture_name:
+          type: string
+          description: Name of the security posture
+          example: Ensure that collaboration invitations are sent to allowed domains only
+        status:
+          type: string
+          description: Current compliance status
+          example: PENDING_EVALUATION
+        workflow_status:
+          type: string
+          description: Current workflow status
+          example: UNTRIAGED
+        risk_level:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Risk level of the posture
+        last_updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was last updated
+          example: '2025-04-24T07:50:04.086534Z'
+        last_evaluated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was last evaluated
+          example: '2025-04-24T07:50:04.087191Z'
+        posture_type:
+          type: string
+          description: Type of posture evaluation
+          example: MANUAL
+        benchmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisplayId'
+          description: List of security benchmarks this posture belongs to
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisplayId'
+          description: List of tags associated with the posture
+    TextBlock:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of text block (TEXT, LINK, or STATUS)
+          example: TEXT
+        text:
+          type: string
+          description: Text content of the block
+          example: Abnormal Security
+        href:
+          type: string
+          description: URL for link type blocks
+          example: /home/knowledge/tenant/41ef22d1-8ada-4f0b-a384-5d78274bcedb
+    Actor:
+      type: object
+      properties:
+        display_name:
+          type: string
+          description: Display name of the actor who performed the action
+          example: ABNORMAL_SECURITY
+    PostureCatalogResponse:
+      type: object
+      description: Paginated response serializer for posture catalog.
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+          description: Response metadata including pagination information
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostureItem'
+          description: List of available postures in the catalog
+    PostureHighlight:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the highlighted security posture
+          example: Ensure Administrative accounts are separate and cloud-only
+        description:
+          type: string
+          description: Description of the security posture highlight
+          example: <p><strong>Administrative accounts are separate and cloud-only</strong> ensures proper separation of privileged accounts from regular user accounts.</p>
+        posture_id:
+          type: integer
+          description: Unique identifier for the posture
+          example: 292
+        risk_level:
+          type: string
+          description: Risk level of the highlighted posture
+          example: HIGH
+    DisplayId:
+      type: object
+      properties:
+        display_name:
+          type: string
+          description: Human-readable display name
+          example: HIGH
+        id:
+          type: string
+          description: Internal identifier for the item
+          example: high
+    RiskLevelsEnum:
+      enum:
+      - LOW
+      - MED
+      - HIGH
+      type: string
+    SPMReport:
+      type: object
+      properties:
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Section'
+          description: List of security posture sections organized by platform area
+    PostureListParams:
+      type: object
+      properties:
+        risk_levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskLevelsEnum'
+          description: Filter by risk levels
+          example:
+          - HIGH
+          - MED
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusesEnum'
+          description: Filter by compliance statuses
+          example:
+          - PENDING_EVALUATION
+          - NON_COMPLIANT
+        benchmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/BenchmarksEnum'
+          description: Filter by security benchmarks
+          example:
+          - CIS
+        last_evaluated_at:
+          allOf:
+          - $ref: '#/components/schemas/DateRange'
+          description: Filter by last evaluation date range
+        posture_area:
+          type: array
+          items:
+            type: string
+          description: Filter by posture areas
+          example:
+          - ADMIN_CENTER
+          - ENTRA
+        platform_type:
+          type: array
+          items:
+            type: string
+          description: Filter by platform types
+          example:
+          - M365
+        posture_types:
+          type: array
+          items:
+            type: string
+          description: Filter by posture types
+          example:
+          - MANUAL
+          - AUTO
+    WorkflowLogRawJson:
+      type: object
+      description: Serializer for the workflow log raw json response.
+      properties:
+        raw_json:
+          type: string
+          description: Raw JSON data from the workflow log
+          example: '{"status": "updated", "workflow_status": "UNTRIAGED", "timestamp": "2025-04-29T15:51:46.564185Z"}'
+    PostureTimelineResponse:
+      type: object
+      description: Paginated response serializer for posture timeline events.
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+          description: Response metadata including pagination information
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineEntry'
+          description: List of timeline events for the posture
+    TimelineEntry:
+      type: object
+      properties:
+        entry_type:
+          type: string
+          description: Type of timeline entry (WORKFLOW_ITEM or NOTABLE_EVENT)
+          example: WORKFLOW_ITEM
+        detail:
+          allOf:
+          - $ref: '#/components/schemas/TimelineEntryDetail'
+          description: Detailed information about the timeline entry
+    StatusesEnum:
+      enum:
+      - NON_COMPLIANT
+      - COMPLIANT
+      - PENDING_EVALUATION
+      - PERMISSIONS_NEEDED
+      type: string
+    PostureStats:
+      type: object
+      properties:
+        total_postures_count:
+          type: integer
+          description: Total number of postures in this area
+          example: 13
+        success_postures_count:
+          type: integer
+          description: Number of postures that are compliant
+          example: 0
+        fail_postures_count:
+          type: integer
+          description: Number of postures that are non-compliant
+          example: 13
+    DateRange:
+      type: object
+      properties:
+        from_date:
+          type: string
+          format: date-time
+          description: Start date for the range filter
+          example: '2025-01-01T00:00:00Z'
+        to_date:
+          type: string
+          format: date-time
+          description: End date for the range filter
+          example: '2025-12-31T23:59:59Z'
+    TimelineEntryDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the timeline entry
+          example: 175
+        title:
+          type: string
+          description: Title of the timeline event
+          example: Posture Workflow Status Updated
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the event was created
+          example: '2025-04-29T15:51:46.564185Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the event was last updated
+          example: '2025-04-29T15:51:46.564185Z'
+        description:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextBlock'
+          description: Structured description of the event as text blocks
+        category:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Category classification for the event
+        event_id:
+          type: string
+          description: External event identifier
+          example: 33646635-3331-6332-3964-363137646630
+        risk:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Risk level associated with the event
+        abnormality:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Abnormality level of the event
+    PostureListResponse:
+      type: object
+      description: Paginated response serializer for posture list.
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+          description: Response metadata including pagination information
+        postures:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostureListItem'
+          description: List of postures
+    BenchmarksEnum:
+      enum:
+      - CIS
+      type: string
+    PostureDetail:
+      type: object
+      properties:
+        last_updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was last updated
+          example: '2025-04-29T15:51:41.560354Z'
+        posture_name:
+          type: string
+          description: Name of the security posture
+          example: Ensure Microsoft Authenticator is configured to protect against MFA fatigue
+        status:
+          type: string
+          description: Current compliance status of the posture
+          example: NON_COMPLIANT
+        workflow_status:
+          type: string
+          description: Current workflow status for remediation
+          example: UNTRIAGED
+        actor:
+          allOf:
+          - $ref: '#/components/schemas/Actor'
+          description: Actor who last modified the posture
+        posture_type:
+          type: string
+          description: Type of posture evaluation (AUTO or MANUAL)
+          example: AUTO
+        description:
+          type: string
+          description: Detailed description of the security posture requirement
+          example: '**Microsoft Authenticator** should be configured to prevent MFA fatigue attacks...'
+        risk_level:
+          type: string
+          description: Risk level associated with this posture
+          example: HIGH
+    PaginationMetadata:
+      type: object
+      description: Serializer for pagination metadata.
+      properties:
+        page:
+          type: integer
+          description: Current page number
+          example: 1
+        pageSize:
+          type: integer
+          description: Number of items per page
+          example: 10
+        totalResults:
+          type: integer
+          description: Total number of items available
+          example: 42
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 5
+      required:
+      - page
+      - pageSize
+      - totalPages
+      - totalResults
+    PostureArea:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the posture area
+          example: Admin Center Highlights
+        description:
+          type: string
+          description: Description of the posture area with security grade information
+          example: <p>Abnormal rates the security grade of Admin Center as &quot;B-&quot; because less than 25% of postures in this area are resolved...</p>
+        highlights:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostureHighlight'
+          description: List of highlighted security postures in this area
+    PostureItem:
+      type: object
+      description: Serializer for individual posture items in the catalog.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the posture
+          example: ensure-microsoft-authenticator-configured
+        space_type:
+          type: string
+          description: Type of space this posture applies to
+          example: TENANT
+        platform_type:
+          type: string
+          description: Platform type for this posture
+          example: M365
+        posture_area:
+          type: string
+          description: Area or category of the posture
+          example: ENTRA
+        benchmarks:
+          type: array
+          items:
+            type: string
+          description: List of security benchmarks this posture belongs to
+          example:
+          - CIS
+        name:
+          type: string
+          description: Name of the security posture
+          example: Ensure Microsoft Authenticator is configured to protect against MFA fatigue
+        category:
+          type: string
+          description: Category classification of the posture
+          example: AUTHENTICATION
+        risk_level:
+          type: string
+          description: Risk level associated with this posture
+          example: HIGH
+        description:
+          type: string
+          description: Detailed description of the security posture requirement
+          example: Microsoft Authenticator should be configured to prevent MFA fatigue attacks by requiring number matching...
+        insight:
+          type: string
+          description: Additional insights about the posture
+          example: This configuration helps prevent attackers from bypassing MFA through fatigue attacks
+        remediation_steps:
+          type: string
+          description: Steps to remediate this posture
+          example: 1. Navigate to Azure AD admin center 2. Go to Security > Authentication methods...
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was created
+          example: '2025-01-15T10:30:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was last updated
+          example: '2025-04-29T15:51:41.560354Z'
+    Section:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the section
+          example: ADMIN_CENTER
+        platform_type:
+          type: string
+          description: Platform type for this section
+          example: M365
+        display_name:
+          type: string
+          description: Human-readable name for the section
+          example: Admin Center
+        stats:
+          allOf:
+          - $ref: '#/components/schemas/PostureStats'
+          description: Statistics about postures in this section
+        posture_area:
+          allOf:
+          - $ref: '#/components/schemas/PostureArea'
+          description: Detailed information about the posture area
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

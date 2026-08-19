@@ -1,0 +1,290 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Employee Insights API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Employee Insights
+  description: API to manage employees
+paths:
+  /employee/{email_address}:
+    get:
+      operationId: v1_employee_retrieve
+      summary: Get employee information
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: path
+        name: email_address
+        schema:
+          type: string
+        description: Email address of the employee you want to retrieve data for
+        required: true
+      tags:
+      - Employee Insights
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeDetails'
+          description: Employee information for provided email address
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /employee/{email_address}/identity:
+    get:
+      operationId: v1_employee_identity_retrieve
+      summary: Get employee identity analysis (Genome) data
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: path
+        name: email_address
+        schema:
+          type: string
+        description: Email address of the employee you want to retrieve data for
+        required: true
+      tags:
+      - Employee Insights
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeIdentityDetails'
+          description: Employee identity analysis data derived from employee login data.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /employee/{email_address}/logins:
+    get:
+      operationId: v1_employee_logins_retrieve
+      summary: Get employee login information for last 30 days in csv format
+      parameters:
+      - in: path
+        name: email_address
+        schema:
+          type: string
+        description: Email address of the employee you want to retrieve data for
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Employee Insights
+      responses:
+        '200':
+          content:
+            text/csv:
+              schema:
+                type: string
+                example: Timestamp,User Principal Name,User Display Name,Status,IP Address,City,State,Country or Region,Latitude,Longitude,App Display Name,App ID,Client App Used,Browser,Operating System,Device ID,Resource Display Name
+          description: A csv list of employee login information. Headers of the csv include the following in order:<br />- Timestamp<br />- User Principal Name<br />- User Display Name<br />- Status<br />- IP Address<br />- City<br />- State<br />- Country or Region<br />- Latitude<br />- Longitude<br />- App Display Name<br />- App ID<br />- Client App Used<br />- Browser<br />- Operating System<br />- Device ID<br />- Resource Display Name
+        '401':
+          content:
+            text/csv:
+              schema:
+                $ref: '#/components/responses/UnauthorizedError'
+          description: ''
+        '403':
+          content:
+            text/csv:
+              schema:
+                $ref: '#/components/responses/ForbiddenError'
+          description: ''
+        '404':
+          content:
+            text/csv:
+              schema:
+                $ref: '#/components/responses/NotFoundError'
+          description: ''
+        '429':
+          content:
+            text/csv:
+              schema:
+                $ref: '#/components/responses/TooManyRequestsError'
+          description: ''
+components:
+  schemas:
+    EmployeeIdentityDetails:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeGenomeDetails'
+      required:
+      - data
+    EmployeeDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the employee.
+          example: Tom
+        email:
+          type: string
+          description: Email of the employee.
+          example: example@example.com
+        title:
+          type: string
+          description: Job title of the employee.
+          example: General Manager
+        manager:
+          type: string
+          description: Email address of the employee's manager
+          example: manager_email@example.com
+      required:
+      - email
+      - manager
+      - name
+      - title
+    EmployeeGenomeDetails:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Genome key name
+          example: ip_address
+        name:
+          type: string
+          description: Genome title
+          example: Common IP Addresses
+        description:
+          type: string
+          description: Description of genome object
+          example: Common IP Addresses for user logins
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeGenomeCategory'
+      required:
+      - description
+      - key
+      - name
+      - values
+    EmployeeGenomeCategory:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Category value
+          example: 203.12.172.182
+        percentage:
+          type: number
+          format: double
+          description: Ratio of this category relative to others
+          example: 0.9
+        total_count:
+          type: integer
+          description: Number of occurences for this category
+          example: 9
+      required:
+      - percentage
+      - total_count
+      - value
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

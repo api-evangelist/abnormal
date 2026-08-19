@@ -1,0 +1,234 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Tokens API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Tokens
+  description: API to manage SOAR API tokens
+paths:
+  /soar/tokens:
+    get:
+      operationId: v1_soar_tokens_retrieve
+      description: 'Fetch all API tokens for the authenticated customer from the Go Token Management Service.
+
+
+        This endpoint retrieves tokens with response format containing:
+
+        - token_id: UUID of the token
+
+        - name: Token name
+
+        - version: Token version (v1 or v2)
+
+        - status: Token status (active, expired, revoked)
+
+        - created_at: ISO 8601 creation timestamp
+
+        - expires_at: ISO 8601 expiration timestamp
+
+        - permissions: List of permission strings (scope)'
+      summary: Get a list of API tokens for the authenticated customer
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: Maximum number of tokens to return (1-200, default 50)
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: Pagination offset (default 0)
+      - in: query
+        name: show_all
+        schema:
+          type: boolean
+        description: Include expired/revoked tokens (default false)
+      - in: query
+        name: sort_by
+        schema:
+          type: string
+        description: 'Sort field: created_at, -created_at, expires_at, -expires_at'
+      tags:
+      - Tokens
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenListResponseSwagger'
+          description: A list of API tokens for the customer.
+        '400':
+          description: Bad Request - Invalid query parameters
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Forbidden - Either insufficient permissions or feature not enabled for account
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    TokenListResponseSwagger:
+      type: object
+      description: Swagger serializer for token list response.
+      properties:
+        status:
+          type: string
+          default: success
+          description: Response status
+        status_code:
+          type: integer
+          default: 200
+          description: HTTP status code
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenSwagger'
+          description: List of API tokens
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationSwagger'
+          description: Pagination metadata
+      required:
+      - data
+      - pagination
+    PaginationSwagger:
+      type: object
+      description: Swagger serializer for pagination metadata.
+      properties:
+        total:
+          type: integer
+          description: Total number of tokens matching criteria
+        limit:
+          type: integer
+          description: Maximum tokens returned in this response
+        offset:
+          type: integer
+          description: Number of tokens skipped
+      required:
+      - limit
+      - offset
+      - total
+    TokenSwagger:
+      type: object
+      description: Swagger serializer for token object.
+      properties:
+        token_id:
+          type: string
+          description: Unique token identifier (UUID)
+        name:
+          type: string
+          description: Token name
+        version:
+          type: string
+          description: Token version (v1 or v2)
+        status:
+          type: string
+          description: Token status (active, expired, revoked)
+        created_at:
+          type: string
+          format: date-time
+          description: Token creation timestamp (ISO 8601)
+        expires_at:
+          type: string
+          format: date-time
+          description: Token expiration timestamp (ISO 8601)
+        permissions:
+          type: array
+          items:
+            type: string
+          description: List of endpoint permissions (e.g., soar_v1_read_threats, soar_v1_manage_threat)
+      required:
+      - created_at
+      - expires_at
+      - name
+      - permissions
+      - status
+      - token_id
+      - version
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

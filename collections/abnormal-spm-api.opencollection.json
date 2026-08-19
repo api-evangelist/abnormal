@@ -1,0 +1,197 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client SPM API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SPM",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get posture catalog containing all available abnormal supported postures",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/spm-v2/posture-catalog",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": " Number of items on each page.Default 100. Each page of data will have at most pageSize items. Has no effect if filter is not specified."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of items. Has no effect if filter is not specified."
+              }
+            ]
+          },
+          "docs": "Get posture catalog containing all available abnormal supported postures"
+        },
+        {
+          "info": {
+            "name": "Get detailed information about a specific security posture evaluation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/spm-v2/postures/:posture_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "posture_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get detailed information about a specific security posture evaluation"
+        },
+        {
+          "info": {
+            "name": "Get timeline of events for a specific security posture",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/spm-v2/postures/:posture_id/timeline",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "posture_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": " Number of items on each page.Default 100. Each page of data will have at most pageSize items. Has no effect if filter is not specified."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of items. Has no effect if filter is not specified."
+              }
+            ]
+          },
+          "docs": "Get timeline of events for a specific security posture"
+        },
+        {
+          "info": {
+            "name": "Get a list of all tenant postures",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/spm-v2/postures/query",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": " Number of items on each page.Default 100. Each page of data will have at most pageSize items. Has no effect if filter is not specified."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of items. Has no effect if filter is not specified."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a list of all tenant postures"
+        },
+        {
+          "info": {
+            "name": "Get summary report for all postures",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/spm-v2/reports/summary",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get summary report for all postures"
+        },
+        {
+          "info": {
+            "name": "Get raw JSON for a workflow log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/spm-v2/workflow-logs/:workflow_log_id/raw-json",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "workflow_log_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "workflow_log_id",
+                "value": "",
+                "type": "query",
+                "description": "Workflow Log ID"
+              }
+            ]
+          },
+          "docs": "Get raw JSON for a workflow log"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

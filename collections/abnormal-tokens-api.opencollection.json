@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Tokens API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tokens",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of API tokens for the authenticated customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/soar/tokens",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of tokens to return (1-200, default 50)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset (default 0)"
+              },
+              {
+                "name": "show_all",
+                "value": "",
+                "type": "query",
+                "description": "Include expired/revoked tokens (default false)"
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "Sort field: created_at, -created_at, expires_at, -expires_at"
+              }
+            ]
+          },
+          "docs": "Fetch all API tokens for the authenticated customer from the Go Token Management Service.\n\nThis endpoint retrieves tokens with response format containing:\n- token_id: UUID of the token\n- name: Token name\n- version: Token version (v1 or v2)\n- status: Token status (active, expired, revoked)\n- created_at: ISO 8601 creation timestamp\n- expires_at: ISO 8601 expiration timestamp\n- permissions: List of permission strings (scope)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

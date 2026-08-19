@@ -1,0 +1,414 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Detection360 API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Detection360
+paths:
+  /detection360/reports:
+    get:
+      operationId: v1_detection360_reports_retrieve
+      description: Get a list of Detection 360 reports that you have submitted and view corresponding details for each case, including report summaries, statuses, message analyses, and more.
+      summary: List Detection 360 reports for a specific type of detection misclassification.
+      parameters:
+      - in: query
+        name: inquiry_type
+        schema:
+          enum:
+          - MISSED_ATTACK
+          - FALSE_POSITIVE
+          type: string
+          minLength: 1
+        description: Whether to fetch missed attacks or false positives.
+        required: true
+      - in: query
+        name: start
+        schema:
+          type: string
+          format: date-time
+        description: The start of the datetime range, as an RFC 3339 timestamp, to fetch Detection 360 cases from. Defaults to 30 days before end.
+        examples:
+          Start:
+            value: '2022-01-01T00:00:00Z'
+            summary: start
+      - in: query
+        name: end
+        schema:
+          type: string
+          format: date-time
+        description: The end of the datetime range, as an RFC 3339 timestamp, to fetch Detection 360 cases from. Defaults to the current time.
+        examples:
+          End:
+            value: '2022-01-07T23:59:59Z'
+            summary: end
+      - in: query
+        name: status
+        schema:
+          type: array
+          items:
+            enum:
+            - UNREVIEWED
+            - CONTAINING_ATTACK
+            - IMPROVING_PLATFORM
+            - RESOLVED
+            - CORRECTING_JUDGEMENT
+            type: string
+        description: Only Detection 360 cases with these statuses will be retrieved. Defaults to all statuses.
+      tags:
+      - Detection360
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Detection360Case'
+          description: Successful operation
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+    post:
+      operationId: v1_detection360_reports_create
+      description: Use this to report a detection misclassification judgement by Abnormal Security.  We use this data to improve our models, and also give customers transparency into the frequency of misclassifications.
+      summary: Submit a detection misclassification report
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Detection360
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Detection360ReportRequest'
+      responses:
+        '202':
+          description: Report was submitted successfully.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    Detection360CaseStatusEnum:
+      enum:
+      - UNREVIEWED
+      - CONTAINING_ATTACK
+      - IMPROVING_PLATFORM
+      - RESOLVED
+      - CORRECTING_JUDGEMENT
+      type: string
+    FalseNegativeReportTypeEnum:
+      enum:
+      - false-negative
+      type: string
+    FalsePositive:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/FalsePositiveReportTypeEnum'
+          description: Type of report
+        portal_link:
+          type: string
+          description: Link in Portal of the False Positive Threat
+          example: https://portal.abnormalsecurity.com/home/threat-center/remediation-history/1234567890
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+          example: 2020/02/01
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice reported this email was missing from their inbox.
+      required:
+      - portal_link
+      - report_type
+    MissedSpam:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/MissedSpamReportTypeEnum'
+          description: Type of report
+        recipient_email:
+          type: string
+        sender_email:
+          type: string
+        subject:
+          type: string
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice reported this email looked like spam.
+      required:
+      - recipient_email
+      - report_type
+      - sender_email
+      - subject
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: Ching Li-Hsieh
+        email:
+          type: string
+          description: The email address of the user
+          example: lhching@bigcompany.com
+      required:
+      - name
+    MissedSpamReportTypeEnum:
+      enum:
+      - missed-spam
+      type: string
+    InquiryTypeEnum:
+      enum:
+      - MISSED_ATTACK
+      - FALSE_POSITIVE
+      type: string
+    Detection360Report:
+      type: object
+      properties:
+        analysis:
+          type: string
+        root_causes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortalVisibleRootCause'
+      required:
+      - analysis
+      - root_causes
+    FalseNegative:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/FalseNegativeReportTypeEnum'
+          description: Type of report
+        recipient_email:
+          type: string
+          description: Email address of the recipient
+          example: alice@aloha.com
+        sender_email:
+          type: string
+          description: Email address of the sender
+          example: alice@aloha.com
+        subject:
+          type: string
+          description: Subject of the email
+          example: hello!
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+          example: 2020/02/01
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice reported this email looked like an attack.
+      required:
+      - recipient_email
+      - report_type
+      - sender_email
+      - subject
+    Detection360Case:
+      type: object
+      properties:
+        id:
+          type: integer
+        inquiry_type:
+          $ref: '#/components/schemas/InquiryTypeEnum'
+        messages:
+          type: array
+          items:
+            type: integer
+        report:
+          $ref: '#/components/schemas/Detection360Report'
+        status:
+          $ref: '#/components/schemas/Detection360CaseStatusEnum'
+        submission_datetime:
+          type: string
+          format: date-time
+        submitted_by:
+          $ref: '#/components/schemas/User'
+      required:
+      - id
+      - inquiry_type
+      - messages
+      - status
+      - submission_datetime
+      - submitted_by
+    MissedAttackReportTypeEnum:
+      enum:
+      - missed-attack
+      type: string
+    MissedGraymail:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/MissedGraymailReportTypeEnum'
+          description: Type of report
+        recipient_email:
+          type: string
+        sender_email:
+          type: string
+        subject:
+          type: string
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice does not want to see this email in her inbox.
+      required:
+      - recipient_email
+      - report_type
+      - sender_email
+      - subject
+    FalsePositiveReportTypeEnum:
+      enum:
+      - false-positive
+      type: string
+    MissedAttack:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/MissedAttackReportTypeEnum'
+          description: Type of report
+        recipient_email:
+          type: string
+          description: Email address of the sender
+          example: alice@aloha.com
+        sender_email:
+          type: string
+          description: Email address of the sender
+          example: alice@aloha.com
+        subject:
+          type: string
+          description: Subject of the email
+          example: hello!
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice reported this email looked like an attack.
+      required:
+      - recipient_email
+      - report_type
+      - sender_email
+      - subject
+    MissedGraymailReportTypeEnum:
+      enum:
+      - missed-graymail
+      type: string
+    PortalVisibleRootCause:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+      - description
+      - name
+    Detection360ReportRequest:
+      oneOf:
+      - $ref: '#/components/schemas/FalsePositive'
+      - $ref: '#/components/schemas/FalseNegative'
+      - $ref: '#/components/schemas/MissedAttack'
+      - $ref: '#/components/schemas/MissedSpam'
+      - $ref: '#/components/schemas/MissedGraymail'
+      discriminator:
+        propertyName: report_type
+        mapping:
+          null: '#/components/schemas/MissedGraymail'
+  responses:
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

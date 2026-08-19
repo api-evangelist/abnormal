@@ -1,0 +1,384 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Messages API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Messages
+  description: API to manage message details
+paths:
+  /messages/{message_id}/attachment/{attachment_name}:
+    get:
+      operationId: v1_messages_attachment_retrieve
+      summary: Get details of an attachment in an email message
+      parameters:
+      - in: path
+        name: message_id
+        schema:
+          type: number
+        description: The ABX Message Id of a message.
+        required: true
+      - in: path
+        name: attachment_name
+        schema:
+          type: string
+        description: The attachment name of an attachment belonging to an email message.
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoarAttachmentSignalsStruct'
+          description: Attachment details of an attachment in an email message.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/ThreatDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /messages/{message_id}/attachment/{attachment_name}/download:
+    get:
+      operationId: v1_messages_attachment_download_retrieve
+      summary: Download the attachment in an email as a file
+      parameters:
+      - in: path
+        name: message_id
+        schema:
+          type: number
+        description: The ABX Message Id of a message.
+        required: true
+      - in: path
+        name: attachment_name
+        schema:
+          type: string
+        description: The attachment name of an attachment belonging to an email message.
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Messages
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+          description: The attachment file as an octet-stream. Will resolve into a file in the file system of the machine calling the request.
+        '401':
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/responses/UnauthorizedError'
+          description: ''
+        '403':
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/responses/ForbiddenError'
+          description: ''
+        '404':
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/responses/NotFoundError'
+          description: ''
+        '429':
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/responses/TooManyRequestsError'
+          description: ''
+  /messages/{message_id}/download:
+    get:
+      operationId: v1_messages_download_retrieve
+      description: Download the message contents in plaintext in the EML format. For security reasons, this API endpoint is disabled by default. Please talk to your customer specialist to get it enabled.
+      summary: Download a message in EML format
+      parameters:
+      - in: path
+        name: message_id
+        schema:
+          type: number
+        description: The ABX Message Id of a message.
+        required: true
+      tags:
+      - Messages
+      responses:
+        '200':
+          content:
+            message/rfc822:
+              schema:
+                type: string
+                example: 'From: sender@example.com
+
+                  To: recipient@example.com
+
+                  Subject: Test Email
+
+                  Date: Thu, 23 Aug 2024 12:00:00 +0000
+
+                  Content-Type: text/plain; charset="UTF-8"
+
+
+                  This is the email body
+
+                  '
+          description: The EML file in plain text
+        '401':
+          content:
+            message/rfc822:
+              schema:
+                $ref: '#/components/responses/UnauthorizedError'
+          description: ''
+        '403':
+          content:
+            message/rfc822:
+              schema:
+                $ref: '#/components/responses/ForbiddenError'
+          description: ''
+        '404':
+          content:
+            message/rfc822:
+              schema:
+                $ref: '#/components/responses/NotFoundError'
+          description: ''
+        '429':
+          content:
+            message/rfc822:
+              schema:
+                $ref: '#/components/responses/TooManyRequestsError'
+          description: ''
+  /messages/{message_id}/remediation_history:
+    get:
+      operationId: v1_messages_remediation_history_retrieve
+      summary: Get details of the remediation history for a threat log message
+      parameters:
+      - in: path
+        name: message_id
+        schema:
+          type: number
+        description: The ABX Message Id of a message.
+        required: true
+      tags:
+      - Messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemediationHistory'
+          description: Remediation history for a threat log message.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    SoarAttachmentSignalsStruct:
+      type: object
+      description: Serializes a AttachmentSignalsPortalStruct object for Soar payload
+      properties:
+        attachmentName:
+          type: string
+          readOnly: true
+          description: Name of the attachment file
+          example: test_attachment.pdf
+        type:
+          type: string
+          readOnly: true
+          description: File type of the attachment
+          example: JPEG
+        details:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: Details of insights gained from analyzing the attachment
+          example:
+          - has Javascript
+        md5:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: MD5 algorithm hash of the attachment
+          example: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+        sha1:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: SHA1 hash of the attachment
+          example: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0
+        sha256:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: SHA256 hash of the attachment
+          example: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2
+        size:
+          type: string
+          readOnly: true
+          description: Size of the attachment file
+          example: 1KB
+        createdOn:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp attachment file was created on
+          example: '2020-01-01T00:00:00Z'
+        lastUpdated:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp attachment file was last updated
+          example: '2020-01-01T00:00:00Z'
+        url:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: URLs found in the attachment
+          example:
+          - http://malicious.lamronba.com
+        keyPhrases:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: Key phrases flagging the attachment as potential malware
+          example:
+          - view
+          - completed document
+      required:
+      - attachmentName
+      - createdOn
+      - details
+      - keyPhrases
+      - lastUpdated
+      - md5
+      - sha1
+      - sha256
+      - size
+      - type
+      - url
+    RemediationHistory:
+      type: object
+      properties:
+        remediation_history:
+          type: object
+          additionalProperties:
+            type: string
+            format: date-time
+          description: Remediation history of a threat.
+          example: '"Auto-Remediated": "2023-04-11T20:54:56.244716+00:00"'
+        folder_locations:
+          type: array
+          items:
+            type: string
+          description: Folder locations.
+          example:
+          - Junk
+      required:
+      - folder_locations
+      - remediation_history
+  responses:
+    ThreatDoesNotExistError:
+      description: Threat does not exist
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

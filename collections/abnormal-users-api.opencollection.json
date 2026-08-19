@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Users API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of users from RBAC user management system",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/users",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves users for an account from the RBAC user management system."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

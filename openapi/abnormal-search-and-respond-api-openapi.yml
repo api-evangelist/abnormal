@@ -1,0 +1,1426 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Search and Respond API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Search and Respond
+paths:
+  /search:
+    post:
+      operationId: v1_search_create
+      description: 'Search for email messages across Abnormal and Quarantine sources. Optionally filter by tenant_ids in the request body. If tenant_ids is not provided, all authorized tenants are searched. The tenant_ids must be a subset of the tenants authorized by the bearer token.
+
+
+        **Key Filter Fields:**
+
+        - `body_link`: Filter by URLs found in the email body (e.g., phishing links, suspicious domains)
+
+        - `judgement`: Filter by threat classification. Values: ''attack'' (confirmed threats), ''borderline'' (suspicious but not confirmed), ''spam'' (unwanted bulk email), ''graymail'' (legitimate bulk email), ''safe'' (benign messages)
+
+        - `judgement_source`: Filter by detection source. Values: ''ABNORMAL_SYSTEM'' (flagged by Abnormal''s own detection), ''CUSTOMER_AI_MODEL'' (flagged by a customer-defined Custom AI Model). Only supported for `source=abnormal` (not quarantine).'
+      summary: Search for email messages
+      parameters:
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+        description: 'Page number for pagination (default: 1)'
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+        description: 'Number of results per page (default: 100, max: 1000)'
+      tags:
+      - Search and Respond
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+            examples:
+              AllAvailableSearchFilters:
+                value:
+                  source: abnormal
+                  filters:
+                    start_time: '2024-01-01T00:00:00Z'
+                    end_time: '2024-01-31T23:59:59Z'
+                    subject: 'Urgent: Payment Required'
+                    sender_email: suspicious@external-domain.com
+                    sender_name: John Doe
+                    recipient_email: user@company.com
+                    recipient_name: Jane Smith
+                    attachment_name: invoice.pdf
+                    internet_message_id: <message123@sender.com>
+                    body_link: https://suspicious-domain.com
+                    sender_ip: 192.0.2.1
+                    judgement: attack
+                    use_sender_regex: false
+                    use_recipient_regex: false
+                  tenant_ids:
+                  - 123
+                  - 456
+                summary: All available search filters
+              SearchByDateAndSender:
+                value:
+                  source: abnormal
+                  filters:
+                    start_time: '2024-01-01T00:00:00Z'
+                    end_time: '2024-01-31T23:59:59Z'
+                    sender_email: suspicious@external-domain.com
+                  tenant_ids:
+                  - 123
+                  - 456
+                summary: Search by date and sender
+              SearchBySubjectAndJudgement:
+                value:
+                  source: abnormal
+                  filters:
+                    start_time: '2024-01-01T00:00:00Z'
+                    end_time: '2024-01-31T23:59:59Z'
+                    subject: 'Urgent: Payment Required'
+                    judgement: attack
+                summary: Search by subject and judgement
+              SearchByCustomAIModel(CAIM)Detection:
+                value:
+                  source: abnormal
+                  filters:
+                    start_time: '2024-01-01T00:00:00Z'
+                    end_time: '2024-01-31T23:59:59Z'
+                    judgement_source: CUSTOMER_AI_MODEL
+                  tenant_ids:
+                  - 123
+                summary: Search by Custom AI Model (CAIM) detection
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+              examples:
+                SuccessfulSearchResponse:
+                  value:
+                    results:
+                    - customer_id: 100
+                      tenant_id: 123
+                      received_time: '2024-01-15T10:30:00Z'
+                      subject: 'Urgent: Wire Transfer Request'
+                      sender: attacker@malicious.com
+                      sender_display_name: John Doe
+                      mailbox_name: user@company.com
+                      mailbox_display_name: User Name
+                      current_folder_name: Inbox
+                      raw_message_id: AAMkAGI2THVSAAA=
+                      native_user_id: user@company.com
+                      cloud_message_id: abx:CloudMessage:123:456
+                      internet_message_id: <message123@sender.com>
+                      abnormal_message_id: abc123def456
+                      abnormal_message_uuid: uuid-123-456
+                      decision_category: attack
+                      judgement: attack
+                      judgement_source: CUSTOMER_AI_MODEL
+                      judgement_source_model_id: '700'
+                      judgement_source_model_version: '19'
+                      attachments:
+                        invoice.pdf:
+                          name: invoice.pdf
+                          md5_hash: d41d8cd98f00b204e9800998ecf8427e
+                      body_links:
+                      - https://suspicious-domain.com/phishing
+                      sender_ip_addresses:
+                      - 192.0.2.1
+                    total: 25
+                    pageNumber: 1
+                    pageSize: 100
+                    nextPageNumber: 2
+                    metadata:
+                      trace_id: abc-123-def-456
+                      response_time: '2024-01-15T10:30:05Z'
+                  summary: Successful search response
+          description: Search completed successfully
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Authentication failed (invalid bearer token) or Authorization failed (requested tenant_ids not authorized by bearer token)
+        '403':
+          description: API not enabled for this customer
+        '500':
+          description: Internal server error
+  /search/activities:
+    get:
+      operationId: v1_search_activities_retrieve
+      description: List activity logs for search and remediation operations. Optionally filter by tenant_ids query parameter (e.g., ?tenant_ids=123&tenant_ids=456). If tenant_ids is not provided, all authorized tenants are included. The tenant_ids must be a subset of the tenants authorized by the bearer token.
+      summary: List activity logs
+      parameters:
+      - in: query
+        name: tenant_ids
+        schema:
+          type: string
+        description: Comma-separated list of tenant IDs to filter activities (e.g., '123,456' or '789'). If not provided, all authorized tenants are included.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+        description: 'Page number for pagination (default: 1)'
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+        description: 'Number of results per page (default: 100, max: 1000)'
+      - in: query
+        name: action
+        schema:
+          type: string
+        description: Filter by remediation action (e.g., delete, move_to_inbox)
+      tags:
+      - Search and Respond
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivitiesResponse'
+              examples:
+                ActivitiesListResponse:
+                  value:
+                    activities:
+                    - activity_id: 12345
+                      action: delete
+                      status: completed
+                      performed_by: Rest API
+                      timestamp: '2024-01-15T10:30:00Z'
+                      result_count: 5
+                      parameters:
+                        tenant_ids:
+                        - 123
+                        source: abnormal
+                      submit_d360_case: false
+                    - activity_id: 12346
+                      action: move_to_inbox
+                      status: in_progress
+                      performed_by: Rest API
+                      timestamp: '2024-01-15T11:00:00Z'
+                      result_count: 3
+                      parameters:
+                        tenant_ids:
+                        - 456
+                        source: abnormal
+                        target_folder: inbox
+                      submit_d360_case: false
+                    total: 50
+                    pageNumber: 1
+                    pageSize: 100
+                    metadata:
+                      trace_id: abc-123-def-456
+                      response_time: '2024-01-15T11:05:00Z'
+                  summary: Activities list response
+          description: Activity logs retrieved successfully
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Authentication failed (invalid bearer token) or Authorization failed (requested tenant_ids not authorized by bearer token)
+        '403':
+          description: API not enabled for this customer
+        '500':
+          description: Internal server error
+  /search/activities/{activity_log_id}/status:
+    get:
+      operationId: v1_search_activities_status_retrieve
+      description: 'Get detailed status of a specific activity including remediation results. Authorization is automatically determined by the bearer token - if the activity belongs to any tenant authorized by your token, you will be able to access it. The activity_log_id is returned in the response from the remediation endpoint. '
+      summary: Get activity status
+      parameters:
+      - in: path
+        name: activity_log_id
+        schema:
+          type: integer
+        description: The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)
+        required: true
+      tags:
+      - Search and Respond
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityStatusResponse'
+              examples:
+                SuccessfulActivityStatus:
+                  value:
+                    activity_id: 12345
+                    action: delete
+                    status: completed
+                    performed_by: Rest API
+                    timestamp: '2024-01-15T10:30:00Z'
+                    result_count: 5
+                    remediation_details:
+                    - tenant_id: 123
+                      raw_message_id: AAMkAGI2THVSAAA=
+                      status: success
+                      error_message: ''
+                    - tenant_id: 123
+                      raw_message_id: BBMkAGI2THVSAAA=
+                      status: success
+                      error_message: ''
+                    total: 5
+                    pageNumber: 1
+                    pageSize: 100
+                    metadata:
+                      trace_id: abc-123-def-456
+                      response_time: '2024-01-15T10:30:01Z'
+                  summary: Successful activity status
+          description: Activity status retrieved successfully
+        '400':
+          description: Invalid activity_log_id parameter
+        '401':
+          description: Authentication failed (invalid bearer token) or the activity does not belong to any tenant authorized by your token
+        '403':
+          description: API not enabled for this customer
+        '404':
+          description: Activity not found
+        '500':
+          description: Internal server error
+  /search/messages/{message_id}/eml:
+    get:
+      operationId: v1_search_messages_eml_retrieve
+      description: Download the EML file for a specific message by cloud_message_id. Returns the EML file content as message/rfc822 format. For quarantine messages, provide both 'quarantineIdentity' and 'recipientMailbox' query parameters.
+      summary: Download EML file for a message
+      parameters:
+      - in: path
+        name: message_id
+        schema:
+          type: string
+        description: 'The cloud_message_id from the Search API response (format: ''abx:CloudMessage:...''). Use the ''cloud_message_id'' field from the search results.'
+        required: true
+      - in: query
+        name: quarantineIdentity
+        schema:
+          type: string
+        description: Quarantine identity for quarantined messages. Required along with 'recipientMailbox' to download quarantine messages from S3 cache.
+      - in: query
+        name: recipientMailbox
+        schema:
+          type: string
+        description: Recipient mailbox email address for quarantined messages. Required along with 'quarantineIdentity' to download quarantine messages from S3 cache.
+      tags:
+      - Search and Respond
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+          description: 'EML file downloaded successfully (Content-Type: message/rfc822)'
+        '400':
+          description: Bad request - invalid message ID format
+        '401':
+          description: Unauthorized - invalid or expired token
+        '403':
+          description: Forbidden - API not enabled or unauthorized tenant access
+        '404':
+          description: Not found - message does not exist or EML not available
+        '500':
+          description: Internal server error
+  /search/messages/attachments/download:
+    get:
+      operationId: v1_search_messages_attachments_download_retrieve
+      description: Download an email attachment for a given message.
+      summary: Download email attachment
+      parameters:
+      - in: query
+        name: message_id
+        schema:
+          type: integer
+        description: Message ID
+        required: true
+      - in: query
+        name: attachment_name
+        schema:
+          type: string
+        description: Name of the attachment to download
+        required: true
+      - in: query
+        name: tenant_id
+        schema:
+          type: integer
+        description: Tenant ID
+        required: true
+      - in: query
+        name: raw_message_id
+        schema:
+          type: string
+        description: Raw message ID from cloud provider
+        required: true
+      - in: query
+        name: native_user_id
+        schema:
+          type: string
+        description: Native user ID from cloud provider
+        required: true
+      - in: query
+        name: recipient_mailbox
+        schema:
+          type: string
+        description: Recipient mailbox email address
+        required: true
+      tags:
+      - Search and Respond
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+          description: Attachment downloaded successfully (binary file)
+        '400':
+          description: Invalid request parameters
+        '401':
+          description: Unauthorized
+        '404':
+          description: Attachment not found
+        '502':
+          description: Failed to retrieve attachment from cloud provider. The message or attachment may have been moved, deleted, or remediated.
+        '500':
+          description: Internal server error
+  /search/remediate:
+    post:
+      operationId: v1_search_remediate_create
+      description: 'Remediate email messages by deleting, moving, or submitting them for review. Returns an `activity_log_id` that can be polled via the **Get Activity Status** endpoint.
+
+
+        ---
+
+
+        ## Two modes of operation
+
+
+        **Specific messages** (`remediate_all=false`):
+
+        Provide a `messages` list. Each entry must include `tenant_id`, `raw_message_id`, `mailbox_name`, `native_user_id`, `subject`, `sender`, and `received_time`. The response returns an `activity_log_id`; poll **Get Activity Status** to retrieve per-message results.
+
+
+        **Bulk / remediate-all** (`remediate_all=true`):
+
+        Provide `search_filters` instead of `messages`. All messages matching the filters are remediated asynchronously. The response returns an `activity_log_id`; poll **Get Activity Status** to track progress.
+
+
+        ---
+
+
+        ## Actions
+
+
+        | `action` | Description |
+
+        |---|---|
+
+        | `delete` | Move messages to the provider''s deleted items / recoverable items folder |
+
+        | `move_to_inbox` | Move messages to a specified folder (requires `target_folder`) |
+
+
+        To attach a Detection 360 case to a remediation, set `submit_d360_case: true` alongside any `action` above.
+
+
+        ---
+
+
+        ## Valid action / remediation_reason combinations
+
+
+        | `action` | Allowed `remediation_reason` values |
+
+        |---|---|
+
+        | `delete` | `false_negative`, `unsolicited`, `other`, `groups_remediation` |
+
+        | `move_to_inbox` | `quarantine_release`, `other`, `false_negative` |
+
+
+        ---
+
+
+        ## Validation rules
+
+
+        - `search_filters` is **required** when `remediate_all=true`.
+
+        - `messages` is **required** when `remediate_all=false`.
+
+        - `target_folder` is **required** when `action=move_to_inbox`.
+
+        - `remediation_reason=quarantine_release` is only valid when `source=quarantine`.
+
+        - `search_filters.start_time` must be strictly before `search_filters.end_time`.
+
+        - `use_sender_regex=true` in `search_filters` requires `sender_email` to be set.
+
+        - `use_recipient_regex=true` in `search_filters` requires `recipient_email` to be set.
+
+        - `submit_d360_case=true` requires `remediation_reason=false_negative`. Detection 360 only supports missed-attack inquiries today; other reasons are rejected at the API boundary.
+
+        - `submit_d360_case=true` with `remediate_all=true` requires `search_filters.subject` to be set.
+
+        - `submit_d360_case=true` with `messages` requires `abnormal_message_uuid` on every message.
+
+
+        ---
+
+
+        ## Tenant filtering
+
+
+        Optionally provide `tenant_ids` to restrict remediation to a subset of tenants. If omitted, all tenants authorized by the bearer token are included. `tenant_ids` must be a subset of the tenants authorized by the bearer token.'
+      summary: Remediate email messages
+      tags:
+      - Search and Respond
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemediationRequest'
+            examples:
+              DeleteSpecificMessages(falseNegative):
+                value:
+                  action: delete
+                  source: abnormal
+                  remediation_reason: false_negative
+                  submit_d360_case: false
+                  remediate_all: false
+                  messages:
+                  - tenant_id: 123
+                    raw_message_id: AAMkAGI2THVSAAA=
+                    abnormal_message_id: abc123def456
+                    mailbox_name: user@company.com
+                    native_user_id: user@company.com
+                    subject: 'Urgent: Wire Transfer Request'
+                    sender: attacker@malicious.com
+                    received_time: '2024-01-15T10:30:00Z'
+                  tenant_ids:
+                  - 123
+                summary: Delete specific messages (false negative)
+              MoveSpecificMessagesToInbox(quarantineRelease):
+                value:
+                  action: move_to_inbox
+                  source: quarantine
+                  remediation_reason: quarantine_release
+                  target_folder: inbox
+                  submit_d360_case: false
+                  remediate_all: false
+                  messages:
+                  - tenant_id: 123
+                    raw_message_id: AAMkAGI2THVSAAA=
+                    mailbox_name: user@company.com
+                    native_user_id: user@company.com
+                    subject: Quarterly Report
+                    sender: partner@trusted.com
+                    received_time: '2024-01-15T10:30:00Z'
+                  tenant_ids:
+                  - 123
+                summary: Move specific messages to inbox (quarantine release)
+              BulkDeleteUsingSearchFilters(remediateAll):
+                value:
+                  action: delete
+                  source: abnormal
+                  remediation_reason: false_negative
+                  submit_d360_case: false
+                  remediate_all: true
+                  search_filters:
+                    start_time: '2024-01-01T00:00:00Z'
+                    end_time: '2024-01-31T23:59:59Z'
+                    sender_email: attacker@malicious.com
+                    judgement: attack
+                  tenant_ids:
+                  - 123
+                summary: Bulk delete using search filters (remediate_all)
+              DeleteWithD360CaseSubmission:
+                value:
+                  action: delete
+                  source: abnormal
+                  remediation_reason: false_negative
+                  submit_d360_case: true
+                  remediate_all: false
+                  messages:
+                  - tenant_id: 123
+                    raw_message_id: AAMkAGI2THVSAAA=
+                    abnormal_message_id: abc123def456
+                    abnormal_message_uuid: 550e8400-e29b-41d4-a716-446655440000
+                    mailbox_name: user@company.com
+                    native_user_id: user@company.com
+                    subject: 'Urgent: Wire Transfer Request'
+                    sender: attacker@malicious.com
+                    received_time: '2024-01-15T10:30:00Z'
+                  tenant_ids:
+                  - 123
+                summary: Delete with D360 case submission
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemediationResponse'
+              examples:
+                RemediationAccepted:
+                  value:
+                    activity_log_id: 12345
+                    metadata:
+                      trace_id: abc-123-def-456
+                      response_time: '2024-01-15T10:30:00Z'
+                  summary: Remediation accepted
+          description: Remediation request accepted. Poll GET /v1/search/activity/{activity_log_id} to retrieve results or track progress.
+        '400':
+          description: 'Invalid request. Common causes: missing required fields (`search_filters` when `remediate_all=true`, `messages` when `remediate_all=false`, `target_folder` when `action=move_to_inbox`), incompatible action/reason combination, `quarantine_release` reason with non-quarantine source, or invalid time range.'
+        '401':
+          description: Authentication failed (invalid bearer token) or Authorization failed (requested tenant_ids not authorized by bearer token)
+        '403':
+          description: API not enabled for this customer
+        '409':
+          description: Concurrent remediation limit exceeded. Retry after the in-progress operation completes.
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    SearchFilters:
+      properties:
+        start_time:
+          description: Start time in ISO 8601 format
+          format: date-time
+          title: Start Time
+          type: string
+        end_time:
+          description: End time in ISO 8601 format
+          format: date-time
+          title: End Time
+          type: string
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Subject
+        sender_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender Email
+        sender_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender Name
+        recipient_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Recipient Email
+        recipient_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Recipient Name
+        attachment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Attachment Name
+        attachment_md5_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Attachment Md5 Hash
+        internet_message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Internet Message Id
+        body_link:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Body Link
+        sender_ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender Ip
+        judgement:
+          anyOf:
+          - $ref: '#/components/schemas/JudgementEnum'
+          - type: 'null'
+          default: null
+        judgement_source:
+          anyOf:
+          - $ref: '#/components/schemas/JudgementSourceEnum'
+          - type: 'null'
+          default: null
+        judgement_source_model_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Judgement Source Model Ids
+        judgement_source_model_versions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Judgement Source Model Versions
+        use_sender_regex:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Use Sender Regex
+        use_recipient_regex:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Use Recipient Regex
+      required:
+      - start_time
+      - end_time
+      title: SearchFilters
+      type: object
+    ActionReasonEnum:
+      enum:
+      - false_negative
+      - unsolicited
+      - other
+      - groups_remediation
+      - quarantine_release
+      title: ActionReasonEnum
+      type: string
+    JudgementSourceEnum:
+      enum:
+      - ABNORMAL_SYSTEM
+      - CUSTOMER_AI_MODEL
+      title: JudgementSourceEnum
+      type: string
+    ActivitiesResponse:
+      properties:
+        activities:
+          items:
+            $ref: '#/components/schemas/ActivityLogEntry'
+          title: Activities
+          type: array
+        total:
+          title: Total
+          type: integer
+        pageNumber:
+          title: Pagenumber
+          type: integer
+        pageSize:
+          title: Pagesize
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - activities
+      - total
+      - pageNumber
+      - pageSize
+      - metadata
+      title: ActivitiesResponse
+      type: object
+    ActionEnum:
+      enum:
+      - search
+      - remediation
+      - csv_export
+      title: ActionEnum
+      type: string
+    QuarantineInfo:
+      properties:
+        identity:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Identity
+        message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Message Id
+        policy_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Policy Type
+        quarantine_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Quarantine Reason
+        release_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Release Status
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Type
+        processed_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Processed At
+      title: QuarantineInfo
+      type: object
+    ActivityStatusResponse:
+      properties:
+        activity_id:
+          title: Activity Id
+          type: integer
+        action:
+          anyOf:
+          - $ref: '#/components/schemas/ActionEnum'
+          - type: 'null'
+          default: null
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/ActionStatusEnum'
+          - type: 'null'
+          default: null
+        performed_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Performed By
+        timestamp:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Timestamp
+        result_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Result Count
+        remediation_details:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RemediationDetail'
+            type: array
+          - type: 'null'
+          default: null
+          title: Remediation Details
+        total:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Total
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - activity_id
+      - metadata
+      title: ActivityStatusResponse
+      type: object
+    MetaData:
+      properties:
+        trace_id:
+          title: Trace Id
+          type: string
+        response_time:
+          title: Response Time
+          type: string
+      required:
+      - trace_id
+      - response_time
+      title: MetaData
+      type: object
+    SearchRequest:
+      properties:
+        source:
+          $ref: '#/components/schemas/EmailSourceEnum'
+          description: Source of the search
+        filters:
+          $ref: '#/components/schemas/SearchFilters'
+          description: Search filters
+        tenant_ids:
+          anyOf:
+          - items:
+              type: integer
+            minItems: 1
+            type: array
+          - type: 'null'
+          default: null
+          description: Optional list of tenant IDs to filter the search. If not provided, all authorized tenants are included.
+          title: Tenant Ids
+      required:
+      - source
+      - filters
+      title: SearchRequest
+      type: object
+    JudgementEnum:
+      enum:
+      - attack
+      - borderline
+      - spam
+      - graymail
+      - safe
+      title: JudgementEnum
+      type: string
+    DecisionCategoryEnum:
+      enum:
+      - malicious
+      - spam
+      - safe
+      - graymail
+      title: DecisionCategoryEnum
+      type: string
+    RemediationResponse:
+      properties:
+        activity_log_id:
+          title: Activity Log Id
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - activity_log_id
+      - metadata
+      title: RemediationResponse
+      type: object
+    SearchResult:
+      properties:
+        customer_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Customer Id
+        tenant_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Tenant Id
+        received_time:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Received Time
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Subject
+        sender:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender
+        sender_display_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender Display Name
+        mailbox_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Mailbox Name
+        mailbox_display_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Mailbox Display Name
+        current_folder_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Current Folder Name
+        raw_message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Raw Message Id
+        native_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Native User Id
+        cloud_message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Cloud Message Id
+        internet_message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Internet Message Id
+        abnormal_message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Abnormal Message Id
+        abnormal_message_uuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Abnormal Message Uuid
+        decision_category:
+          anyOf:
+          - $ref: '#/components/schemas/DecisionCategoryEnum'
+          - type: 'null'
+          default: null
+        judgement:
+          anyOf:
+          - $ref: '#/components/schemas/JudgementEnum'
+          - type: 'null'
+          default: null
+        judgement_source:
+          anyOf:
+          - $ref: '#/components/schemas/JudgementSourceEnum'
+          - type: 'null'
+          default: null
+        judgement_source_model_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Judgement Source Model Id
+        judgement_source_model_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Judgement Source Model Version
+        attachments:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/Attachment'
+            type: object
+          - type: 'null'
+          default: null
+          title: Attachments
+        body_links:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Body Links
+        sender_ip_addresses:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Sender Ip Addresses
+        quarantine_info:
+          anyOf:
+          - $ref: '#/components/schemas/QuarantineInfo'
+          - type: 'null'
+          default: null
+      title: SearchResult
+      type: object
+    EmailSourceEnum:
+      enum:
+      - abnormal
+      - quarantine
+      title: EmailSourceEnum
+      type: string
+    RemediationActionEnum:
+      enum:
+      - delete
+      - move_to_inbox
+      title: RemediationActionEnum
+      type: string
+    RemediationDetail:
+      properties:
+        tenant_id:
+          title: Tenant Id
+          type: integer
+        raw_message_id:
+          title: Raw Message Id
+          type: string
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Subject
+        sender:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender
+        mailbox_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Mailbox Name
+        current_folder_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Current Folder Name
+        native_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Native User Id
+        date_created:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Date Created
+        date_remediated:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Date Remediated
+        status:
+          $ref: '#/components/schemas/ActionStatusEnum'
+        status_details:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Status Details
+        received_time:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Received Time
+      required:
+      - tenant_id
+      - raw_message_id
+      - status
+      title: RemediationDetail
+      type: object
+    Attachment:
+      properties:
+        name:
+          title: Name
+          type: string
+        md5_hash:
+          title: Md5 Hash
+          type: string
+      required:
+      - name
+      - md5_hash
+      title: Attachment
+      type: object
+    RemediationRequest:
+      properties:
+        action:
+          $ref: '#/components/schemas/RemediationActionEnum'
+          description: Remediation action
+        source:
+          $ref: '#/components/schemas/EmailSourceEnum'
+          description: Source of the messages
+        remediation_reason:
+          $ref: '#/components/schemas/ActionReasonEnum'
+          description: Reason for remediation
+        target_folder:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Target folder for move actions
+          title: Target Folder
+        submit_d360_case:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Submit D360 Case
+        messages:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MessageToRemediate'
+            type: array
+          - type: 'null'
+          default: null
+          title: Messages
+        remediate_all:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Remediate All
+        search_filters:
+          anyOf:
+          - $ref: '#/components/schemas/SearchFilters'
+          - type: 'null'
+          default: null
+        tenant_ids:
+          anyOf:
+          - items:
+              type: integer
+            minItems: 1
+            type: array
+          - type: 'null'
+          default: null
+          description: Optional list of tenant IDs to filter remediation. If not provided, all authorized tenants are included.
+          title: Tenant Ids
+      required:
+      - action
+      - source
+      - remediation_reason
+      title: RemediationRequest
+      type: object
+    SearchResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          title: Results
+          type: array
+        total:
+          title: Total
+          type: integer
+        pageNumber:
+          title: Pagenumber
+          type: integer
+        pageSize:
+          title: Pagesize
+          type: integer
+        nextPageNumber:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Nextpagenumber
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - results
+      - total
+      - pageNumber
+      - pageSize
+      - metadata
+      title: SearchResponse
+      type: object
+    ActivityLogEntry:
+      properties:
+        activity_id:
+          title: Activity Id
+          type: integer
+        action:
+          $ref: '#/components/schemas/ActionEnum'
+        status:
+          $ref: '#/components/schemas/ActionStatusEnum'
+        performed_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Performed By
+        timestamp:
+          format: date-time
+          title: Timestamp
+          type: string
+        result_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Result Count
+        parameters:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          default: null
+          title: Parameters
+        submit_d360_case:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          title: Submit D360 Case
+      required:
+      - activity_id
+      - action
+      - status
+      - timestamp
+      title: ActivityLogEntry
+      type: object
+    MessageToRemediate:
+      properties:
+        tenant_id:
+          description: Tenant ID
+          title: Tenant Id
+          type: integer
+        raw_message_id:
+          description: Raw message ID
+          title: Raw Message Id
+          type: string
+        abnormal_message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Abnormal Message Id
+        abnormal_message_uuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Abnormal Message Uuid
+        mailbox_name:
+          description: Mailbox name
+          title: Mailbox Name
+          type: string
+        native_user_id:
+          description: Native user ID
+          title: Native User Id
+          type: string
+        subject:
+          description: Subject
+          title: Subject
+          type: string
+        sender:
+          description: Sender
+          title: Sender
+          type: string
+        received_time:
+          description: Received time
+          format: date-time
+          title: Received Time
+          type: string
+      required:
+      - tenant_id
+      - raw_message_id
+      - mailbox_name
+      - native_user_id
+      - subject
+      - sender
+      - received_time
+      title: MessageToRemediate
+      type: object
+    ActionStatusEnum:
+      enum:
+      - pending
+      - success
+      - partial_success
+      - error
+      title: ActionStatusEnum
+      type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

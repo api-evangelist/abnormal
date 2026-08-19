@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Detection360 API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Detection360",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Detection 360 reports for a specific type of detection misclassification.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/detection360/reports",
+            "params": [
+              {
+                "name": "inquiry_type",
+                "value": "",
+                "type": "query",
+                "description": "Whether to fetch missed attacks or false positives."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "The start of the datetime range, as an RFC 3339 timestamp, to fetch Detection 360 cases from. Defaults to 30 days before end."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "The end of the datetime range, as an RFC 3339 timestamp, to fetch Detection 360 cases from. Defaults to the current time."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Only Detection 360 cases with these statuses will be retrieved. Defaults to all statuses."
+              }
+            ]
+          },
+          "docs": "Get a list of Detection 360 reports that you have submitted and view corresponding details for each case, including report summaries, statuses, message analyses, and more."
+        },
+        {
+          "info": {
+            "name": "Submit a detection misclassification report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/detection360/reports",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this to report a detection misclassification judgement by Abnormal Security.  We use this data to improve our models, and also give customers transparency into the frequency of misclassifications."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

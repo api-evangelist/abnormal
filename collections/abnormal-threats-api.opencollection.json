@@ -1,0 +1,302 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Threats API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Threats",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of threats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/threats",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the keys that are supported for `/threats` are `receivedTime` and `latestTimeRemediated`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ format`."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": " Number of threats on each page. Each page of data will have at most pageSize threats. Has no effect if filter is not specified."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of threats. Has no effect if filter is not specified."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the source of detection. 'all' returns threats from all sources, 'spam' returns only spam threats, 'attacks' returns only attack threats, and 'borderline' returns only borderline threats."
+              },
+              {
+                "name": "sender",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the name or email address of the sender"
+              },
+              {
+                "name": "recipient",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the name or email address of the recipient"
+              },
+              {
+                "name": "subject",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the email subject"
+              },
+              {
+                "name": "topic",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the topic of email contents"
+              },
+              {
+                "name": "attackType",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the type of attack"
+              },
+              {
+                "name": "attackVector",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the attack vector"
+              },
+              {
+                "name": "attackStrategy",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the attack strategy"
+              },
+              {
+                "name": "impersonatedParty",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the impersonated party"
+              }
+            ]
+          },
+          "docs": "Get a list of threats"
+        },
+        {
+          "info": {
+            "name": "Get details of a threat",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/threats/:threat_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of messages corresponding to threat in each page. Each page of data will have at most pageSize message. Total results returned cannot exceed 2000 due to database limitations"
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of threat messages. Currently ignored, only 10 results for `messages` will show. Supported will be added in a future version. Total results returned cannot exceed 2000 due to database limitations"
+              },
+              {
+                "name": "threat_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the threat."
+              }
+            ]
+          },
+          "docs": "Get details of a threat"
+        },
+        {
+          "info": {
+            "name": "Manage a Threat identified by Abnormal Security",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/threats/:threat_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "threat_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the threat."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this to remediate or unremediate a threat. If the request is found to be something which can be processed, the server will return a '202 Accept' with an actionId and status URL in the response. This can be used to check the status of the request."
+        },
+        {
+          "info": {
+            "name": "Check the status of an action requested on a threat.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/threats/:threat_id/actions/:action_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "threat_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the threat."
+              },
+              {
+                "name": "action_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the action id for a threat."
+              }
+            ]
+          },
+          "docs": "Check the status of an action requested on a threat."
+        },
+        {
+          "info": {
+            "name": "Get attachment details of a threat campaign.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/threats/:threat_id/attachments",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "threat_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the threat."
+              }
+            ]
+          },
+          "docs": "Get attachment details of a threat campaign."
+        },
+        {
+          "info": {
+            "name": "Get information of links in a threat campagin.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/threats/:threat_id/links",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "threat_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the threat."
+              }
+            ]
+          },
+          "docs": "Get information of links in a threat campagin."
+        },
+        {
+          "info": {
+            "name": "Download data from Threat Log in .csv format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/threats_export/csv",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              },
+              {
+                "name": "Accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Max time range is 14 days. If only one of the gte or lte filters are specified, the time range defaults to 1 day within the specified filter. If neither of the gte or lte filters are specified, the time range defaults to the previous date to the current date."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the source of detection. 'all' returns threats from all sources, 'spam' returns only spam threats, 'attacks' returns only attack threats, and 'borderline' returns only borderline threats."
+              }
+            ]
+          },
+          "docs": "Download data from Threat Log in .csv format"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

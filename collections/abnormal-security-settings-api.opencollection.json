@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Security Settings API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Security Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get security settings including session timeout configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/security-settings",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Fetch security settings for an account.\n\nThis endpoint retrieves security settings including session timeout\nconfiguration (inactivity timeout and max session time)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

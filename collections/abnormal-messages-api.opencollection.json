@@ -1,0 +1,124 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Messages API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Messages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get details of an attachment in an email message",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/messages/:message_id/attachment/:attachment_name",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The ABX Message Id of a message."
+              },
+              {
+                "name": "attachment_name",
+                "value": "",
+                "type": "path",
+                "description": "The attachment name of an attachment belonging to an email message."
+              }
+            ]
+          },
+          "docs": "Get details of an attachment in an email message"
+        },
+        {
+          "info": {
+            "name": "Download the attachment in an email as a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/messages/:message_id/attachment/:attachment_name/download",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The ABX Message Id of a message."
+              },
+              {
+                "name": "attachment_name",
+                "value": "",
+                "type": "path",
+                "description": "The attachment name of an attachment belonging to an email message."
+              }
+            ]
+          },
+          "docs": "Download the attachment in an email as a file"
+        },
+        {
+          "info": {
+            "name": "Download a message in EML format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/messages/:message_id/download",
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The ABX Message Id of a message."
+              }
+            ]
+          },
+          "docs": "Download the message contents in plaintext in the EML format. For security reasons, this API endpoint is disabled by default. Please talk to your customer specialist to get it enabled."
+        },
+        {
+          "info": {
+            "name": "Get details of the remediation history for a threat log message",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/messages/:message_id/remediation_history",
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The ABX Message Id of a message."
+              }
+            ]
+          },
+          "docs": "Get details of the remediation history for a threat log message"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

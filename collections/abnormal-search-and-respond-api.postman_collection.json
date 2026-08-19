@@ -1,0 +1,2325 @@
+{
+  "item": [
+    {
+      "id": "594ec490-fcd6-4c63-b5d1-e066d32655be",
+      "name": "Search and Respond",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7efc36f7-8542-40a5-b3f7-551344f246e4",
+          "name": "Search for email messages",
+          "request": {
+            "name": "Search for email messages",
+            "description": {
+              "content": "Search for email messages across Abnormal and Quarantine sources. Optionally filter by tenant_ids in the request body. If tenant_ids is not provided, all authorized tenants are searched. The tenant_ids must be a subset of the tenants authorized by the bearer token.\n\n**Key Filter Fields:**\n- `body_link`: Filter by URLs found in the email body (e.g., phishing links, suspicious domains)\n- `judgement`: Filter by threat classification. Values: 'attack' (confirmed threats), 'borderline' (suspicious but not confirmed), 'spam' (unwanted bulk email), 'graymail' (legitimate bulk email), 'safe' (benign messages)\n- `judgement_source`: Filter by detection source. Values: 'ABNORMAL_SYSTEM' (flagged by Abnormal's own detection), 'CUSTOMER_AI_MODEL' (flagged by a customer-defined Custom AI Model). Only supported for `source=abnormal` (not quarantine).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "<integer>",
+                  "description": "Page number for pagination (default: 1)"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of results per page (default: 100, max: 1000)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"<string>\",\n  \"filters\": {\n    \"start_time\": \"<dateTime>\",\n    \"end_time\": \"<dateTime>\",\n    \"subject\": \"<string>\",\n    \"sender_email\": \"<string>\",\n    \"sender_name\": \"<string>\",\n    \"recipient_email\": \"<string>\",\n    \"recipient_name\": \"<string>\",\n    \"attachment_name\": \"<string>\",\n    \"attachment_md5_hash\": \"<string>\",\n    \"internet_message_id\": \"<string>\",\n    \"body_link\": \"<string>\",\n    \"sender_ip\": \"<string>\",\n    \"judgement\": \"<string>\",\n    \"judgement_source\": \"<string>\",\n    \"judgement_source_model_ids\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"judgement_source_model_versions\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"use_sender_regex\": \"<boolean>\",\n    \"use_recipient_regex\": \"<boolean>\"\n  },\n  \"tenant_ids\": [\n    \"<integer>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6248829a-957d-488d-a561-e3b57b2d483c",
+              "name": "Search completed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"abnormal\",\n  \"filters\": {\n    \"start_time\": \"2024-01-01T00:00:00Z\",\n    \"end_time\": \"2024-01-31T23:59:59Z\",\n    \"subject\": \"Urgent: Payment Required\",\n    \"sender_email\": \"suspicious@external-domain.com\",\n    \"sender_name\": \"John Doe\",\n    \"recipient_email\": \"user@company.com\",\n    \"recipient_name\": \"Jane Smith\",\n    \"attachment_name\": \"invoice.pdf\",\n    \"internet_message_id\": \"<message123@sender.com>\",\n    \"body_link\": \"https://suspicious-domain.com\",\n    \"sender_ip\": \"192.0.2.1\",\n    \"judgement\": \"attack\",\n    \"use_sender_regex\": false,\n    \"use_recipient_regex\": false\n  },\n  \"tenant_ids\": [\n    123,\n    456\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"customer_id\": 100,\n      \"tenant_id\": 123,\n      \"received_time\": \"2024-01-15T10:30:00Z\",\n      \"subject\": \"Urgent: Wire Transfer Request\",\n      \"sender\": \"attacker@malicious.com\",\n      \"sender_display_name\": \"John Doe\",\n      \"mailbox_name\": \"user@company.com\",\n      \"mailbox_display_name\": \"User Name\",\n      \"current_folder_name\": \"Inbox\",\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"native_user_id\": \"user@company.com\",\n      \"cloud_message_id\": \"abx:CloudMessage:123:456\",\n      \"internet_message_id\": \"<message123@sender.com>\",\n      \"abnormal_message_id\": \"abc123def456\",\n      \"abnormal_message_uuid\": \"uuid-123-456\",\n      \"decision_category\": \"attack\",\n      \"judgement\": \"attack\",\n      \"judgement_source\": \"CUSTOMER_AI_MODEL\",\n      \"judgement_source_model_id\": \"700\",\n      \"judgement_source_model_version\": \"19\",\n      \"attachments\": {\n        \"invoice.pdf\": {\n          \"name\": \"invoice.pdf\",\n          \"md5_hash\": \"d41d8cd98f00b204e9800998ecf8427e\"\n        }\n      },\n      \"body_links\": [\n        \"https://suspicious-domain.com/phishing\"\n      ],\n      \"sender_ip_addresses\": [\n        \"192.0.2.1\"\n      ]\n    }\n  ],\n  \"total\": 25,\n  \"pageNumber\": 1,\n  \"pageSize\": 100,\n  \"nextPageNumber\": 2,\n  \"metadata\": {\n    \"trace_id\": \"abc-123-def-456\",\n    \"response_time\": \"2024-01-15T10:30:05Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5778d259-7429-423c-a716-e6bb3fd72282",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"abnormal\",\n  \"filters\": {\n    \"start_time\": \"2024-01-01T00:00:00Z\",\n    \"end_time\": \"2024-01-31T23:59:59Z\",\n    \"subject\": \"Urgent: Payment Required\",\n    \"sender_email\": \"suspicious@external-domain.com\",\n    \"sender_name\": \"John Doe\",\n    \"recipient_email\": \"user@company.com\",\n    \"recipient_name\": \"Jane Smith\",\n    \"attachment_name\": \"invoice.pdf\",\n    \"internet_message_id\": \"<message123@sender.com>\",\n    \"body_link\": \"https://suspicious-domain.com\",\n    \"sender_ip\": \"192.0.2.1\",\n    \"judgement\": \"attack\",\n    \"use_sender_regex\": false,\n    \"use_recipient_regex\": false\n  },\n  \"tenant_ids\": [\n    123,\n    456\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5d251acb-1c47-469a-a6d0-433ca8839905",
+              "name": "Authentication failed (invalid bearer token) or Authorization failed (requested tenant_ids not authorized by bearer token)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"abnormal\",\n  \"filters\": {\n    \"start_time\": \"2024-01-01T00:00:00Z\",\n    \"end_time\": \"2024-01-31T23:59:59Z\",\n    \"subject\": \"Urgent: Payment Required\",\n    \"sender_email\": \"suspicious@external-domain.com\",\n    \"sender_name\": \"John Doe\",\n    \"recipient_email\": \"user@company.com\",\n    \"recipient_name\": \"Jane Smith\",\n    \"attachment_name\": \"invoice.pdf\",\n    \"internet_message_id\": \"<message123@sender.com>\",\n    \"body_link\": \"https://suspicious-domain.com\",\n    \"sender_ip\": \"192.0.2.1\",\n    \"judgement\": \"attack\",\n    \"use_sender_regex\": false,\n    \"use_recipient_regex\": false\n  },\n  \"tenant_ids\": [\n    123,\n    456\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b440956f-f518-45ac-a0af-eb9e52951344",
+              "name": "API not enabled for this customer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"abnormal\",\n  \"filters\": {\n    \"start_time\": \"2024-01-01T00:00:00Z\",\n    \"end_time\": \"2024-01-31T23:59:59Z\",\n    \"subject\": \"Urgent: Payment Required\",\n    \"sender_email\": \"suspicious@external-domain.com\",\n    \"sender_name\": \"John Doe\",\n    \"recipient_email\": \"user@company.com\",\n    \"recipient_name\": \"Jane Smith\",\n    \"attachment_name\": \"invoice.pdf\",\n    \"internet_message_id\": \"<message123@sender.com>\",\n    \"body_link\": \"https://suspicious-domain.com\",\n    \"sender_ip\": \"192.0.2.1\",\n    \"judgement\": \"attack\",\n    \"use_sender_regex\": false,\n    \"use_recipient_regex\": false\n  },\n  \"tenant_ids\": [\n    123,\n    456\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7ebbc524-bc0c-4892-ae86-72a581dc1a16",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source\": \"abnormal\",\n  \"filters\": {\n    \"start_time\": \"2024-01-01T00:00:00Z\",\n    \"end_time\": \"2024-01-31T23:59:59Z\",\n    \"subject\": \"Urgent: Payment Required\",\n    \"sender_email\": \"suspicious@external-domain.com\",\n    \"sender_name\": \"John Doe\",\n    \"recipient_email\": \"user@company.com\",\n    \"recipient_name\": \"Jane Smith\",\n    \"attachment_name\": \"invoice.pdf\",\n    \"internet_message_id\": \"<message123@sender.com>\",\n    \"body_link\": \"https://suspicious-domain.com\",\n    \"sender_ip\": \"192.0.2.1\",\n    \"judgement\": \"attack\",\n    \"use_sender_regex\": false,\n    \"use_recipient_regex\": false\n  },\n  \"tenant_ids\": [\n    123,\n    456\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3be5ecfc-e09a-4828-86b5-09d87da90cd2",
+          "name": "List activity logs",
+          "request": {
+            "name": "List activity logs",
+            "description": {
+              "content": "List activity logs for search and remediation operations. Optionally filter by tenant_ids query parameter (e.g., ?tenant_ids=123&tenant_ids=456). If tenant_ids is not provided, all authorized tenants are included. The tenant_ids must be a subset of the tenants authorized by the bearer token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search",
+                "activities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tenant_ids",
+                  "value": "<string>",
+                  "description": "Comma-separated list of tenant IDs to filter activities (e.g., '123,456' or '789'). If not provided, all authorized tenants are included."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "<integer>",
+                  "description": "Page number for pagination (default: 1)"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of results per page (default: 100, max: 1000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "action",
+                  "value": "<string>",
+                  "description": "Filter by remediation action (e.g., delete, move_to_inbox)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e4096a20-478e-4395-8f03-0508c6273ea7",
+              "name": "Activity logs retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenant_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "action",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activities\": [\n    {\n      \"activity_id\": 12345,\n      \"action\": \"delete\",\n      \"status\": \"completed\",\n      \"performed_by\": \"Rest API\",\n      \"timestamp\": \"2024-01-15T10:30:00Z\",\n      \"result_count\": 5,\n      \"parameters\": {\n        \"tenant_ids\": [\n          123\n        ],\n        \"source\": \"abnormal\"\n      },\n      \"submit_d360_case\": false\n    },\n    {\n      \"activity_id\": 12346,\n      \"action\": \"move_to_inbox\",\n      \"status\": \"in_progress\",\n      \"performed_by\": \"Rest API\",\n      \"timestamp\": \"2024-01-15T11:00:00Z\",\n      \"result_count\": 3,\n      \"parameters\": {\n        \"tenant_ids\": [\n          456\n        ],\n        \"source\": \"abnormal\",\n        \"target_folder\": \"inbox\"\n      },\n      \"submit_d360_case\": false\n    }\n  ],\n  \"total\": 50,\n  \"pageNumber\": 1,\n  \"pageSize\": 100,\n  \"metadata\": {\n    \"trace_id\": \"abc-123-def-456\",\n    \"response_time\": \"2024-01-15T11:05:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e1daf4d-9114-4166-82b6-25ee1c0bc5c8",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenant_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "action",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5c3954ff-adb4-44ab-883b-73877329756c",
+              "name": "Authentication failed (invalid bearer token) or Authorization failed (requested tenant_ids not authorized by bearer token)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenant_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "action",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8dff8a72-1b67-49db-9ead-b530b3d3d650",
+              "name": "API not enabled for this customer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenant_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "action",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ec5bbe99-443b-4d07-bbc2-60d4830cb839",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenant_ids",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageNumber",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "action",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d4b490e1-2054-475a-b652-dc773557c9cd",
+          "name": "Get activity status",
+          "request": {
+            "name": "Get activity status",
+            "description": {
+              "content": "Get detailed status of a specific activity including remediation results. Authorization is automatically determined by the bearer token - if the activity belongs to any tenant authorized by your token, you will be able to access it. The activity_log_id is returned in the response from the remediation endpoint. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search",
+                "activities",
+                ":activity_log_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "activity_log_id",
+                  "description": "(Required) The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "09b2a018-7e5f-47e3-8e1f-1400dcf16896",
+              "name": "Activity status retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities",
+                    ":activity_log_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "activity_log_id",
+                      "description": "(Required) The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activity_id\": 12345,\n  \"action\": \"delete\",\n  \"status\": \"completed\",\n  \"performed_by\": \"Rest API\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"result_count\": 5,\n  \"remediation_details\": [\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"status\": \"success\",\n      \"error_message\": \"\"\n    },\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"BBMkAGI2THVSAAA=\",\n      \"status\": \"success\",\n      \"error_message\": \"\"\n    }\n  ],\n  \"total\": 5,\n  \"pageNumber\": 1,\n  \"pageSize\": 100,\n  \"metadata\": {\n    \"trace_id\": \"abc-123-def-456\",\n    \"response_time\": \"2024-01-15T10:30:01Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1b2a7f4-9efa-452f-80cd-50bb9a682c54",
+              "name": "Invalid activity_log_id parameter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities",
+                    ":activity_log_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "activity_log_id",
+                      "description": "(Required) The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f88738de-e8e5-42f1-b155-c41ca9c59311",
+              "name": "Authentication failed (invalid bearer token) or the activity does not belong to any tenant authorized by your token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities",
+                    ":activity_log_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "activity_log_id",
+                      "description": "(Required) The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5e4caf9a-5cff-4ce6-ad1c-f52168fea761",
+              "name": "API not enabled for this customer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities",
+                    ":activity_log_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "activity_log_id",
+                      "description": "(Required) The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "57e4c9ca-85a6-4a7d-b632-b9d672d504f6",
+              "name": "Activity not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities",
+                    ":activity_log_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "activity_log_id",
+                      "description": "(Required) The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e9df388a-696a-4a38-aaf3-1cf892611180",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "activities",
+                    ":activity_log_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "activity_log_id",
+                      "description": "(Required) The activity log ID returned from the remediation request (use 'activity_log_id' field from remediation response)"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "445db5a4-0085-43be-a2fc-f138e6cd1f1a",
+          "name": "Download EML file for a message",
+          "request": {
+            "name": "Download EML file for a message",
+            "description": {
+              "content": "Download the EML file for a specific message by cloud_message_id. Returns the EML file content as message/rfc822 format. For quarantine messages, provide both 'quarantineIdentity' and 'recipientMailbox' query parameters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search",
+                "messages",
+                ":message_id",
+                "eml"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "quarantineIdentity",
+                  "value": "<string>",
+                  "description": "Quarantine identity for quarantined messages. Required along with 'recipientMailbox' to download quarantine messages from S3 cache."
+                },
+                {
+                  "disabled": false,
+                  "key": "recipientMailbox",
+                  "value": "<string>",
+                  "description": "Recipient mailbox email address for quarantined messages. Required along with 'quarantineIdentity' to download quarantine messages from S3 cache."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "message_id",
+                  "description": "(Required) The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7240b461-d460-4153-8afb-03d7bc5ffaad",
+              "name": "EML file downloaded successfully (Content-Type: message/rfc822)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    ":message_id",
+                    "eml"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "quarantineIdentity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipientMailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "message_id",
+                      "description": "(Required) The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"string\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "86f20b2c-93ec-4615-8557-f4fc628e4f4b",
+              "name": "Bad request - invalid message ID format",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    ":message_id",
+                    "eml"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "quarantineIdentity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipientMailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "message_id",
+                      "description": "(Required) The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "40df1393-57f1-4cfc-99f6-cb96e4f797be",
+              "name": "Unauthorized - invalid or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    ":message_id",
+                    "eml"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "quarantineIdentity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipientMailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "message_id",
+                      "description": "(Required) The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cf7caa29-e2de-49fe-8b5a-f9b916e7b042",
+              "name": "Forbidden - API not enabled or unauthorized tenant access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    ":message_id",
+                    "eml"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "quarantineIdentity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipientMailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "message_id",
+                      "description": "(Required) The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "47e888a4-3c3b-4d6f-aa5f-65b4b980ed43",
+              "name": "Not found - message does not exist or EML not available",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    ":message_id",
+                    "eml"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "quarantineIdentity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipientMailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "message_id",
+                      "description": "(Required) The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "152009ba-16f6-41ea-a616-3ccca3b21304",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    ":message_id",
+                    "eml"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "quarantineIdentity",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipientMailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "message_id",
+                      "description": "(Required) The cloud_message_id from the Search API response (format: 'abx:CloudMessage:...'). Use the 'cloud_message_id' field from the search results."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "85888f01-cba5-45ae-ae38-85d1e74e764f",
+          "name": "Download email attachment",
+          "request": {
+            "name": "Download email attachment",
+            "description": {
+              "content": "Download an email attachment for a given message.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search",
+                "messages",
+                "attachments",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "message_id",
+                  "value": "<integer>",
+                  "description": "(Required) Message ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "attachment_name",
+                  "value": "<string>",
+                  "description": "(Required) Name of the attachment to download"
+                },
+                {
+                  "disabled": false,
+                  "key": "tenant_id",
+                  "value": "<integer>",
+                  "description": "(Required) Tenant ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "raw_message_id",
+                  "value": "<string>",
+                  "description": "(Required) Raw message ID from cloud provider"
+                },
+                {
+                  "disabled": false,
+                  "key": "native_user_id",
+                  "value": "<string>",
+                  "description": "(Required) Native user ID from cloud provider"
+                },
+                {
+                  "disabled": false,
+                  "key": "recipient_mailbox",
+                  "value": "<string>",
+                  "description": "(Required) Recipient mailbox email address"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ed6f7054-381e-4dad-affc-e4096da65371",
+              "name": "Attachment downloaded successfully (binary file)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "message_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "attachment_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tenant_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "raw_message_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "native_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient_mailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"string\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0e08860c-6437-44a4-a616-8146a6a441db",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "message_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "attachment_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tenant_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "raw_message_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "native_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient_mailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "45c56323-85ed-4353-8590-51288cc7afd9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "message_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "attachment_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tenant_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "raw_message_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "native_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient_mailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7f7d6187-a2d3-4fc7-b1e9-8895eba6b841",
+              "name": "Attachment not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "message_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "attachment_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tenant_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "raw_message_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "native_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient_mailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e764e876-4c97-4893-9066-178c745c7f25",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "message_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "attachment_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tenant_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "raw_message_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "native_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient_mailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "169d657d-da3f-49b4-8dbe-978421350354",
+              "name": "Failed to retrieve attachment from cloud provider. The message or attachment may have been moved, deleted, or remediated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "messages",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "message_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "attachment_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tenant_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "raw_message_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "native_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recipient_mailbox",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a640887b-8a30-41b6-b57e-598b58338555",
+          "name": "Remediate email messages",
+          "request": {
+            "name": "Remediate email messages",
+            "description": {
+              "content": "Remediate email messages by deleting, moving, or submitting them for review. Returns an `activity_log_id` that can be polled via the **Get Activity Status** endpoint.\n\n---\n\n## Two modes of operation\n\n**Specific messages** (`remediate_all=false`):\nProvide a `messages` list. Each entry must include `tenant_id`, `raw_message_id`, `mailbox_name`, `native_user_id`, `subject`, `sender`, and `received_time`. The response returns an `activity_log_id`; poll **Get Activity Status** to retrieve per-message results.\n\n**Bulk / remediate-all** (`remediate_all=true`):\nProvide `search_filters` instead of `messages`. All messages matching the filters are remediated asynchronously. The response returns an `activity_log_id`; poll **Get Activity Status** to track progress.\n\n---\n\n## Actions\n\n| `action` | Description |\n|---|---|\n| `delete` | Move messages to the provider's deleted items / recoverable items folder |\n| `move_to_inbox` | Move messages to a specified folder (requires `target_folder`) |\n\nTo attach a Detection 360 case to a remediation, set `submit_d360_case: true` alongside any `action` above.\n\n---\n\n## Valid action / remediation_reason combinations\n\n| `action` | Allowed `remediation_reason` values |\n|---|---|\n| `delete` | `false_negative`, `unsolicited`, `other`, `groups_remediation` |\n| `move_to_inbox` | `quarantine_release`, `other`, `false_negative` |\n\n---\n\n## Validation rules\n\n- `search_filters` is **required** when `remediate_all=true`.\n- `messages` is **required** when `remediate_all=false`.\n- `target_folder` is **required** when `action=move_to_inbox`.\n- `remediation_reason=quarantine_release` is only valid when `source=quarantine`.\n- `search_filters.start_time` must be strictly before `search_filters.end_time`.\n- `use_sender_regex=true` in `search_filters` requires `sender_email` to be set.\n- `use_recipient_regex=true` in `search_filters` requires `recipient_email` to be set.\n- `submit_d360_case=true` requires `remediation_reason=false_negative`. Detection 360 only supports missed-attack inquiries today; other reasons are rejected at the API boundary.\n- `submit_d360_case=true` with `remediate_all=true` requires `search_filters.subject` to be set.\n- `submit_d360_case=true` with `messages` requires `abnormal_message_uuid` on every message.\n\n---\n\n## Tenant filtering\n\nOptionally provide `tenant_ids` to restrict remediation to a subset of tenants. If omitted, all tenants authorized by the bearer token are included. `tenant_ids` must be a subset of the tenants authorized by the bearer token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search",
+                "remediate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"<string>\",\n  \"source\": \"<string>\",\n  \"remediation_reason\": \"<string>\",\n  \"target_folder\": \"<string>\",\n  \"submit_d360_case\": \"<boolean>\",\n  \"messages\": [\n    {\n      \"tenant_id\": \"<integer>\",\n      \"raw_message_id\": \"<string>\",\n      \"mailbox_name\": \"<string>\",\n      \"native_user_id\": \"<string>\",\n      \"subject\": \"<string>\",\n      \"sender\": \"<string>\",\n      \"received_time\": \"<dateTime>\",\n      \"abnormal_message_id\": \"<string>\",\n      \"abnormal_message_uuid\": \"<string>\"\n    },\n    {\n      \"tenant_id\": \"<integer>\",\n      \"raw_message_id\": \"<string>\",\n      \"mailbox_name\": \"<string>\",\n      \"native_user_id\": \"<string>\",\n      \"subject\": \"<string>\",\n      \"sender\": \"<string>\",\n      \"received_time\": \"<dateTime>\",\n      \"abnormal_message_id\": \"<string>\",\n      \"abnormal_message_uuid\": \"<string>\"\n    }\n  ],\n  \"remediate_all\": \"<boolean>\",\n  \"search_filters\": {\n    \"start_time\": \"<dateTime>\",\n    \"end_time\": \"<dateTime>\",\n    \"subject\": \"<string>\",\n    \"sender_email\": \"<string>\",\n    \"sender_name\": \"<string>\",\n    \"recipient_email\": \"<string>\",\n    \"recipient_name\": \"<string>\",\n    \"attachment_name\": \"<string>\",\n    \"attachment_md5_hash\": \"<string>\",\n    \"internet_message_id\": \"<string>\",\n    \"body_link\": \"<string>\",\n    \"sender_ip\": \"<string>\",\n    \"judgement\": \"<string>\",\n    \"judgement_source\": \"<string>\",\n    \"judgement_source_model_ids\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"judgement_source_model_versions\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"use_sender_regex\": \"<boolean>\",\n    \"use_recipient_regex\": \"<boolean>\"\n  },\n  \"tenant_ids\": [\n    \"<integer>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "91fc7bc9-1767-43bc-83df-d72f1111b731",
+              "name": "Remediation request accepted. Poll GET /v1/search/activity/{activity_log_id} to retrieve results or track progress.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "remediate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"delete\",\n  \"source\": \"abnormal\",\n  \"remediation_reason\": \"false_negative\",\n  \"submit_d360_case\": false,\n  \"remediate_all\": false,\n  \"messages\": [\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"abnormal_message_id\": \"abc123def456\",\n      \"mailbox_name\": \"user@company.com\",\n      \"native_user_id\": \"user@company.com\",\n      \"subject\": \"Urgent: Wire Transfer Request\",\n      \"sender\": \"attacker@malicious.com\",\n      \"received_time\": \"2024-01-15T10:30:00Z\"\n    }\n  ],\n  \"tenant_ids\": [\n    123\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activity_log_id\": 12345,\n  \"metadata\": {\n    \"trace_id\": \"abc-123-def-456\",\n    \"response_time\": \"2024-01-15T10:30:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e55c9f4-aeb1-4670-a133-0a9bb538f6b1",
+              "name": "Invalid request. Common causes: missing required fields (`search_filters` when `remediate_all=true`, `messages` when `remediate_all=false`, `target_folder` when `action=move_to_inbox`), incompatible action/reason combination, `quarantine_release` reason with non-quarantine source, or invalid time range.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "remediate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"delete\",\n  \"source\": \"abnormal\",\n  \"remediation_reason\": \"false_negative\",\n  \"submit_d360_case\": false,\n  \"remediate_all\": false,\n  \"messages\": [\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"abnormal_message_id\": \"abc123def456\",\n      \"mailbox_name\": \"user@company.com\",\n      \"native_user_id\": \"user@company.com\",\n      \"subject\": \"Urgent: Wire Transfer Request\",\n      \"sender\": \"attacker@malicious.com\",\n      \"received_time\": \"2024-01-15T10:30:00Z\"\n    }\n  ],\n  \"tenant_ids\": [\n    123\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "37b844fa-5258-48cd-b1b4-d414b97c3698",
+              "name": "Authentication failed (invalid bearer token) or Authorization failed (requested tenant_ids not authorized by bearer token)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "remediate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"delete\",\n  \"source\": \"abnormal\",\n  \"remediation_reason\": \"false_negative\",\n  \"submit_d360_case\": false,\n  \"remediate_all\": false,\n  \"messages\": [\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"abnormal_message_id\": \"abc123def456\",\n      \"mailbox_name\": \"user@company.com\",\n      \"native_user_id\": \"user@company.com\",\n      \"subject\": \"Urgent: Wire Transfer Request\",\n      \"sender\": \"attacker@malicious.com\",\n      \"received_time\": \"2024-01-15T10:30:00Z\"\n    }\n  ],\n  \"tenant_ids\": [\n    123\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c40883d7-181f-433d-8477-52d19b987374",
+              "name": "API not enabled for this customer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "remediate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"delete\",\n  \"source\": \"abnormal\",\n  \"remediation_reason\": \"false_negative\",\n  \"submit_d360_case\": false,\n  \"remediate_all\": false,\n  \"messages\": [\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"abnormal_message_id\": \"abc123def456\",\n      \"mailbox_name\": \"user@company.com\",\n      \"native_user_id\": \"user@company.com\",\n      \"subject\": \"Urgent: Wire Transfer Request\",\n      \"sender\": \"attacker@malicious.com\",\n      \"received_time\": \"2024-01-15T10:30:00Z\"\n    }\n  ],\n  \"tenant_ids\": [\n    123\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c98a64c1-61b9-4c7d-ad71-f6dc9870bcea",
+              "name": "Concurrent remediation limit exceeded. Retry after the in-progress operation completes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "remediate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"delete\",\n  \"source\": \"abnormal\",\n  \"remediation_reason\": \"false_negative\",\n  \"submit_d360_case\": false,\n  \"remediate_all\": false,\n  \"messages\": [\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"abnormal_message_id\": \"abc123def456\",\n      \"mailbox_name\": \"user@company.com\",\n      \"native_user_id\": \"user@company.com\",\n      \"subject\": \"Urgent: Wire Transfer Request\",\n      \"sender\": \"attacker@malicious.com\",\n      \"received_time\": \"2024-01-15T10:30:00Z\"\n    }\n  ],\n  \"tenant_ids\": [\n    123\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fe6ee950-b67f-423d-95c2-794385eaa1e9",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search",
+                    "remediate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"delete\",\n  \"source\": \"abnormal\",\n  \"remediation_reason\": \"false_negative\",\n  \"submit_d360_case\": false,\n  \"remediate_all\": false,\n  \"messages\": [\n    {\n      \"tenant_id\": 123,\n      \"raw_message_id\": \"AAMkAGI2THVSAAA=\",\n      \"abnormal_message_id\": \"abc123def456\",\n      \"mailbox_name\": \"user@company.com\",\n      \"native_user_id\": \"user@company.com\",\n      \"subject\": \"Urgent: Wire Transfer Request\",\n      \"sender\": \"attacker@malicious.com\",\n      \"received_time\": \"2024-01-15T10:30:00Z\"\n    }\n  ],\n  \"tenant_ids\": [\n    123\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.abnormalplatform.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8e8e4c25-29d7-46f3-8d98-0488e96a70b8",
+    "name": "Abnormal Security Client Search and Respond API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.\n<h2>Who is this API for?</h2>\nThis API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.\n<h2> Integration Steps </h2>\nGo to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`\n<h3> Step 1: Generating the authentication token </h3>\n\nRetrieve your authentication token via the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.\n\nKeep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.\n\nOnce obtained, the token can be used in a request from any HTTP client, such as cURL:\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" https://api.abnormalplatform.com/v1/threats </pre>\n\n<h3> Step 2: IP allowlisting </h3>\n\nIP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.\n\nTo allowlist your organization's IPs, please provide enter into the <a href=\"https://portal.abnormalsecurity.com/home/settings/integrations\">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href=\"https://www.ipaddressguide.com/cidr\"> CIDR block</a>.\n\n<h3> Step 3: Try it out with Test Data </h3>\n\nTo confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:\n\n<pre> curl -H \"Authorization: Bearer  << ACCESS_TOKEN >>\" <b>-H \"Mock-Data: True\"</b> https://api.abnormalplatform.com/v1/threats </pre>\n\nThe server should respond with a body payload similar to the examples specified in this documentation.\n\n<h3> Note for EU Customers </h3>\n\nIf you're a customer in the EU, you'll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you'd like to test the API through SwaggerHub, you'll find both the default host and the EU host in the Servers dropdown menu below.\n\n\nContact Support:\n Name: Abnormal Security Support\n Email: support@abnormalsecurity.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,872 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Cases API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Cases
+  description: APIs to manage Abnormal Cases
+paths:
+  /cases:
+    get:
+      operationId: v1_cases_retrieve
+      description: Account Takeover license is required to call this endpoint.
+      summary: Get a list of Abnormal cases identified by Abnormal Security
+      parameters:
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`.  A `{FILTER KEY}` must be specified, and currently the only key that is supported for `/cases` is `lastModifiedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format.
+        explode: false
+        style: spaceDelimited
+        examples:
+          LastModifiedTime:
+            value: lastModifiedTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: lastModifiedTime
+          CreatedTime:
+            value: createdTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: createdTime
+          CustomerVisibleTime:
+            value: customerVisibleTime gte 2020-01-01T01:01:01Z lte 2021-12-01T01:01:01Z
+            summary: customerVisibleTime
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: Number of cases that are on each page. Each page of data will have at most pageSize threats. Has no effect if filter is not specified.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of cases. Has no effect if filter is not specified.
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Cases
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCases'
+          description: A list of the top 100 cases identified in Abnormal Cases if no filter query parameter is specified, or a paginated list of cases if a filter query parameter is specified. The pageNumber and nextPageNumber fields will be absent if no filter query parameter is used. The nextPageNumber field will be absent if there are no more pages of data.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /cases/{case_id}:
+    get:
+      operationId: v1_cases_retrieve_2
+      description: Account Takeover license is required to call this endpoint.
+      summary: Get details of an Abnormal case
+      parameters:
+      - in: path
+        name: case_id
+        schema:
+          type: string
+        description: A string representing the case
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Cases
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbnormalCaseDetails'
+          description: An Abnormal Case.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/CaseDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+    post:
+      operationId: v1_cases_create
+      description: Account Takeover license is required to call this endpoint. Use this to update the status of an abnormal case. The action field is contains the new case status.
+      summary: Manage an Abnormal Case.
+      parameters:
+      - in: path
+        name: case_id
+        schema:
+          type: string
+        description: A string representing the case
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Cases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCaseRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostCaseResponse'
+          description: Accepted for processing.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/CaseDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /cases/{case_id}/actions/{action_id}:
+    get:
+      operationId: v1_cases_actions_retrieve
+      description: Account Takeover license is required to call this endpoint.
+      summary: Check the status of an action requested on a case.
+      parameters:
+      - in: path
+        name: case_id
+        schema:
+          type: string
+        description: A string representing the case
+        required: true
+      - in: path
+        name: action_id
+        schema:
+          type: string
+        description: A UUID representing the action id for a case
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Cases
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionStatus'
+          description: Status of the action requested on a case. This API can be used to check the status of a request made to the threats. The response will return a descriptive string if the action on the threat could not be completed.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/ActionDoesNotExistError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+  /cases/{case_id}/analysis:
+    get:
+      operationId: v1_cases_analysis_retrieve
+      description: Account Takeover license is required to call this endpoint.
+      summary: Provides the analysis and timeline details of a case
+      parameters:
+      - in: path
+        name: case_id
+        schema:
+          type: string
+        description: A string representing the case
+        required: true
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      tags:
+      - Cases
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseAnalysis'
+          description: The analysis results and timeline of events for the case.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    RemediationStatusEnum:
+      enum:
+      - Not remediated
+      - remediated
+      - Remediation attempted
+      type: string
+    EventLocation:
+      type: object
+      properties:
+        city:
+          type: string
+          description: The city where the event occurred.
+          example: Aldie
+        state:
+          type: string
+          description: The state where the event occurred.
+          example: Virginia
+        country:
+          type: string
+          description: The country where the event occurred.
+          example: US
+      required:
+      - city
+      - country
+      - state
+    ConfidenceEnum:
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      type: string
+    ActionStatus:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ActionStatusStatusEnum'
+        description:
+          type: string
+          description: Description of the action
+          example: The request was completed successfully
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+      required:
+      - description
+      - status
+      - tenantId
+      - tenantName
+    SignInEvent:
+      type: object
+      properties:
+        event_timestamp:
+          type: string
+          format: date-time
+          description: Time when event occurred
+          example: '2020-05-19T17:47:30Z'
+        category:
+          type: string
+          description: Type of event
+          example: Sign In Event
+        title:
+          type: string
+          description: Title of the event
+          example: Suspicious Failed Sign In Attempt
+        field_labels:
+          type: object
+          additionalProperties: {}
+          description: Anomaly labels/tags associated with fields in the event
+        description:
+          type: string
+          description: Description of the sign in event
+          example: Suspicious Failed Sign In Attempt for foo@bar.com
+        ip_address:
+          type: string
+          description: IP Address where user attempted to sign in from
+          example: 123.456.78.900
+        isp:
+          type: string
+          description: ISP that was used when attempting to sign in to mailbox
+          example: NGCOM
+        browser:
+          type: string
+          description: Browser that was used when attempting to sign in to mailbox
+          example: Chrome
+        operating_system:
+          type: string
+          description: Operating system of the device used to attempt sign in
+          example: Windows 10
+        device_trust_type:
+          type: string
+          description: Trust type used by device when signing in
+        protocol:
+          type: string
+          description: Connection protocol used when attempting to sign in
+          example: Browser
+        application:
+          type: string
+          description: Mail application used to sign in
+          example: GSuite
+        location:
+          allOf:
+          - $ref: '#/components/schemas/EventLocation'
+          description: Location of a sign in as detected from case analysis
+      required:
+      - application
+      - browser
+      - category
+      - description
+      - device_trust_type
+      - event_timestamp
+      - field_labels
+      - ip_address
+      - isp
+      - location
+      - operating_system
+      - protocol
+      - title
+    PostCaseResponse:
+      type: object
+      properties:
+        actionId:
+          type: string
+          description: A unique identifier for this case.
+          example: 61e76395-40d3-4d78-b6a8-8b17634d0f5b
+        statusUrl:
+          type: string
+          description: The URL of the status of the case.
+          example: https://api.abnormalplatform.com/v1/cases/1234/actions/61e76395-40d3-4d78-b6a8-8b17634d0f5b
+      required:
+      - actionId
+      - statusUrl
+    PaginatedCases:
+      type: object
+      properties:
+        cases:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbnormalCase'
+          description: List of Abnormal Cases.
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
+      required:
+      - cases
+    AbnormalCaseDetailsSeverityLevelEnum:
+      enum:
+      - NONE
+      - LOW
+      - MEDIUM
+      - HIGH
+      type: string
+    PostCaseRequestActionEnum:
+      enum:
+      - action_required
+      - acknowledge_resolved
+      - acknowledge_in_progress
+      - acknowledge_not_an_attack
+      type: string
+    RiskEvent:
+      type: object
+      properties:
+        event_timestamp:
+          type: string
+          format: date-time
+          description: Time when event occurred
+          example: '2020-05-19T17:47:30Z'
+        category:
+          type: string
+          description: Type of event
+          example: Risk Event
+        title:
+          type: string
+          description: Title of the event
+          example: Impossible Travel
+        field_labels:
+          type: object
+          additionalProperties: {}
+          description: Anomaly labels/tags associated with fields in the event
+        ip_address:
+          type: string
+          description: IP Address where user accessed mail from
+          example: 123.456.78.900
+        location:
+          allOf:
+          - $ref: '#/components/schemas/EventLocation'
+          description: Location of a sign in as detected from case analysis
+        prev_location:
+          allOf:
+          - $ref: '#/components/schemas/EventLocation'
+          description: Location of a sign in as detected from case analysis
+      required:
+      - category
+      - event_timestamp
+      - field_labels
+      - ip_address
+      - location
+      - prev_location
+      - title
+    AbnormalCase:
+      type: object
+      properties:
+        caseId:
+          type: string
+          description: A unique identifier for this case.
+          example: 1234
+        description:
+          type: string
+        severity_level:
+          $ref: '#/components/schemas/SeverityLevel3eaEnum'
+          description: Description of the severity level for this case.
+        confidence:
+          $ref: '#/components/schemas/ConfidenceEnum'
+          description: The confidence level for this case.
+        last_modified:
+          type: string
+          format: date-time
+        first_observed:
+          type: string
+          format: date-time
+        created:
+          type: string
+          format: date-time
+        tenant:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with this case. Not returned for Azure Sentinel integrations.
+          example: my-tenant
+      required:
+      - caseId
+      - confidence
+      - created
+      - description
+      - first_observed
+      - last_modified
+      - severity_level
+    AbnormalCaseDetails:
+      type: object
+      properties:
+        caseId:
+          type: string
+          description: A unique identifier for this case.
+          example: 1234
+        case_status:
+          $ref: '#/components/schemas/CaseStatusEnum'
+        severity:
+          type: string
+          description: Description of the severity level for this case.
+          example: Potential Account Takeover
+        affectedEmployee:
+          type: string
+          description: Which employee this case pertains to.
+          example: FirstName LastName
+        customerVisibleTime:
+          type: string
+          format: date-time
+        firstObserved:
+          type: string
+          format: date-time
+          description: First time suspicious behavior was observed.
+          example: '2020-06-09T17:42:59Z'
+        threatIds:
+          type: array
+          items:
+            type: string
+          description: Threats related to Case
+          example:
+          - 184712ab-6d8b-47b3-89d3-a314efef79e2
+        analysis:
+          type: string
+        remediation_status:
+          $ref: '#/components/schemas/RemediationStatusEnum'
+        severity_level:
+          $ref: '#/components/schemas/AbnormalCaseDetailsSeverityLevelEnum'
+        confidence:
+          $ref: '#/components/schemas/ConfidenceEnum'
+          description: The confidence level for this case.
+        genai_summary:
+          type: array
+          items:
+            type: string
+          description: List of AI-generated summary points for the case
+        tenant:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with this case. Not returned for Azure Sentinel integrations.
+          example: my-tenant
+      required:
+      - affectedEmployee
+      - analysis
+      - caseId
+      - case_status
+      - confidence
+      - customerVisibleTime
+      - firstObserved
+      - genai_summary
+      - remediation_status
+      - severity
+      - severity_level
+      - threatIds
+    MailRuleEvent:
+      type: object
+      properties:
+        event_timestamp:
+          type: string
+          format: date-time
+          description: Time when event occurred
+          example: '2020-05-19T17:47:30Z'
+        category:
+          type: string
+          description: Type of event
+          example: Mail Rule
+        title:
+          type: string
+          description: Title of the event
+          example: Mail Rule Change
+        rule_name:
+          type: string
+          description: Name of the mail rule that was changed
+          example: Delete all messages rule
+        condition:
+          type: string
+          description: Condition of the mail rule
+          example: hasNoCondition
+        flagging_detectors:
+          type: string
+          description: Flagging detectors of the mail rule
+          example: DELETE_ALL
+      required:
+      - category
+      - condition
+      - event_timestamp
+      - flagging_detectors
+      - rule_name
+      - title
+    SeverityLevel3eaEnum:
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      type: string
+    PostCaseRequest:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/PostCaseRequestActionEnum'
+      required:
+      - action
+    CaseStatusEnum:
+      enum:
+      - Action Required
+      - Acknowledged (In progress)
+      - Acknowledged (Attack resolved)
+      - Acknowledged (Not an attack)
+      type: string
+    MismatchedMFALocationEvent:
+      type: object
+      properties:
+        event_timestamp:
+          type: string
+          format: date-time
+          description: Time when event occurred
+          example: '2020-05-19T17:47:30Z'
+        category:
+          type: string
+          description: Type of event
+          example: Authentication Events
+        title:
+          type: string
+          description: Title of the event
+          example: Different Authentication Factor Locations
+        field_labels:
+          type: object
+          additionalProperties: {}
+          description: Anomaly labels/tags associated with fields in the event
+        description:
+          type: string
+          description: Mismatch between session location and second factor authentication location
+          example: Mismatch between session location and second factor authentication location
+        session_ip:
+          type: string
+          description: IP Address where the user signed in
+          example: 123.456.78.900 / Indianapolis, IN, US
+        second_factor_ip:
+          type: string
+          description: IP Address where the user attempted to use Multi Factor Authentication
+          example: 123.456.78.900 / Indianapolis, IN, US
+        used_second_factors:
+          type: string
+          description: Type of 2FA technology used to make the authentication
+          example: MOBILE_APP_NOTIFICATION
+        familiarity_statistics:
+          type: object
+          additionalProperties: {}
+          description: Familiarity analysis of the other fields in this event
+        location:
+          allOf:
+          - $ref: '#/components/schemas/EventLocation'
+          description: Location of a sign in as detected from case analysis
+      required:
+      - category
+      - description
+      - event_timestamp
+      - familiarity_statistics
+      - field_labels
+      - location
+      - second_factor_ip
+      - session_ip
+      - title
+      - used_second_factors
+    CaseInsights:
+      type: object
+      properties:
+        signal:
+          type: string
+        description:
+          type: string
+      required:
+      - description
+      - signal
+    MFAFailureEvent:
+      type: object
+      properties:
+        event_timestamp:
+          type: string
+          format: date-time
+          description: Time when event occurred
+          example: '2020-05-19T17:47:30Z'
+        category:
+          type: string
+          description: Type of event
+          example: Failed MFA Attempt
+        title:
+          type: string
+          description: Title of the event
+          example: Failed MFA Attempt
+        field_labels:
+          type: object
+          additionalProperties: {}
+          description: Anomaly labels/tags associated with fields in the event
+        ip_address:
+          type: string
+          description: IP Address where user attempted Multi Factor Authentication
+          example: 123.456.78.900
+        browser:
+          type: string
+          description: Browser that was used when attempting to sign in to mailbox
+          example: Chrome
+        operating_system:
+          type: string
+          description: Operating system of the device used to attempt sign in
+          example: Windows 10
+        protocol:
+          type: string
+          description: Connection protocol used when attempting to sign in
+          example: Browser
+        application:
+          type: string
+          description: Mail application used to sign in
+          example: GSuite
+        location:
+          allOf:
+          - $ref: '#/components/schemas/EventLocation'
+          description: Location of a sign in as detected from case analysis
+      required:
+      - application
+      - browser
+      - category
+      - event_timestamp
+      - field_labels
+      - ip_address
+      - location
+      - operating_system
+      - protocol
+      - title
+    CaseEvent:
+      oneOf:
+      - $ref: '#/components/schemas/RiskEvent'
+      - $ref: '#/components/schemas/SignInEvent'
+      - $ref: '#/components/schemas/MailRuleEvent'
+      - $ref: '#/components/schemas/OutboundMessageEvent'
+      - $ref: '#/components/schemas/MFAFailureEvent'
+      - $ref: '#/components/schemas/MismatchedMFALocationEvent'
+    ActionStatusStatusEnum:
+      enum:
+      - acknowledged
+      - in_progress
+      - done
+      - error
+      type: string
+    OutboundMessageEvent:
+      type: object
+      properties:
+        event_timestamp:
+          type: string
+          format: date-time
+          description: Time when event occurred
+          example: '2020-05-19T17:47:30Z'
+        category:
+          type: string
+          description: Type of event
+          example: Mail Sent
+        title:
+          type: string
+          description: Title of the event
+          example: Unusual Correspondence
+        subject:
+          type: string
+          description: Subject of suspicious email sent
+          example: Transaction Sent
+        sender:
+          type: string
+          description: Email of the Sender
+          example: john.doe@lamronba.com
+        recipient:
+          type: string
+          description: Name of the recipient
+          example: Jane Eyre
+      required:
+      - category
+      - event_timestamp
+      - recipient
+      - sender
+      - subject
+      - title
+    CaseAnalysis:
+      type: object
+      properties:
+        insights:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaseInsights'
+          description: List of case insights
+        eventTimeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaseEvent'
+          readOnly: true
+          description: Timeline of flagged events on the case
+      required:
+      - eventTimeline
+      - insights
+  responses:
+    ActionDoesNotExistError:
+      description: Action does not exist
+    CaseDoesNotExistError:
+      description: Abnormal Case does not exist
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

@@ -1,0 +1,147 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client AI Security Mailbox (formerly known as Abuse Mailbox) AI Security Mailbox (formerly known as Abuse Mailbox) API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "AI Security Mailbox (formerly known as Abuse Mailbox)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of messages submitted to AI Security Mailbox (formerly known as Abuse Mailbox) that were not analyzed.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/abuse_mailbox/not_analyzed",
+            "params": [
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "The start of the datetime range, as an RFC 3339 timestamp, to fetch unanalyzed messages from. Defaults to 90 days before end."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "The end of the datetime range, as an RFC 3339 timestamp, to fetch unanalyzed messages from. Defaults to the current time."
+              }
+            ]
+          },
+          "docs": "Get a list of messages submitted to AI Security Mailbox (formerly known as Abuse Mailbox) that were not analyzed."
+        },
+        {
+          "info": {
+            "name": "Get a list of campaigns submitted to AI Security Mailbox (formerly known as Abuse Mailbox)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/abusecampaigns",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the keys `lastReportedTime` and `receivedTime` are supported for `/abusecampaigns`. At least one of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format. `lastReportedTime` defaults to the last 24h if unspecified. Do note that provided filter time is in UTC."
+              },
+              {
+                "name": "sender",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the name or email address of the sender"
+              },
+              {
+                "name": "recipient",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the name or email address of the recipient"
+              },
+              {
+                "name": "subject",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the email subject"
+              },
+              {
+                "name": "reporter",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the reporter name or email address"
+              },
+              {
+                "name": "attackType",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the type of attack"
+              },
+              {
+                "name": "threatType",
+                "value": "",
+                "type": "query",
+                "description": "Filters threats based on the type of threat"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of abuse campaigns shown on each page. Each page of data will have at most pageSize abuse campaign IDs."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of abuse campaigns. Has no effect if filter is not specified."
+              }
+            ]
+          },
+          "docs": "Get a list of campaigns submitted to AI Security Mailbox (formerly known as Abuse Mailbox)"
+        },
+        {
+          "info": {
+            "name": "Get details of an abuse campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/abusecampaigns/:campaign_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the abuse campaign id"
+              }
+            ]
+          },
+          "docs": "Get details of an abuse campaign"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

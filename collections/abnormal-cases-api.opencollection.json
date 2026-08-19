@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Cases API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of Abnormal cases identified by Abnormal Security",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/cases",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`.  A `{FILTER KEY}` must be specified, and currently the only key that is supported for `/cases` is `lastModifiedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ` format."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of cases that are on each page. Each page of data will have at most pageSize threats. Has no effect if filter is not specified."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of cases. Has no effect if filter is not specified."
+              }
+            ]
+          },
+          "docs": "Account Takeover license is required to call this endpoint."
+        },
+        {
+          "info": {
+            "name": "Get details of an Abnormal case",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/cases/:case_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "case_id",
+                "value": "",
+                "type": "path",
+                "description": "A string representing the case"
+              }
+            ]
+          },
+          "docs": "Account Takeover license is required to call this endpoint."
+        },
+        {
+          "info": {
+            "name": "Manage an Abnormal Case.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.abnormalplatform.com/v1/cases/:case_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "case_id",
+                "value": "",
+                "type": "path",
+                "description": "A string representing the case"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Account Takeover license is required to call this endpoint. Use this to update the status of an abnormal case. The action field is contains the new case status."
+        },
+        {
+          "info": {
+            "name": "Check the status of an action requested on a case.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/cases/:case_id/actions/:action_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "case_id",
+                "value": "",
+                "type": "path",
+                "description": "A string representing the case"
+              },
+              {
+                "name": "action_id",
+                "value": "",
+                "type": "path",
+                "description": "A UUID representing the action id for a case"
+              }
+            ]
+          },
+          "docs": "Account Takeover license is required to call this endpoint."
+        },
+        {
+          "info": {
+            "name": "Provides the analysis and timeline details of a case",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/cases/:case_id/analysis",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "case_id",
+                "value": "",
+                "type": "path",
+                "description": "A string representing the case"
+              }
+            ]
+          },
+          "docs": "Account Takeover license is required to call this endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

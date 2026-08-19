@@ -1,0 +1,167 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client Vendors API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vendors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of vendor cases.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/vendor-cases",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only keys that are supported for `/vendor-cases` are `firstObservedTime` and `lastModifiedTime`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ format`."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of vendor cases that are on each page. Each page of data will have at most pageSize vendor cases. Has no effect if filter is not specified."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of vendor cases. Has no effect if filter is not specified."
+              }
+            ]
+          },
+          "docs": "Get a list of vendor cases."
+        },
+        {
+          "info": {
+            "name": "Get details of a vendor case",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/vendor-cases/:case_id",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "case_id",
+                "value": "",
+                "type": "path",
+                "description": "The vendor case to query"
+              }
+            ]
+          },
+          "docs": "Get details of a vendor case"
+        },
+        {
+          "info": {
+            "name": "Get a list of vendors your organization has interacted with",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/vendors",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of vendors that are on each page. Each page of data will have at most pageSize threats. Has no effect if filter is not specified."
+              },
+              {
+                "name": "pageNumber",
+                "value": "",
+                "type": "query",
+                "description": "1-indexed page number to get a particular page of vendors. Has no effect if filter is not specified."
+              }
+            ]
+          },
+          "docs": "Get a list of vendors your organization has interacted with"
+        },
+        {
+          "info": {
+            "name": "Get activity of a vendor your organization has interacted with",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/vendors/:vendor_domain/activity",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "vendor_domain",
+                "value": "",
+                "type": "path",
+                "description": "The vendor domain to query"
+              }
+            ]
+          },
+          "docs": "Get activity of a vendor your organization has interacted with"
+        },
+        {
+          "info": {
+            "name": "Get details of a vendor your organization has interacted with",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/vendors/:vendor_domain/details",
+            "headers": [
+              {
+                "name": "mock-data",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "vendor_domain",
+                "value": "",
+                "type": "path",
+                "description": "The vendor domain to query"
+              }
+            ]
+          },
+          "docs": "Get details of a vendor your organization has interacted with"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

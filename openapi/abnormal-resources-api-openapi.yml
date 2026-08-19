@@ -1,0 +1,403 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Resources API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Resources
+paths:
+  /resources:
+    get:
+      operationId: v1_resources_retrieve
+      description: Retrieve a paginated list of resources with optional filtering using pageSize and pageNumber query parameters.
+      summary: List resources with pagination and filtering
+      parameters:
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+        description: 'Number of results to return per page (default: 20, max: 100)'
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+        description: 'Page number to retrieve (1-indexed, default: 1)'
+      tags:
+      - Resources
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResourcesResponse'
+          description: A paginated list of resources matching the filter criteria
+        '400':
+          $ref: '#/components/schemas/BadRequestError'
+        '401':
+          description: Authentication credentials were missing or invalid
+        '403':
+          description: The request was valid but the server is refusing to respond to it
+        '429':
+          description: Rate limit exceeded, please try again later
+        '502':
+          description: Failed to communicate with upstream service
+  /resources/{resource_id}:
+    get:
+      operationId: v1_resources_retrieve_2
+      description: Retrieve detailed information about a specific resource by its UUID.
+      summary: Get a single resource by ID
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+        description: Unique identifier for the resource
+        required: true
+      tags:
+      - Resources
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetResourceResponse'
+          description: The requested resource
+        '401':
+          description: Authentication credentials were missing or invalid
+        '403':
+          description: The request was valid but the server is refusing to respond to it
+        '404':
+          $ref: '#/components/schemas/NotFoundError'
+        '429':
+          description: Rate limit exceeded, please try again later
+        '502':
+          description: Failed to communicate with upstream service
+  /resources/{resource_id}/actions:
+    post:
+      operationId: v1_resources_actions_create
+      description: Execute a specific action on a resource (refresh or validate). Returns 202 Accepted with action ID for tracking.
+      summary: Perform an action on a resource
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+        description: Unique identifier for the resource
+        required: true
+      tags:
+      - Resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerformAction'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformActionResponse'
+          description: Action accepted and completed
+        '400':
+          $ref: '#/components/schemas/BadRequestError'
+        '401':
+          description: Authentication credentials were missing or invalid
+        '403':
+          description: The request was valid but the server is refusing to respond to it
+        '404':
+          $ref: '#/components/schemas/NotFoundError'
+        '429':
+          description: Rate limit exceeded, please try again later
+        '500':
+          description: An unexpected error occurred on the server
+  /resources/{resource_id}/update:
+    patch:
+      operationId: v1_resources_update_partial_update
+      description: Partially update an existing resource's fields (PATCH). Provide only the fields that need updating.
+      summary: Update an existing resource
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+        description: Unique identifier for the resource
+        required: true
+      tags:
+      - Resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateResource'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResourceResponse'
+          description: Resource updated successfully
+        '400':
+          $ref: '#/components/schemas/BadRequestError'
+        '401':
+          description: Authentication credentials were missing or invalid
+        '403':
+          description: The request was valid but the server is refusing to respond to it
+        '404':
+          $ref: '#/components/schemas/NotFoundError'
+        '429':
+          description: Rate limit exceeded, please try again later
+        '500':
+          description: An unexpected error occurred on the server
+  /resources/create:
+    post:
+      operationId: v1_resources_create_create
+      description: Create a new resource with the specified name and optional description. Returns 201 Created with resource ID.
+      summary: Create a new resource
+      tags:
+      - Resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResource'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResourceResponse'
+          description: Resource created successfully
+        '400':
+          $ref: '#/components/schemas/BadRequestError'
+        '401':
+          description: Authentication credentials were missing or invalid
+        '403':
+          description: The request was valid but the server is refusing to respond to it
+        '429':
+          description: Rate limit exceeded, please try again later
+        '500':
+          description: An unexpected error occurred on the server
+components:
+  schemas:
+    CreateResource:
+      type: object
+      description: Serializer for creating a new resource.
+      properties:
+        name:
+          type: string
+          description: Name of the resource
+          maxLength: 255
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description of the resource
+          maxLength: 1000
+      required:
+      - name
+    Resource:
+      type: object
+      description: Serializer for resource representation in responses.
+      properties:
+        resourceId:
+          type: string
+          description: Unique identifier for the resource
+        name:
+          type: string
+          description: Human-readable name of the resource
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description of the resource
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags
+      required:
+      - name
+      - resourceId
+    PerformActionResponse:
+      type: object
+      description: Serializer for perform action response.
+      properties:
+        actionId:
+          type: string
+          description: Unique ID for the action request
+        resourceId:
+          type: string
+          description: ID of the resource the action was performed on
+        status:
+          type: string
+          description: Status of the action
+      required:
+      - actionId
+      - resourceId
+      - status
+    CreateResourceResponse:
+      type: object
+      description: Serializer for create resource response.
+      properties:
+        resourceId:
+          type: string
+          description: ID of the newly created resource
+        status:
+          type: string
+          description: Status of the creation operation
+      required:
+      - resourceId
+      - status
+    UpdateResourceResponse:
+      type: object
+      description: Serializer for update resource response.
+      properties:
+        resourceId:
+          type: string
+          description: ID of the updated resource
+        status:
+          type: string
+          description: Status of the update operation
+      required:
+      - resourceId
+      - status
+    PerformActionActionEnum:
+      enum:
+      - refresh
+      - validate
+      type: string
+    NotFoundError:
+      type: object
+      description: 404 Not Found error response.
+      properties:
+        error:
+          type: string
+          default: Resource not found
+          description: Resource with the specified ID was not found
+    PatchedUpdateResource:
+      type: object
+      description: Serializer for updating an existing resource.
+      properties:
+        description:
+          type: string
+          description: Updated description (can be empty string to clear)
+          maxLength: 1000
+    BadRequestError:
+      type: object
+      description: 400 Bad Request error response.
+      properties:
+        error:
+          type: string
+          default: Bad request
+          description: The request was invalid or malformed
+    PerformAction:
+      type: object
+      description: Serializer for performing an action on a resource.
+      properties:
+        action:
+          $ref: '#/components/schemas/PerformActionActionEnum'
+          description: 'Action to perform: refresh or validate'
+      required:
+      - action
+    ListResourcesResponse:
+      type: object
+      description: Serializer for list resources response.
+      properties:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+          description: List of resources
+        total:
+          type: integer
+          description: Total number of resources matching the query
+        pageNumber:
+          type: integer
+          description: Current page number
+        nextPageNumber:
+          type:
+          - integer
+          - 'null'
+          description: Next page number if more pages exist
+      required:
+      - pageNumber
+      - resources
+      - total
+    GetResourceResponse:
+      type: object
+      description: Serializer for get resource response.
+      properties:
+        resource:
+          allOf:
+          - $ref: '#/components/schemas/Resource'
+          description: The requested resource
+      required:
+      - resource
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

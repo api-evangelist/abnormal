@@ -1,0 +1,235 @@
+openapi: 3.2.0
+info:
+  title: Abnormal Security Client Audit Logs API
+  version: 1.4.3
+  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
+
+    <h2>Who is this API for?</h2>
+
+    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
+
+    <h2> Integration Steps </h2>
+
+    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
+
+    <h3> Step 1: Generating the authentication token </h3>
+
+
+    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
+
+
+    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
+
+
+    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    <h3> Step 2: IP allowlisting </h3>
+
+
+    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
+
+
+    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
+
+
+    <h3> Step 3: Try it out with Test Data </h3>
+
+
+    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
+
+
+    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
+
+
+    The server should respond with a body payload similar to the examples specified in this documentation.
+
+
+    <h3> Note for EU Customers </h3>
+
+
+    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
+
+    '
+  termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
+  contact:
+    name: Abnormal Security Support
+    email: support@abnormalsecurity.com
+servers:
+- url: https://api.abnormalplatform.com/v1
+  description: Production Server for managing threats
+- url: https://eu.rest.abnormalsecurity.com/v1
+  description: EU Production Server for managing threats.
+security:
+- BearerAuth: []
+tags:
+- name: Audit Logs
+  description: API to retrieve audit logs for Portal
+paths:
+  /auditlogs:
+    get:
+      operationId: v1_auditlogs_retrieve
+      summary: Gets a list of Audit Logs for Portal
+      parameters:
+      - in: header
+        name: mock-data
+        schema:
+          type: string
+          default: 'False'
+          enum:
+          - 'False'
+          - 'True'
+        description: Returns test data if set to `True`
+      - in: query
+        name: filter
+        schema:
+          type: string
+        description: Value must be of the format `filter={FILTER KEY} gte YYYY-MM-DDTHH:MM:SSZ lte YYYY-MM-DDTHH:MM:SSZ`. A `{FILTER KEY}` must be specified, and currently the only key that are supported for `/auditlogs` is `timestamp`. At least 1 of `gte`/`lte` must be specified, with a datetime string following the `YYYY-MM-DDTHH:MM:SSZ format`. We limit the results returned to the last 90 days and will default to that if no filter is supplied.
+        style: spaceDelimited
+        examples:
+          Timestamp:
+            value: timestamp gte 2020-01-01T01:01:01Z lte 2020-03-01T01:01:01Z
+            summary: timestamp
+      - in: query
+        name: action
+        schema:
+          type: string
+        description: 'Filters audit logs based on the action(s) taken. Accepts >= 1 options in a space-delimited string. Example: `view_message_content`'
+        style: spaceDelimited
+      - in: query
+        name: category
+        schema:
+          type: string
+        description: 'Filters audit logs based on their category(ies).Accepts >= 1 options in a space-delimited string. Example: `abuse_mailbox threat_log`'
+        style: spaceDelimited
+      - in: query
+        name: status
+        schema:
+          type: string
+        description: Filters audit logs based on their status
+      - in: query
+        name: sourceIp
+        schema:
+          type: string
+        description: Filters audit logs based on their source IP address
+      - in: query
+        name: pageSize
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+        description: Number of audit logs that are on each page. Each page of data will have at most pageSize audit logs.
+      - in: query
+        name: pageNumber
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: 1-indexed page number to get a particular page of audit logs.
+      tags:
+      - Audit Logs
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogResponse'
+          description: The audit logs based on filters specified. The nextPageNumber field will be absent if there are no more pages of data.
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '429':
+          $ref: '#/components/responses/TooManyRequestsError'
+components:
+  schemas:
+    AuditLogResponse:
+      type: object
+      properties:
+        auditLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+        pageNumber:
+          type: integer
+          description: Current page number of the results
+        nextPageNumber:
+          type: integer
+          description: (Optional) Next page number to query for. Would not be returned if it was the last page
+      required:
+      - auditLogs
+      - pageNumber
+    AuditLog:
+      type: object
+      properties:
+        action:
+          type: string
+          description: (Optional) The specific action performed during the event. This field is optional and may not be present.
+        actionDetails:
+          allOf:
+          - $ref: '#/components/schemas/AuditLogActionDetails'
+          description: (Optional) The details of the action performed.
+        category:
+          type: string
+          description: The category of the performed action.
+        sourceIp:
+          type: string
+          description: The IP address of the device that caused the event.
+        status:
+          type: string
+          description: The result of the event. Returned as either SUCCESS or FAILURE.
+        tenantName:
+          type: string
+          description: Name of the tenant the user has access to.
+        timestamp:
+          type: string
+          description: Date/time when the event occurred in UTC.
+        user:
+          allOf:
+          - $ref: '#/components/schemas/AuditLogUser'
+          description: Information about the user who caused the event. Currently only includes the email address.
+      required:
+      - category
+      - sourceIp
+      - status
+      - tenantName
+      - timestamp
+      - user
+    AuditLogUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address of the user.
+      required:
+      - email
+    AuditLogActionDetails:
+      type: object
+      properties:
+        messageId:
+          type: string
+          description: ID of the message on which an action was performed.
+        providedReason:
+          type: string
+          description: Reason provided for performing the action.
+        requestUrl:
+          type: string
+          description: URL for the request.
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

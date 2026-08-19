@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Abnormal Security Client URL Rewrite API",
+    "version": "1.4.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "URL Rewrite",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get URL rewrite click and clickthrough events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.abnormalplatform.com/v1/url-rewrite/clicked-events",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return per page (default: 20, max: 100)"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start time of the time range to filter by (Unix timestamp)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End time of the time range to filter by (Unix timestamp)"
+              },
+              {
+                "name": "recipient",
+                "value": "",
+                "type": "query",
+                "description": "Email address recipient of the email message to filter by"
+              },
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "query",
+                "description": "Event type to filter by (Click/Clickthrough)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset to use for pagination"
+              }
+            ]
+          },
+          "docs": "Retrieve paginated click and clickthrough events for URL rewrites. Supports filtering by Unix time range, user email, and event type. Returns events where users clicked on rewritten URLs in email messages."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
