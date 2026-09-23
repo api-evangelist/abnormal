@@ -2,57 +2,7 @@ openapi: 3.2.0
 info:
   title: Abnormal Security Client Resources API
   version: 1.4.3
-  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
-
-    <h2>Who is this API for?</h2>
-
-    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
-
-    <h2> Integration Steps </h2>
-
-    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
-
-    <h3> Step 1: Generating the authentication token </h3>
-
-
-    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
-
-
-    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
-
-
-    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    <h3> Step 2: IP allowlisting </h3>
-
-
-    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
-
-
-    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
-
-
-    <h3> Step 3: Try it out with Test Data </h3>
-
-
-    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
-
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    The server should respond with a body payload similar to the examples specified in this documentation.
-
-
-    <h3> Note for EU Customers </h3>
-
-
-    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
-
-    '
+  description: This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
   termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
   contact:
     name: Abnormal Security Support
@@ -242,6 +192,90 @@ paths:
           description: An unexpected error occurred on the server
 components:
   schemas:
+    GetResourceResponse:
+      type: object
+      description: Serializer for get resource response.
+      properties:
+        resource:
+          allOf:
+          - $ref: '#/components/schemas/Resource'
+          description: The requested resource
+      required:
+      - resource
+    UpdateResourceResponse:
+      type: object
+      description: Serializer for update resource response.
+      properties:
+        resourceId:
+          type: string
+          description: ID of the updated resource
+        status:
+          type: string
+          description: Status of the update operation
+      required:
+      - resourceId
+      - status
+    PatchedUpdateResource:
+      type: object
+      description: Serializer for updating an existing resource.
+      properties:
+        description:
+          type: string
+          description: Updated description (can be empty string to clear)
+          maxLength: 1000
+    BadRequestError:
+      type: object
+      description: 400 Bad Request error response.
+      properties:
+        error:
+          type: string
+          default: Bad request
+          description: The request was invalid or malformed
+    ListResourcesResponse:
+      type: object
+      description: Serializer for list resources response.
+      properties:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+          description: List of resources
+        total:
+          type: integer
+          description: Total number of resources matching the query
+        pageNumber:
+          type: integer
+          description: Current page number
+        nextPageNumber:
+          type:
+          - integer
+          - 'null'
+          description: Next page number if more pages exist
+      required:
+      - pageNumber
+      - resources
+      - total
+    CreateResourceResponse:
+      type: object
+      description: Serializer for create resource response.
+      properties:
+        resourceId:
+          type: string
+          description: ID of the newly created resource
+        status:
+          type: string
+          description: Status of the creation operation
+      required:
+      - resourceId
+      - status
+    NotFoundError:
+      type: object
+      description: 404 Not Found error response.
+      properties:
+        error:
+          type: string
+          default: Resource not found
+          description: Resource with the specified ID was not found
     CreateResource:
       type: object
       description: Serializer for creating a new resource.
@@ -282,6 +316,20 @@ components:
       required:
       - name
       - resourceId
+    PerformActionActionEnum:
+      enum:
+      - refresh
+      - validate
+      type: string
+    PerformAction:
+      type: object
+      description: Serializer for performing an action on a resource.
+      properties:
+        action:
+          $ref: '#/components/schemas/PerformActionActionEnum'
+          description: 'Action to perform: refresh or validate'
+      required:
+      - action
     PerformActionResponse:
       type: object
       description: Serializer for perform action response.
@@ -299,104 +347,6 @@ components:
       - actionId
       - resourceId
       - status
-    CreateResourceResponse:
-      type: object
-      description: Serializer for create resource response.
-      properties:
-        resourceId:
-          type: string
-          description: ID of the newly created resource
-        status:
-          type: string
-          description: Status of the creation operation
-      required:
-      - resourceId
-      - status
-    UpdateResourceResponse:
-      type: object
-      description: Serializer for update resource response.
-      properties:
-        resourceId:
-          type: string
-          description: ID of the updated resource
-        status:
-          type: string
-          description: Status of the update operation
-      required:
-      - resourceId
-      - status
-    PerformActionActionEnum:
-      enum:
-      - refresh
-      - validate
-      type: string
-    NotFoundError:
-      type: object
-      description: 404 Not Found error response.
-      properties:
-        error:
-          type: string
-          default: Resource not found
-          description: Resource with the specified ID was not found
-    PatchedUpdateResource:
-      type: object
-      description: Serializer for updating an existing resource.
-      properties:
-        description:
-          type: string
-          description: Updated description (can be empty string to clear)
-          maxLength: 1000
-    BadRequestError:
-      type: object
-      description: 400 Bad Request error response.
-      properties:
-        error:
-          type: string
-          default: Bad request
-          description: The request was invalid or malformed
-    PerformAction:
-      type: object
-      description: Serializer for performing an action on a resource.
-      properties:
-        action:
-          $ref: '#/components/schemas/PerformActionActionEnum'
-          description: 'Action to perform: refresh or validate'
-      required:
-      - action
-    ListResourcesResponse:
-      type: object
-      description: Serializer for list resources response.
-      properties:
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/Resource'
-          description: List of resources
-        total:
-          type: integer
-          description: Total number of resources matching the query
-        pageNumber:
-          type: integer
-          description: Current page number
-        nextPageNumber:
-          type:
-          - integer
-          - 'null'
-          description: Next page number if more pages exist
-      required:
-      - pageNumber
-      - resources
-      - total
-    GetResourceResponse:
-      type: object
-      description: Serializer for get resource response.
-      properties:
-        resource:
-          allOf:
-          - $ref: '#/components/schemas/Resource'
-          description: The requested resource
-      required:
-      - resource
   securitySchemes:
     BearerAuth:
       type: http

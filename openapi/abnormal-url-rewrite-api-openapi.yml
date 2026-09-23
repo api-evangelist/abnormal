@@ -2,57 +2,7 @@ openapi: 3.2.0
 info:
   title: Abnormal Security Client URL Rewrite API
   version: 1.4.3
-  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
-
-    <h2>Who is this API for?</h2>
-
-    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
-
-    <h2> Integration Steps </h2>
-
-    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
-
-    <h3> Step 1: Generating the authentication token </h3>
-
-
-    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
-
-
-    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
-
-
-    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    <h3> Step 2: IP allowlisting </h3>
-
-
-    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
-
-
-    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
-
-
-    <h3> Step 3: Try it out with Test Data </h3>
-
-
-    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
-
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    The server should respond with a body payload similar to the examples specified in this documentation.
-
-
-    <h3> Note for EU Customers </h3>
-
-
-    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
-
-    '
+  description: This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
   termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
   contact:
     name: Abnormal Security Support
@@ -124,6 +74,20 @@ paths:
           $ref: '#/components/schemas/Error'
 components:
   schemas:
+    SoarUserAddress:
+      type: object
+      description: Serializer for user address information.
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: Display name of the user
+        emailAddress:
+          type: string
+          description: Email address of the user who clicked the link
+      required:
+      - emailAddress
     ClickedEventsResponse:
       type: object
       description: 'Serializer for clicked events response.
@@ -147,54 +111,6 @@ components:
       required:
       - data
       - metadata
-    SoarClickedEvent:
-      type: object
-      description: Serializer for clicked event representation in responses.
-      properties:
-        type:
-          type: string
-          description: Type of click event (click or clickthrough)
-        link:
-          type: string
-          description: The URL that was clicked
-        insights:
-          type: array
-          items:
-            type: string
-          description: List of insights about the click
-        messageMetadata:
-          allOf:
-          - $ref: '#/components/schemas/SoarMessageMetadata'
-          description: Metadata about the email message
-        user:
-          allOf:
-          - $ref: '#/components/schemas/SoarUserAddress'
-          description: Information about the user who clicked
-        clickedTime:
-          type: integer
-          description: Unix timestamp when the click occurred
-      required:
-      - clickedTime
-      - insights
-      - link
-      - messageMetadata
-      - type
-      - user
-    ClickedEventsResponseMetadata:
-      type: object
-      description: Serializer for response metadata containing pagination information.
-      properties:
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/ClickedEventsPaginationMetadata'
-          description: Pagination information for the response
-        requestId:
-          type:
-          - string
-          - 'null'
-          description: Request ID for the API request
-      required:
-      - pagination
     SoarMessageMetadata:
       type: object
       description: 'Serializer for message metadata.
@@ -232,20 +148,63 @@ components:
       - from
       - sender
       - to
-    SoarUserAddress:
+    SoarClickedEvent:
       type: object
-      description: Serializer for user address information.
+      description: Serializer for clicked event representation in responses.
       properties:
-        name:
+        type:
+          type: string
+          description: Type of click event (click or clickthrough)
+        link:
+          type: string
+          description: The URL that was clicked
+        insights:
+          type: array
+          items:
+            type: string
+          description: List of insights about the click
+        messageMetadata:
+          allOf:
+          - $ref: '#/components/schemas/SoarMessageMetadata'
+          description: Metadata about the email message
+        user:
+          allOf:
+          - $ref: '#/components/schemas/SoarUserAddress'
+          description: Information about the user who clicked
+        clickedTime:
+          type: integer
+          description: Unix timestamp when the click occurred
+      required:
+      - clickedTime
+      - insights
+      - link
+      - messageMetadata
+      - type
+      - user
+    Error:
+      type: object
+      description: Serializer for bad request error response.
+      properties:
+        error:
+          type: string
+          description: Error message
+      required:
+      - error
+    ClickedEventsResponseMetadata:
+      type: object
+      description: Serializer for response metadata containing pagination information.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/ClickedEventsPaginationMetadata'
+          description: Pagination information for the response
+        requestId:
           type:
           - string
           - 'null'
-          description: Display name of the user
-        emailAddress:
-          type: string
-          description: Email address of the user who clicked the link
+          description: Request ID for the API request
       required:
-      - emailAddress
+      - pagination
     ClickedEventsPaginationMetadata:
       type: object
       description: Serializer for pagination metadata on the clicked events response.
@@ -260,22 +219,13 @@ components:
           - integer
           - 'null'
           description: Limit of the results
-    Error:
-      type: object
-      description: Serializer for bad request error response.
-      properties:
-        error:
-          type: string
-          description: Error message
-      required:
-      - error
   responses:
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
     UnauthorizedError:
       description: Access token is missing or invalid
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
   securitySchemes:
     BearerAuth:
       type: http

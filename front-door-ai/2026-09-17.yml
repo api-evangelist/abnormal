@@ -1,0 +1,35 @@
+# Front Door AI Index — abnormal — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: abnormal
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: abnormal.ai
+  final_host: abnormal.ai
+  ownership: own
+  owner: abnormal
+  shares_host_with:
+  - abnormal-security
+  inherited_from: null
+  verdict: scored
+  score: 61
+  host_score: 61
+  density: 48.72
+  words: 1252
+  tiers:
+    agentic: 3
+    core: 42
+    model: 16
+  ambiguous: 2
+  top_terms:
+    AI: 38
+    GPT: 6
+    Claude: 5
+    Gemini: 5
+    prompts: 3
+    intelligence: 2
+    LLMs: 1
+    gen ai: 1
+    generative ai: 1
+    large language model: 1

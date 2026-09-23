@@ -2,57 +2,7 @@ openapi: 3.2.0
 info:
   title: Abnormal Security Client Messages API
   version: 1.4.3
-  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
-
-    <h2>Who is this API for?</h2>
-
-    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
-
-    <h2> Integration Steps </h2>
-
-    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
-
-    <h3> Step 1: Generating the authentication token </h3>
-
-
-    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
-
-
-    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
-
-
-    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    <h3> Step 2: IP allowlisting </h3>
-
-
-    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
-
-
-    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
-
-
-    <h3> Step 3: Try it out with Test Data </h3>
-
-
-    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
-
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    The server should respond with a body payload similar to the examples specified in this documentation.
-
-
-    <h3> Note for EU Customers </h3>
-
-
-    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
-
-    '
+  description: This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
   termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
   contact:
     name: Abnormal Security Support
@@ -257,6 +207,17 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    ThreatDoesNotExistError:
+      description: Threat does not exist
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
   schemas:
     SoarAttachmentSignalsStruct:
       type: object
@@ -367,17 +328,6 @@ components:
       required:
       - folder_locations
       - remediation_history
-  responses:
-    ThreatDoesNotExistError:
-      description: Threat does not exist
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http

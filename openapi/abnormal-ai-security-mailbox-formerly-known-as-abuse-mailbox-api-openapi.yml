@@ -1,58 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Abnormal Security Client AI Security Mailbox (formerly known as Abuse Mailbox) AI Security Mailbox (formerly known as Abuse Mailbox) API
+  title: Abnormal Security Client AI Security Mailbox (formerly…
   version: 1.4.3
-  description: 'This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
-
-    <h2>Who is this API for?</h2>
-
-    This API is for managing threats to an organization identified by Abnormal Security. The organization should be integrated with Abnormal Security and enabled for real-time detection of malicious emails.
-
-    <h2> Integration Steps </h2>
-
-    Go to `https://portal.abnormalsecurity.com/home/settings/integrations` & click on `Abnormal REST API`
-
-    <h3> Step 1: Generating the authentication token </h3>
-
-
-    Retrieve your authentication token via the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a>. You will use this token to view and modify your Abnormal-detected threats and cases.
-
-
-    Keep the token safe, as it grants access to sensitive threat data related to your organization. Store it in a secure place, such as an encrypted password vault, and do not share it unless absolutely necessary. If you feel that the token has been compromised, please contact your Account Manager immediately.
-
-
-    Once obtained, the token can be used in a request from any HTTP client, such as cURL:
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    <h3> Step 2: IP allowlisting </h3>
-
-
-    IP allowlisting ensures that API access is only possible from IP addresses explicitly belonging to your organization. It prevents users from unauthorized networks to access your Abnormal SOAR data. This second layer of security helps keep your data safe from unauthorized users, and protects you in the event of a token compromise.
-
-
-    To allowlist your organization''s IPs, please provide enter into the <a href="https://portal.abnormalsecurity.com/home/settings/integrations">Abnormal portal</a> specific IPv4 / IPv6 addresses, or a range of addresses using a <a href="https://www.ipaddressguide.com/cidr"> CIDR block</a>.
-
-
-    <h3> Step 3: Try it out with Test Data </h3>
-
-
-    To confirm that <b>Steps 1 & 2</b> have been configured properly, send a request to the server with the following header set:
-
-
-    <pre> curl -H "Authorization: Bearer  << ACCESS_TOKEN >>" <b>-H "Mock-Data: True"</b> https://api.abnormalplatform.com/v1/threats </pre>
-
-
-    The server should respond with a body payload similar to the examples specified in this documentation.
-
-
-    <h3> Note for EU Customers </h3>
-
-
-    If you''re a customer in the EU, you''ll need to make API requests to our EU host `https://eu.rest.abnormalsecurity.com`. If you''d like to test the API through SwaggerHub, you''ll find both the default host and the EU host in the Servers dropdown menu below.
-
-    '
+  description: This is the specification for Abnormal Security Client API which can be used for managing security threats detected by Abnormal Security.
   termsOfService: https://legal.abnormalsecurity.com/legal-hub/abnormal-security-api-terms-of-service-6feee5e3
   contact:
     name: Abnormal Security Support
@@ -71,7 +21,7 @@ paths:
   /abuse_mailbox/not_analyzed:
     get:
       operationId: v1_abuse_mailbox_not_analyzed_retrieve
-      summary: Get a list of messages submitted to AI Security Mailbox (formerly known as Abuse Mailbox) that were not analyzed.
+      summary: Get a list of messages submitted to AI Security Mailbox (formerly known as…
       parameters:
       - in: query
         name: start
@@ -113,7 +63,7 @@ paths:
   /abusecampaigns:
     get:
       operationId: v1_abusecampaigns_retrieve
-      summary: Get a list of campaigns submitted to AI Security Mailbox (formerly known as Abuse Mailbox)
+      summary: Get a list of campaigns submitted to AI Security Mailbox (formerly known as…
       parameters:
       - in: query
         name: filter
@@ -251,25 +201,18 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    InvalidDateError:
+      description: A date provided is in the wrong format or the date range is wider than the allowed range for this endpoint
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
   schemas:
-    PaginatedAbuseCampaings:
-      type: object
-      properties:
-        campaigns:
-          type: array
-          items:
-            $ref: '#/components/schemas/AbuseCampaign'
-          description: List of abuse campaign IDs.
-        pageNumber:
-          type: integer
-          default: 1
-          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
-        nextPageNumber:
-          type: integer
-          default: 2
-          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
-      required:
-      - campaigns
     AbuseMailboxUnanalyzedResponse:
       type: object
       properties:
@@ -280,6 +223,15 @@ components:
           description: A list of representations of messages that were reported to AI Security Mailbox (formerly known as Abuse Mailbox) but not analyzed.
       required:
       - results
+    AbuseCampaign:
+      type: object
+      properties:
+        campaignId:
+          type: string
+          description: An id which maps to an abuse campaign.
+          example: fff51768-c446-34e1-97a8-9802c29c3ebd
+      required:
+      - campaignId
     NotAnalyzedReasonEnum:
       enum:
       - PHISHING_SIMULATION
@@ -295,28 +247,6 @@ components:
       - NOT_ANALYZED_POV_QUOTA_REACHED
       - AI_CONVERSATION
       type: string
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the user
-          example: Ching Li-Hsieh
-        email:
-          type: string
-          description: The email address of the user
-          example: lhching@bigcompany.com
-      required:
-      - name
-    AbuseCampaign:
-      type: object
-      properties:
-        campaignId:
-          type: string
-          description: An id which maps to an abuse campaign.
-          example: fff51768-c446-34e1-97a8-9802c29c3ebd
-      required:
-      - campaignId
     AbuseCampaignDetails:
       type: object
       properties:
@@ -408,17 +338,37 @@ components:
       - reported_datetime
       - reporter
       - subject
-  responses:
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    InvalidDateError:
-      description: A date provided is in the wrong format or the date range is wider than the allowed range for this endpoint
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: Ching Li-Hsieh
+        email:
+          type: string
+          description: The email address of the user
+          example: lhching@bigcompany.com
+      required:
+      - name
+    PaginatedAbuseCampaings:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbuseCampaign'
+          description: List of abuse campaign IDs.
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
+      required:
+      - campaigns
   securitySchemes:
     BearerAuth:
       type: http
