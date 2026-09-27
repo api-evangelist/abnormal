@@ -208,16 +208,16 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   responses:
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    UnauthorizedError:
-      description: Access token is missing or invalid
     ThreatDoesNotExistError:
       description: Threat does not exist
     TooManyRequestsError:
       description: Request count exceeds allowed number of concurrent requests for this resource type
     ForbiddenError:
       description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
   schemas:
     SoarAttachmentSignalsStruct:
       type: object

@@ -96,16 +96,43 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
   schemas:
+    AuditLog:
+      type: object
+      properties:
+        action:
+          type: string
+          description: (Optional) The specific action performed during the event. This field is optional and may not be present.
+        actionDetails:
+          allOf:
+          - $ref: '#/components/schemas/AuditLogActionDetails'
+          description: (Optional) The details of the action performed.
+        category:
+          type: string
+          description: The category of the performed action.
+        sourceIp:
+          type: string
+          description: The IP address of the device that caused the event.
+        status:
+          type: string
+          description: The result of the event. Returned as either SUCCESS or FAILURE.
+        tenantName:
+          type: string
+          description: Name of the tenant the user has access to.
+        timestamp:
+          type: string
+          description: Date/time when the event occurred in UTC.
+        user:
+          allOf:
+          - $ref: '#/components/schemas/AuditLogUser'
+          description: Information about the user who caused the event. Currently only includes the email address.
+      required:
+      - category
+      - sourceIp
+      - status
+      - tenantName
+      - timestamp
+      - user
     AuditLogActionDetails:
       type: object
       properties:
@@ -143,42 +170,15 @@ components:
           description: Email address of the user.
       required:
       - email
-    AuditLog:
-      type: object
-      properties:
-        action:
-          type: string
-          description: (Optional) The specific action performed during the event. This field is optional and may not be present.
-        actionDetails:
-          allOf:
-          - $ref: '#/components/schemas/AuditLogActionDetails'
-          description: (Optional) The details of the action performed.
-        category:
-          type: string
-          description: The category of the performed action.
-        sourceIp:
-          type: string
-          description: The IP address of the device that caused the event.
-        status:
-          type: string
-          description: The result of the event. Returned as either SUCCESS or FAILURE.
-        tenantName:
-          type: string
-          description: Name of the tenant the user has access to.
-        timestamp:
-          type: string
-          description: Date/time when the event occurred in UTC.
-        user:
-          allOf:
-          - $ref: '#/components/schemas/AuditLogUser'
-          description: Information about the user who caused the event. Currently only includes the email address.
-      required:
-      - category
-      - sourceIp
-      - status
-      - tenantName
-      - timestamp
-      - user
+  responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http

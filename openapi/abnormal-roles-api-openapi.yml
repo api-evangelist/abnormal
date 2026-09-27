@@ -58,48 +58,7 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
   schemas:
-    RoleListResponse:
-      type: object
-      description: Swagger serializer for role list response.
-      properties:
-        status:
-          type: string
-          default: success
-          description: Status of the response
-        status_code:
-          type: integer
-          default: 200
-          description: HTTP status code
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RoleSwagger'
-          description: List of global roles from RBAC system
-      required:
-      - data
-    PolicySwagger:
-      type: object
-      description: Swagger serializer for policy object within a role.
-      properties:
-        resource:
-          type: string
-          description: The resource name (e.g., 'threats', 'cases')
-        permissions:
-          type: array
-          items:
-            type: string
-          description: List of permissions granted on this resource
-      required:
-      - permissions
-      - resource
     RoleSwagger:
       type: object
       description: Swagger serializer for role object.
@@ -123,6 +82,47 @@ components:
       - id
       - name
       - policies
+    PolicySwagger:
+      type: object
+      description: Swagger serializer for policy object within a role.
+      properties:
+        resource:
+          type: string
+          description: The resource name (e.g., 'threats', 'cases')
+        permissions:
+          type: array
+          items:
+            type: string
+          description: List of permissions granted on this resource
+      required:
+      - permissions
+      - resource
+    RoleListResponse:
+      type: object
+      description: Swagger serializer for role list response.
+      properties:
+        status:
+          type: string
+          default: success
+          description: Status of the response
+        status_code:
+          type: integer
+          default: 200
+          description: HTTP status code
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleSwagger'
+          description: List of global roles from RBAC system
+      required:
+      - data
+  responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http

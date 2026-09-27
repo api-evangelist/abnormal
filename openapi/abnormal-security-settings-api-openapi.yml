@@ -57,12 +57,12 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
     NotFoundError:
       description: Invalid user input when using the filter query parameter. Will return various error messages
     UnauthorizedError:
       description: Access token is missing or invalid
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
   schemas:
     SessionSettingsSwagger:
       type: object
@@ -81,16 +81,6 @@ components:
       required:
       - inactivity_timeout_minutes
       - max_session_time_minutes
-    SecuritySettingsDataSwagger:
-      type: object
-      description: Swagger serializer for security settings data.
-      properties:
-        session_settings:
-          allOf:
-          - $ref: '#/components/schemas/SessionSettingsSwagger'
-          description: Session timeout settings
-      required:
-      - session_settings
     SecuritySettingsResponse:
       type: object
       description: Swagger serializer for security settings response.
@@ -109,6 +99,16 @@ components:
           description: Security settings data
       required:
       - data
+    SecuritySettingsDataSwagger:
+      type: object
+      description: Swagger serializer for security settings data.
+      properties:
+        session_settings:
+          allOf:
+          - $ref: '#/components/schemas/SessionSettingsSwagger'
+          description: Session timeout settings
+      required:
+      - session_settings
   securitySchemes:
     BearerAuth:
       type: http

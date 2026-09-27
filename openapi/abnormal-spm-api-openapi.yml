@@ -284,47 +284,97 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
+  responses:
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
   schemas:
-    DisplayId:
+    BenchmarksEnum:
+      enum:
+      - CIS
+      type: string
+    ResponseMetadata:
+      type: object
+      description: Serializer for response metadata containing pagination information.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMetadata'
+          description: Pagination information for the response
+      required:
+      - pagination
+    PaginationMetadata:
+      type: object
+      description: Serializer for pagination metadata.
+      properties:
+        page:
+          type: integer
+          description: Current page number
+          example: 1
+        pageSize:
+          type: integer
+          description: Number of items per page
+          example: 10
+        totalResults:
+          type: integer
+          description: Total number of items available
+          example: 42
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 5
+      required:
+      - page
+      - pageSize
+      - totalPages
+      - totalResults
+    TimelineEntryDetail:
       type: object
       properties:
-        display_name:
-          type: string
-          description: Human-readable display name
-          example: HIGH
         id:
-          type: string
-          description: Internal identifier for the item
-          example: high
-    PostureArea:
-      type: object
-      properties:
+          type: integer
+          description: Unique identifier for the timeline entry
+          example: 175
         title:
           type: string
-          description: Title of the posture area
-          example: Admin Center Highlights
-        description:
+          description: Title of the timeline event
+          example: Posture Workflow Status Updated
+        created_at:
           type: string
-          description: Description of the posture area with security grade information
-          example: <p>Abnormal rates the security grade of Admin Center as &quot;B-&quot; because less than 25% of postures in this area are resolved...</p>
-        highlights:
+          format: date-time
+          description: Timestamp when the event was created
+          example: '2025-04-29T15:51:46.564185Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the event was last updated
+          example: '2025-04-29T15:51:46.564185Z'
+        description:
           type: array
           items:
-            $ref: '#/components/schemas/PostureHighlight'
-          description: List of highlighted security postures in this area
-    DateRange:
-      type: object
-      properties:
-        from_date:
+            $ref: '#/components/schemas/TextBlock'
+          description: Structured description of the event as text blocks
+        category:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Category classification for the event
+        event_id:
           type: string
-          format: date-time
-          description: Start date for the range filter
-          example: '2025-01-01T00:00:00Z'
-        to_date:
-          type: string
-          format: date-time
-          description: End date for the range filter
-          example: '2025-12-31T23:59:59Z'
+          description: External event identifier
+          example: 33646635-3331-6332-3964-363137646630
+        risk:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Risk level associated with the event
+        abnormality:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Abnormality level of the event
     PostureCatalogResponse:
       type: object
       description: Paginated response serializer for posture catalog.
@@ -338,6 +388,14 @@ components:
           items:
             $ref: '#/components/schemas/PostureItem'
           description: List of available postures in the catalog
+    SPMReport:
+      type: object
+      properties:
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Section'
+          description: List of security posture sections organized by platform area
     PostureListItem:
       type: object
       properties:
@@ -408,169 +466,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/PostureArea'
           description: Detailed information about the posture area
-    RiskLevelsEnum:
-      enum:
-      - LOW
-      - MED
-      - HIGH
-      type: string
-    TimelineEntry:
-      type: object
-      properties:
-        entry_type:
-          type: string
-          description: Type of timeline entry (WORKFLOW_ITEM or NOTABLE_EVENT)
-          example: WORKFLOW_ITEM
-        detail:
-          allOf:
-          - $ref: '#/components/schemas/TimelineEntryDetail'
-          description: Detailed information about the timeline entry
-    PaginationMetadata:
-      type: object
-      description: Serializer for pagination metadata.
-      properties:
-        page:
-          type: integer
-          description: Current page number
-          example: 1
-        pageSize:
-          type: integer
-          description: Number of items per page
-          example: 10
-        totalResults:
-          type: integer
-          description: Total number of items available
-          example: 42
-        totalPages:
-          type: integer
-          description: Total number of pages
-          example: 5
-      required:
-      - page
-      - pageSize
-      - totalPages
-      - totalResults
-    ResponseMetadata:
-      type: object
-      description: Serializer for response metadata containing pagination information.
-      properties:
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/PaginationMetadata'
-          description: Pagination information for the response
-      required:
-      - pagination
-    Actor:
-      type: object
-      properties:
-        display_name:
-          type: string
-          description: Display name of the actor who performed the action
-          example: ABNORMAL_SECURITY
-    BenchmarksEnum:
-      enum:
-      - CIS
-      type: string
-    PostureListParams:
-      type: object
-      properties:
-        risk_levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/RiskLevelsEnum'
-          description: Filter by risk levels
-          example:
-          - HIGH
-          - MED
-        statuses:
-          type: array
-          items:
-            $ref: '#/components/schemas/StatusesEnum'
-          description: Filter by compliance statuses
-          example:
-          - PENDING_EVALUATION
-          - NON_COMPLIANT
-        benchmarks:
-          type: array
-          items:
-            $ref: '#/components/schemas/BenchmarksEnum'
-          description: Filter by security benchmarks
-          example:
-          - CIS
-        last_evaluated_at:
-          allOf:
-          - $ref: '#/components/schemas/DateRange'
-          description: Filter by last evaluation date range
-        posture_area:
-          type: array
-          items:
-            type: string
-          description: Filter by posture areas
-          example:
-          - ADMIN_CENTER
-          - ENTRA
-        platform_type:
-          type: array
-          items:
-            type: string
-          description: Filter by platform types
-          example:
-          - M365
-        posture_types:
-          type: array
-          items:
-            type: string
-          description: Filter by posture types
-          example:
-          - MANUAL
-          - AUTO
-    PostureHighlight:
-      type: object
-      properties:
-        title:
-          type: string
-          description: Title of the highlighted security posture
-          example: Ensure Administrative accounts are separate and cloud-only
-        description:
-          type: string
-          description: Description of the security posture highlight
-          example: <p><strong>Administrative accounts are separate and cloud-only</strong> ensures proper separation of privileged accounts from regular user accounts.</p>
-        posture_id:
-          type: integer
-          description: Unique identifier for the posture
-          example: 292
-        risk_level:
-          type: string
-          description: Risk level of the highlighted posture
-          example: HIGH
-    PostureListResponse:
-      type: object
-      description: Paginated response serializer for posture list.
-      properties:
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-          description: Response metadata including pagination information
-        postures:
-          type: array
-          items:
-            $ref: '#/components/schemas/PostureListItem'
-          description: List of postures
-    SPMReport:
-      type: object
-      properties:
-        sections:
-          type: array
-          items:
-            $ref: '#/components/schemas/Section'
-          description: List of security posture sections organized by platform area
-    StatusesEnum:
-      enum:
-      - NON_COMPLIANT
-      - COMPLIANT
-      - PENDING_EVALUATION
-      - PERMISSIONS_NEEDED
-      type: string
     PostureItem:
       type: object
       description: Serializer for individual posture items in the catalog.
@@ -632,27 +527,152 @@ components:
           format: date-time
           description: Timestamp when the posture was last updated
           example: '2025-04-29T15:51:41.560354Z'
-    WorkflowLogRawJson:
+    DisplayId:
       type: object
-      description: Serializer for the workflow log raw json response.
       properties:
-        raw_json:
+        display_name:
           type: string
-          description: Raw JSON data from the workflow log
-          example: '{"status": "updated", "workflow_status": "UNTRIAGED", "timestamp": "2025-04-29T15:51:46.564185Z"}'
-    PostureTimelineResponse:
+          description: Human-readable display name
+          example: HIGH
+        id:
+          type: string
+          description: Internal identifier for the item
+          example: high
+    StatusesEnum:
+      enum:
+      - NON_COMPLIANT
+      - COMPLIANT
+      - PENDING_EVALUATION
+      - PERMISSIONS_NEEDED
+      type: string
+    PostureStats:
       type: object
-      description: Paginated response serializer for posture timeline events.
+      properties:
+        total_postures_count:
+          type: integer
+          description: Total number of postures in this area
+          example: 13
+        success_postures_count:
+          type: integer
+          description: Number of postures that are compliant
+          example: 0
+        fail_postures_count:
+          type: integer
+          description: Number of postures that are non-compliant
+          example: 13
+    PostureListResponse:
+      type: object
+      description: Paginated response serializer for posture list.
       properties:
         metadata:
           allOf:
           - $ref: '#/components/schemas/ResponseMetadata'
           description: Response metadata including pagination information
-        events:
+        postures:
           type: array
           items:
-            $ref: '#/components/schemas/TimelineEntry'
-          description: List of timeline events for the posture
+            $ref: '#/components/schemas/PostureListItem'
+          description: List of postures
+    DateRange:
+      type: object
+      properties:
+        from_date:
+          type: string
+          format: date-time
+          description: Start date for the range filter
+          example: '2025-01-01T00:00:00Z'
+        to_date:
+          type: string
+          format: date-time
+          description: End date for the range filter
+          example: '2025-12-31T23:59:59Z'
+    PostureHighlight:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the highlighted security posture
+          example: Ensure Administrative accounts are separate and cloud-only
+        description:
+          type: string
+          description: Description of the security posture highlight
+          example: <p><strong>Administrative accounts are separate and cloud-only</strong> ensures proper separation of privileged accounts from regular user accounts.</p>
+        posture_id:
+          type: integer
+          description: Unique identifier for the posture
+          example: 292
+        risk_level:
+          type: string
+          description: Risk level of the highlighted posture
+          example: HIGH
+    TextBlock:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of text block (TEXT, LINK, or STATUS)
+          example: TEXT
+        text:
+          type: string
+          description: Text content of the block
+          example: Abnormal Security
+        href:
+          type: string
+          description: URL for link type blocks
+          example: /home/knowledge/tenant/41ef22d1-8ada-4f0b-a384-5d78274bcedb
+    PostureListParams:
+      type: object
+      properties:
+        risk_levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskLevelsEnum'
+          description: Filter by risk levels
+          example:
+          - HIGH
+          - MED
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusesEnum'
+          description: Filter by compliance statuses
+          example:
+          - PENDING_EVALUATION
+          - NON_COMPLIANT
+        benchmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/BenchmarksEnum'
+          description: Filter by security benchmarks
+          example:
+          - CIS
+        last_evaluated_at:
+          allOf:
+          - $ref: '#/components/schemas/DateRange'
+          description: Filter by last evaluation date range
+        posture_area:
+          type: array
+          items:
+            type: string
+          description: Filter by posture areas
+          example:
+          - ADMIN_CENTER
+          - ENTRA
+        platform_type:
+          type: array
+          items:
+            type: string
+          description: Filter by platform types
+          example:
+          - M365
+        posture_types:
+          type: array
+          items:
+            type: string
+          description: Filter by posture types
+          example:
+          - MANUAL
+          - AUTO
     PostureDetail:
       type: object
       properties:
@@ -689,87 +709,67 @@ components:
           type: string
           description: Risk level associated with this posture
           example: HIGH
-    PostureStats:
+    TimelineEntry:
       type: object
       properties:
-        total_postures_count:
-          type: integer
-          description: Total number of postures in this area
-          example: 13
-        success_postures_count:
-          type: integer
-          description: Number of postures that are compliant
-          example: 0
-        fail_postures_count:
-          type: integer
-          description: Number of postures that are non-compliant
-          example: 13
-    TimelineEntryDetail:
+        entry_type:
+          type: string
+          description: Type of timeline entry (WORKFLOW_ITEM or NOTABLE_EVENT)
+          example: WORKFLOW_ITEM
+        detail:
+          allOf:
+          - $ref: '#/components/schemas/TimelineEntryDetail'
+          description: Detailed information about the timeline entry
+    Actor:
       type: object
       properties:
-        id:
-          type: integer
-          description: Unique identifier for the timeline entry
-          example: 175
+        display_name:
+          type: string
+          description: Display name of the actor who performed the action
+          example: ABNORMAL_SECURITY
+    RiskLevelsEnum:
+      enum:
+      - LOW
+      - MED
+      - HIGH
+      type: string
+    PostureArea:
+      type: object
+      properties:
         title:
           type: string
-          description: Title of the timeline event
-          example: Posture Workflow Status Updated
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the event was created
-          example: '2025-04-29T15:51:46.564185Z'
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the event was last updated
-          example: '2025-04-29T15:51:46.564185Z'
+          description: Title of the posture area
+          example: Admin Center Highlights
         description:
+          type: string
+          description: Description of the posture area with security grade information
+          example: <p>Abnormal rates the security grade of Admin Center as &quot;B-&quot; because less than 25% of postures in this area are resolved...</p>
+        highlights:
           type: array
           items:
-            $ref: '#/components/schemas/TextBlock'
-          description: Structured description of the event as text blocks
-        category:
-          allOf:
-          - $ref: '#/components/schemas/DisplayId'
-          description: Category classification for the event
-        event_id:
-          type: string
-          description: External event identifier
-          example: 33646635-3331-6332-3964-363137646630
-        risk:
-          allOf:
-          - $ref: '#/components/schemas/DisplayId'
-          description: Risk level associated with the event
-        abnormality:
-          allOf:
-          - $ref: '#/components/schemas/DisplayId'
-          description: Abnormality level of the event
-    TextBlock:
+            $ref: '#/components/schemas/PostureHighlight'
+          description: List of highlighted security postures in this area
+    WorkflowLogRawJson:
       type: object
+      description: Serializer for the workflow log raw json response.
       properties:
-        type:
+        raw_json:
           type: string
-          description: Type of text block (TEXT, LINK, or STATUS)
-          example: TEXT
-        text:
-          type: string
-          description: Text content of the block
-          example: Abnormal Security
-        href:
-          type: string
-          description: URL for link type blocks
-          example: /home/knowledge/tenant/41ef22d1-8ada-4f0b-a384-5d78274bcedb
-  responses:
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
+          description: Raw JSON data from the workflow log
+          example: '{"status": "updated", "workflow_status": "UNTRIAGED", "timestamp": "2025-04-29T15:51:46.564185Z"}'
+    PostureTimelineResponse:
+      type: object
+      description: Paginated response serializer for posture timeline events.
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+          description: Response metadata including pagination information
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineEntry'
+          description: List of timeline events for the posture
   securitySchemes:
     BearerAuth:
       type: http

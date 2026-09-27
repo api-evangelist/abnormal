@@ -455,13 +455,46 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   schemas:
-    PostThreatRequest:
+    ThreatLinks:
       type: object
       properties:
-        action:
-          $ref: '#/components/schemas/PostThreatRequestActionEnum'
+        abxMessageId:
+          type: integer
+          description: An integer representing a unique identifier for an individual message within a threat (i.e email campaign). This is deprecated, use abxMessageIdStr instead.
+          deprecated: true
+          example: 4551618356913732000
+        abxMessageIdStr:
+          type: string
+          description: A string representing a unique identifier for an individual message within a threat (i.e email campaign).
+          example: 4551618356913732000
+        domainLink:
+          type: string
+          description: The domain name of the link
+          example: lamronba.com
+        linkType:
+          type: string
+          description: The type of link in the email
+          example: html href
+        source:
+          type: string
+          description: The location in the email where the link may be found
+          example: body
+        displayText:
+          type: string
+          description: The link's display text
+          example: This is not a spoof!
+        linkUrl:
+          type: string
+          description: The URL of the link
+          example: http://spoof.lamronba.com
       required:
-      - action
+      - abxMessageId
+      - abxMessageIdStr
+      - displayText
+      - domainLink
+      - linkType
+      - linkUrl
+      - source
     PostThreatResponse:
       type: object
       properties:
@@ -490,18 +523,6 @@ components:
       - status_url
       - tenantId
       - tenantName
-    ActionStatusStatusEnum:
-      enum:
-      - acknowledged
-      - in_progress
-      - done
-      - error
-      type: string
-    PostThreatRequestActionEnum:
-      enum:
-      - remediate
-      - unremediate
-      type: string
     ThreatAttachmentsResponse:
       type: object
       properties:
@@ -526,6 +547,128 @@ components:
       - attachments
       - tenantId
       - tenantName
+    CustomerOverride:
+      type: object
+      description: 'Serializes customer override attribution for a message.
+
+
+        Present when blocklist or Custom AI Model attribution is enabled.'
+      properties:
+        overrideType:
+          type: string
+          description: The type of customer override applied.
+          example: Customer Blocklist
+        reason:
+          type: string
+          description: The match type that triggered the blocklist override.
+          example: Sender Email
+        overrideJudgement:
+          type:
+          - string
+          - 'null'
+          description: The message judgement applied by the override.
+          example: malicious
+        value:
+          type:
+          - string
+          - 'null'
+          description: The matched blocklist entry value.
+          example: support@secure-reply.org
+      required:
+      - overrideType
+      - reason
+    ThreatLinksResponse:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreatLinks'
+          description: List of links in the email messages of a threat
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+      required:
+      - links
+      - tenantId
+      - tenantName
+    ThreatDetails:
+      type: object
+      properties:
+        threatId:
+          type: string
+          description: An id which maps to a threat campaign. A threat campaign might be received by multiple users.
+          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
+        recipientCount:
+          type: integer
+          description: The total number of unique recipients who received messages in this threat campaign.
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreatMessage'
+          description: A list of messages comprised in this threat (i.e email campaign).
+        tenantId:
+          type:
+          - integer
+          - 'null'
+          description: The tenant ID associated with the threat
+          example: 1234
+        tenantName:
+          type:
+          - string
+          - 'null'
+          description: The short name of the tenant associated with the threat
+          example: example-tenant
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be includedin the response if there are no more pages of data
+      required:
+      - messages
+      - recipientCount
+      - tenantId
+      - tenantName
+      - threatId
+    ActionStatusStatusEnum:
+      enum:
+      - acknowledged
+      - in_progress
+      - done
+      - error
+      type: string
+    ThreatAttachments:
+      type: object
+      properties:
+        abxMessageId:
+          type: integer
+          description: An integer representing a unique identifier for an individual message within a threat (i.e email campaign). This is deprecated, use abxMessageIdStr instead.
+          deprecated: true
+          example: 4551618356913732000
+        abxMessageIdStr:
+          type: string
+          description: A string representing a unique identifier for an individual message within a threat (i.e email campaign).
+          example: 4551618356913732000
+        attachmentName:
+          type: string
+          description: Name of the attachment
+          example: attachment1.jpg
+      required:
+      - abxMessageId
+      - abxMessageIdStr
+      - attachmentName
     ActionStatus:
       type: object
       properties:
@@ -552,50 +695,13 @@ components:
       - status
       - tenantId
       - tenantName
-    ThreatLinksResponse:
+    PostThreatRequest:
       type: object
       properties:
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/ThreatLinks'
-          description: List of links in the email messages of a threat
-        tenantId:
-          type:
-          - integer
-          - 'null'
-          description: The tenant ID associated with the threat
-          example: 1234
-        tenantName:
-          type:
-          - string
-          - 'null'
-          description: The short name of the tenant associated with the threat
-          example: example-tenant
+        action:
+          $ref: '#/components/schemas/PostThreatRequestActionEnum'
       required:
-      - links
-      - tenantId
-      - tenantName
-    ThreatAttachments:
-      type: object
-      properties:
-        abxMessageId:
-          type: integer
-          description: An integer representing a unique identifier for an individual message within a threat (i.e email campaign). This is deprecated, use abxMessageIdStr instead.
-          deprecated: true
-          example: 4551618356913732000
-        abxMessageIdStr:
-          type: string
-          description: A string representing a unique identifier for an individual message within a threat (i.e email campaign).
-          example: 4551618356913732000
-        attachmentName:
-          type: string
-          description: Name of the attachment
-          example: attachment1.jpg
-      required:
-      - abxMessageId
-      - abxMessageIdStr
-      - attachmentName
+      - action
     ThreatMessage:
       type: object
       properties:
@@ -818,46 +924,6 @@ components:
           description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
       required:
       - threats
-    ThreatLinks:
-      type: object
-      properties:
-        abxMessageId:
-          type: integer
-          description: An integer representing a unique identifier for an individual message within a threat (i.e email campaign). This is deprecated, use abxMessageIdStr instead.
-          deprecated: true
-          example: 4551618356913732000
-        abxMessageIdStr:
-          type: string
-          description: A string representing a unique identifier for an individual message within a threat (i.e email campaign).
-          example: 4551618356913732000
-        domainLink:
-          type: string
-          description: The domain name of the link
-          example: lamronba.com
-        linkType:
-          type: string
-          description: The type of link in the email
-          example: html href
-        source:
-          type: string
-          description: The location in the email where the link may be found
-          example: body
-        displayText:
-          type: string
-          description: The link's display text
-          example: This is not a spoof!
-        linkUrl:
-          type: string
-          description: The URL of the link
-          example: http://spoof.lamronba.com
-      required:
-      - abxMessageId
-      - abxMessageIdStr
-      - displayText
-      - domainLink
-      - linkType
-      - linkUrl
-      - source
     Threat:
       type: object
       properties:
@@ -867,90 +933,24 @@ components:
           example: 184712ab-6d8b-47b3-89d3-a314efef79e2
       required:
       - threatId
-    ThreatDetails:
-      type: object
-      properties:
-        threatId:
-          type: string
-          description: An id which maps to a threat campaign. A threat campaign might be received by multiple users.
-          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
-        recipientCount:
-          type: integer
-          description: The total number of unique recipients who received messages in this threat campaign.
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/ThreatMessage'
-          description: A list of messages comprised in this threat (i.e email campaign).
-        tenantId:
-          type:
-          - integer
-          - 'null'
-          description: The tenant ID associated with the threat
-          example: 1234
-        tenantName:
-          type:
-          - string
-          - 'null'
-          description: The short name of the tenant associated with the threat
-          example: example-tenant
-        pageNumber:
-          type: integer
-          default: 1
-          description: The current page number
-        nextPageNumber:
-          type: integer
-          default: 2
-          description: The next page number. Wil not be includedin the response if there are no more pages of data
-      required:
-      - messages
-      - recipientCount
-      - tenantId
-      - tenantName
-      - threatId
-    CustomerOverride:
-      type: object
-      description: 'Serializes customer override attribution for a message.
-
-
-        Present when blocklist or Custom AI Model attribution is enabled.'
-      properties:
-        overrideType:
-          type: string
-          description: The type of customer override applied.
-          example: Customer Blocklist
-        reason:
-          type: string
-          description: The match type that triggered the blocklist override.
-          example: Sender Email
-        overrideJudgement:
-          type:
-          - string
-          - 'null'
-          description: The message judgement applied by the override.
-          example: malicious
-        value:
-          type:
-          - string
-          - 'null'
-          description: The matched blocklist entry value.
-          example: support@secure-reply.org
-      required:
-      - overrideType
-      - reason
+    PostThreatRequestActionEnum:
+      enum:
+      - remediate
+      - unremediate
+      type: string
   responses:
-    UnauthorizedError:
-      description: Access token is missing or invalid
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
     NotFoundError:
       description: Invalid user input when using the filter query parameter. Will return various error messages
     ThreatDoesNotExistError:
       description: Threat does not exist
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
     ActionDoesNotExistError:
       description: Action does not exist
     TooManyRequestsError:
       description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http

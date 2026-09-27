@@ -114,13 +114,6 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
   schemas:
     FalsePositive:
       type: object
@@ -143,111 +136,6 @@ components:
       required:
       - portal_link
       - report_type
-    PortalVisibleRootCause:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-      required:
-      - description
-      - name
-    MissedAttackReportTypeEnum:
-      enum:
-      - missed-attack
-      type: string
-    MissedGraymailReportTypeEnum:
-      enum:
-      - missed-graymail
-      type: string
-    Detection360Case:
-      type: object
-      properties:
-        id:
-          type: integer
-        inquiry_type:
-          $ref: '#/components/schemas/InquiryTypeEnum'
-        messages:
-          type: array
-          items:
-            type: integer
-        report:
-          $ref: '#/components/schemas/Detection360Report'
-        status:
-          $ref: '#/components/schemas/Detection360CaseStatusEnum'
-        submission_datetime:
-          type: string
-          format: date-time
-        submitted_by:
-          $ref: '#/components/schemas/User'
-      required:
-      - id
-      - inquiry_type
-      - messages
-      - status
-      - submission_datetime
-      - submitted_by
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the user
-          example: Ching Li-Hsieh
-        email:
-          type: string
-          description: The email address of the user
-          example: lhching@bigcompany.com
-      required:
-      - name
-    Detection360CaseStatusEnum:
-      enum:
-      - UNREVIEWED
-      - CONTAINING_ATTACK
-      - IMPROVING_PLATFORM
-      - RESOLVED
-      - CORRECTING_JUDGEMENT
-      type: string
-    FalseNegativeReportTypeEnum:
-      enum:
-      - false-negative
-      type: string
-    MissedSpam:
-      type: object
-      properties:
-        report_type:
-          $ref: '#/components/schemas/MissedSpamReportTypeEnum'
-          description: Type of report
-        recipient_email:
-          type: string
-        sender_email:
-          type: string
-        subject:
-          type: string
-        received_date:
-          type: string
-          description: Date the email was received in YYYY-MM-DD format.
-        description:
-          type: string
-          description: Free text to provide more context on the issue.
-          example: Alice reported this email looked like spam.
-      required:
-      - recipient_email
-      - report_type
-      - sender_email
-      - subject
-    Detection360ReportRequest:
-      oneOf:
-      - $ref: '#/components/schemas/FalsePositive'
-      - $ref: '#/components/schemas/FalseNegative'
-      - $ref: '#/components/schemas/MissedAttack'
-      - $ref: '#/components/schemas/MissedSpam'
-      - $ref: '#/components/schemas/MissedGraymail'
-      discriminator:
-        propertyName: report_type
-        mapping:
-          null: '#/components/schemas/MissedGraymail'
     FalseNegative:
       type: object
       properties:
@@ -309,6 +197,69 @@ components:
       - report_type
       - sender_email
       - subject
+    Detection360CaseStatusEnum:
+      enum:
+      - UNREVIEWED
+      - CONTAINING_ATTACK
+      - IMPROVING_PLATFORM
+      - RESOLVED
+      - CORRECTING_JUDGEMENT
+      type: string
+    FalsePositiveReportTypeEnum:
+      enum:
+      - false-positive
+      type: string
+    InquiryTypeEnum:
+      enum:
+      - MISSED_ATTACK
+      - FALSE_POSITIVE
+      type: string
+    Detection360ReportRequest:
+      oneOf:
+      - $ref: '#/components/schemas/FalsePositive'
+      - $ref: '#/components/schemas/FalseNegative'
+      - $ref: '#/components/schemas/MissedAttack'
+      - $ref: '#/components/schemas/MissedSpam'
+      - $ref: '#/components/schemas/MissedGraymail'
+      discriminator:
+        propertyName: report_type
+        mapping:
+          null: '#/components/schemas/MissedGraymail'
+    Detection360Case:
+      type: object
+      properties:
+        id:
+          type: integer
+        inquiry_type:
+          $ref: '#/components/schemas/InquiryTypeEnum'
+        messages:
+          type: array
+          items:
+            type: integer
+        report:
+          $ref: '#/components/schemas/Detection360Report'
+        status:
+          $ref: '#/components/schemas/Detection360CaseStatusEnum'
+        submission_datetime:
+          type: string
+          format: date-time
+        submitted_by:
+          $ref: '#/components/schemas/User'
+      required:
+      - id
+      - inquiry_type
+      - messages
+      - status
+      - submission_datetime
+      - submitted_by
+    MissedGraymailReportTypeEnum:
+      enum:
+      - missed-graymail
+      type: string
+    FalseNegativeReportTypeEnum:
+      enum:
+      - false-negative
+      type: string
     MissedGraymail:
       type: object
       properties:
@@ -345,19 +296,68 @@ components:
       required:
       - analysis
       - root_causes
-    FalsePositiveReportTypeEnum:
-      enum:
-      - false-positive
-      type: string
-    InquiryTypeEnum:
-      enum:
-      - MISSED_ATTACK
-      - FALSE_POSITIVE
-      type: string
     MissedSpamReportTypeEnum:
       enum:
       - missed-spam
       type: string
+    MissedSpam:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/MissedSpamReportTypeEnum'
+          description: Type of report
+        recipient_email:
+          type: string
+        sender_email:
+          type: string
+        subject:
+          type: string
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice reported this email looked like spam.
+      required:
+      - recipient_email
+      - report_type
+      - sender_email
+      - subject
+    PortalVisibleRootCause:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+      - description
+      - name
+    MissedAttackReportTypeEnum:
+      enum:
+      - missed-attack
+      type: string
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: Ching Li-Hsieh
+        email:
+          type: string
+          description: The email address of the user
+          example: lhching@bigcompany.com
+      required:
+      - name
+  responses:
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http
