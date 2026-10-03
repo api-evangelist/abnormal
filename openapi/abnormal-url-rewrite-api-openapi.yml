@@ -81,43 +81,6 @@ components:
     UnauthorizedError:
       description: Access token is missing or invalid
   schemas:
-    SoarUserAddress:
-      type: object
-      description: Serializer for user address information.
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          description: Display name of the user
-        emailAddress:
-          type: string
-          description: Email address of the user who clicked the link
-      required:
-      - emailAddress
-    ClickedEventsResponse:
-      type: object
-      description: 'Serializer for clicked events response.
-
-
-        Note: the "data" field is injected below via `_declared_fields` because a
-
-        class attribute named `data` would shadow DRF''s `Serializer.data` property
-
-        (basedpyright also flags the conflict).'
-      properties:
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ClickedEventsResponseMetadata'
-          description: Response metadata including pagination
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SoarClickedEvent'
-          description: List of clicked events
-      required:
-      - data
-      - metadata
     Error:
       type: object
       description: Serializer for bad request error response.
@@ -127,21 +90,6 @@ components:
           description: Error message
       required:
       - error
-    ClickedEventsResponseMetadata:
-      type: object
-      description: Serializer for response metadata containing pagination information.
-      properties:
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/ClickedEventsPaginationMetadata'
-          description: Pagination information for the response
-        requestId:
-          type:
-          - string
-          - 'null'
-          description: Request ID for the API request
-      required:
-      - pagination
     ClickedEventsPaginationMetadata:
       type: object
       description: Serializer for pagination metadata on the clicked events response.
@@ -193,6 +141,20 @@ components:
       - from
       - sender
       - to
+    SoarUserAddress:
+      type: object
+      description: Serializer for user address information.
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: Display name of the user
+        emailAddress:
+          type: string
+          description: Email address of the user who clicked the link
+      required:
+      - emailAddress
     SoarClickedEvent:
       type: object
       description: Serializer for clicked event representation in responses.
@@ -226,6 +188,44 @@ components:
       - messageMetadata
       - type
       - user
+    ClickedEventsResponse:
+      type: object
+      description: 'Serializer for clicked events response.
+
+
+        Note: the "data" field is injected below via `_declared_fields` because a
+
+        class attribute named `data` would shadow DRF''s `Serializer.data` property
+
+        (basedpyright also flags the conflict).'
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ClickedEventsResponseMetadata'
+          description: Response metadata including pagination
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SoarClickedEvent'
+          description: List of clicked events
+      required:
+      - data
+      - metadata
+    ClickedEventsResponseMetadata:
+      type: object
+      description: Serializer for response metadata containing pagination information.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/ClickedEventsPaginationMetadata'
+          description: Pagination information for the response
+        requestId:
+          type:
+          - string
+          - 'null'
+          description: Request ID for the API request
+      required:
+      - pagination
   securitySchemes:
     BearerAuth:
       type: http

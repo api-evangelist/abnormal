@@ -192,6 +192,14 @@ paths:
           description: An unexpected error occurred on the server
 components:
   schemas:
+    BadRequestError:
+      type: object
+      description: 400 Bad Request error response.
+      properties:
+        error:
+          type: string
+          default: Bad request
+          description: The request was invalid or malformed
     NotFoundError:
       type: object
       description: 404 Not Found error response.
@@ -200,23 +208,46 @@ components:
           type: string
           default: Resource not found
           description: Resource with the specified ID was not found
-    CreateResource:
+    PerformActionResponse:
       type: object
-      description: Serializer for creating a new resource.
+      description: Serializer for perform action response.
       properties:
-        name:
+        actionId:
           type: string
-          description: Name of the resource
-          maxLength: 255
-          minLength: 1
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional description of the resource
-          maxLength: 1000
+          description: Unique ID for the action request
+        resourceId:
+          type: string
+          description: ID of the resource the action was performed on
+        status:
+          type: string
+          description: Status of the action
       required:
-      - name
+      - actionId
+      - resourceId
+      - status
+    GetResourceResponse:
+      type: object
+      description: Serializer for get resource response.
+      properties:
+        resource:
+          allOf:
+          - $ref: '#/components/schemas/Resource'
+          description: The requested resource
+      required:
+      - resource
+    PerformActionActionEnum:
+      enum:
+      - refresh
+      - validate
+      type: string
+    PatchedUpdateResource:
+      type: object
+      description: Serializer for updating an existing resource.
+      properties:
+        description:
+          type: string
+          description: Updated description (can be empty string to clear)
+          maxLength: 1000
     Resource:
       type: object
       description: Serializer for resource representation in responses.
@@ -240,44 +271,19 @@ components:
       required:
       - name
       - resourceId
-    PerformActionResponse:
+    UpdateResourceResponse:
       type: object
-      description: Serializer for perform action response.
-      properties:
-        actionId:
-          type: string
-          description: Unique ID for the action request
-        resourceId:
-          type: string
-          description: ID of the resource the action was performed on
-        status:
-          type: string
-          description: Status of the action
-      required:
-      - actionId
-      - resourceId
-      - status
-    CreateResourceResponse:
-      type: object
-      description: Serializer for create resource response.
+      description: Serializer for update resource response.
       properties:
         resourceId:
           type: string
-          description: ID of the newly created resource
+          description: ID of the updated resource
         status:
           type: string
-          description: Status of the creation operation
+          description: Status of the update operation
       required:
       - resourceId
       - status
-    PatchedUpdateResource:
-      type: object
-      description: Serializer for updating an existing resource.
-      properties:
-        description:
-          type: string
-          description: Updated description (can be empty string to clear)
-          maxLength: 1000
     ListResourcesResponse:
       type: object
       description: Serializer for list resources response.
@@ -302,11 +308,6 @@ components:
       - pageNumber
       - resources
       - total
-    PerformActionActionEnum:
-      enum:
-      - refresh
-      - validate
-      type: string
     PerformAction:
       type: object
       description: Serializer for performing an action on a resource.
@@ -316,37 +317,36 @@ components:
           description: 'Action to perform: refresh or validate'
       required:
       - action
-    UpdateResourceResponse:
+    CreateResource:
       type: object
-      description: Serializer for update resource response.
+      description: Serializer for creating a new resource.
+      properties:
+        name:
+          type: string
+          description: Name of the resource
+          maxLength: 255
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description of the resource
+          maxLength: 1000
+      required:
+      - name
+    CreateResourceResponse:
+      type: object
+      description: Serializer for create resource response.
       properties:
         resourceId:
           type: string
-          description: ID of the updated resource
+          description: ID of the newly created resource
         status:
           type: string
-          description: Status of the update operation
+          description: Status of the creation operation
       required:
       - resourceId
       - status
-    BadRequestError:
-      type: object
-      description: 400 Bad Request error response.
-      properties:
-        error:
-          type: string
-          default: Bad request
-          description: The request was invalid or malformed
-    GetResourceResponse:
-      type: object
-      description: Serializer for get resource response.
-      properties:
-        resource:
-          allOf:
-          - $ref: '#/components/schemas/Resource'
-          description: The requested resource
-      required:
-      - resource
   securitySchemes:
     BearerAuth:
       type: http

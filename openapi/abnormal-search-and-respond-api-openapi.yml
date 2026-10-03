@@ -639,60 +639,141 @@ components:
       - timestamp
       title: ActivityLogEntry
       type: object
-    ActivityStatusResponse:
+    RemediationRequest:
       properties:
-        activity_id:
-          title: Activity Id
-          type: integer
         action:
-          anyOf:
-          - $ref: '#/components/schemas/ActionEnum'
-          - type: 'null'
-          default: null
-        status:
-          anyOf:
-          - $ref: '#/components/schemas/ActionStatusEnum'
-          - type: 'null'
-          default: null
-        performed_by:
+          $ref: '#/components/schemas/RemediationActionEnum'
+          description: Remediation action
+        source:
+          $ref: '#/components/schemas/EmailSourceEnum'
+          description: Source of the messages
+        remediation_reason:
+          $ref: '#/components/schemas/ActionReasonEnum'
+          description: Reason for remediation
+        target_folder:
           anyOf:
           - type: string
           - type: 'null'
           default: null
-          title: Performed By
-        timestamp:
+          description: Target folder for move actions
+          title: Target Folder
+        submit_d360_case:
           anyOf:
-          - format: date-time
-            type: string
+          - type: boolean
           - type: 'null'
-          default: null
-          title: Timestamp
-        result_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: null
-          title: Result Count
-        remediation_details:
+          default: false
+          title: Submit D360 Case
+        messages:
           anyOf:
           - items:
-              $ref: '#/components/schemas/RemediationDetail'
+              $ref: '#/components/schemas/MessageToRemediate'
             type: array
           - type: 'null'
           default: null
-          title: Remediation Details
-        total:
+          title: Messages
+        remediate_all:
           anyOf:
-          - type: integer
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Remediate All
+        search_filters:
+          anyOf:
+          - $ref: '#/components/schemas/SearchFilters'
           - type: 'null'
           default: null
-          title: Total
+        tenant_ids:
+          anyOf:
+          - items:
+              type: integer
+            minItems: 1
+            type: array
+          - type: 'null'
+          default: null
+          description: Optional list of tenant IDs to filter remediation. If not provided, all authorized tenants are included.
+          title: Tenant Ids
+      required:
+      - action
+      - source
+      - remediation_reason
+      title: RemediationRequest
+      type: object
+    RemediationResponse:
+      properties:
+        activity_log_id:
+          title: Activity Log Id
+          type: integer
         metadata:
           $ref: '#/components/schemas/MetaData'
       required:
-      - activity_id
+      - activity_log_id
       - metadata
-      title: ActivityStatusResponse
+      title: RemediationResponse
+      type: object
+    MetaData:
+      properties:
+        trace_id:
+          title: Trace Id
+          type: string
+        response_time:
+          title: Response Time
+          type: string
+      required:
+      - trace_id
+      - response_time
+      title: MetaData
+      type: object
+    EmailSourceEnum:
+      enum:
+      - abnormal
+      - quarantine
+      title: EmailSourceEnum
+      type: string
+    Attachment:
+      properties:
+        name:
+          title: Name
+          type: string
+        md5_hash:
+          title: Md5 Hash
+          type: string
+      required:
+      - name
+      - md5_hash
+      title: Attachment
+      type: object
+    ActionEnum:
+      enum:
+      - search
+      - remediation
+      - csv_export
+      title: ActionEnum
+      type: string
+    ActivitiesResponse:
+      properties:
+        activities:
+          items:
+            $ref: '#/components/schemas/ActivityLogEntry'
+          title: Activities
+          type: array
+        total:
+          title: Total
+          type: integer
+        pageNumber:
+          title: Pagenumber
+          type: integer
+        pageSize:
+          title: Pagesize
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - activities
+      - total
+      - pageNumber
+      - pageSize
+      - metadata
+      title: ActivitiesResponse
       type: object
     RemediationDetail:
       properties:
@@ -766,6 +847,206 @@ components:
       - raw_message_id
       - status
       title: RemediationDetail
+      type: object
+    QuarantineInfo:
+      properties:
+        identity:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Identity
+        message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Message Id
+        policy_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Policy Type
+        quarantine_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Quarantine Reason
+        release_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Release Status
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Type
+        processed_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Processed At
+      title: QuarantineInfo
+      type: object
+    SearchFilters:
+      properties:
+        start_time:
+          description: Start time in ISO 8601 format
+          format: date-time
+          title: Start Time
+          type: string
+        end_time:
+          description: End time in ISO 8601 format
+          format: date-time
+          title: End Time
+          type: string
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Subject
+        sender_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender Email
+        sender_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender Name
+        recipient_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Recipient Email
+        recipient_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Recipient Name
+        attachment_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Attachment Name
+        attachment_md5_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Attachment Md5 Hash
+        internet_message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Internet Message Id
+        body_link:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Body Link
+        sender_ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Sender Ip
+        judgement:
+          anyOf:
+          - $ref: '#/components/schemas/JudgementEnum'
+          - type: 'null'
+          default: null
+        judgement_source:
+          anyOf:
+          - $ref: '#/components/schemas/JudgementSourceEnum'
+          - type: 'null'
+          default: null
+        judgement_source_model_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Judgement Source Model Ids
+        judgement_source_model_versions:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          title: Judgement Source Model Versions
+        use_sender_regex:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Use Sender Regex
+        use_recipient_regex:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Use Recipient Regex
+      required:
+      - start_time
+      - end_time
+      title: SearchFilters
+      type: object
+    RemediationActionEnum:
+      enum:
+      - delete
+      - move_to_inbox
+      title: RemediationActionEnum
+      type: string
+    SearchResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          title: Results
+          type: array
+        total:
+          title: Total
+          type: integer
+        pageNumber:
+          title: Pagenumber
+          type: integer
+        pageSize:
+          title: Pagesize
+          type: integer
+        nextPageNumber:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Nextpagenumber
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - results
+      - total
+      - pageNumber
+      - pageSize
+      - metadata
+      title: SearchResponse
       type: object
     SearchResult:
       properties:
@@ -918,68 +1199,6 @@ components:
           default: null
       title: SearchResult
       type: object
-    QuarantineInfo:
-      properties:
-        identity:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Identity
-        message_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Message Id
-        policy_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Policy Type
-        quarantine_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Quarantine Reason
-        release_status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Release Status
-        type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Type
-        processed_at:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          default: null
-          title: Processed At
-      title: QuarantineInfo
-      type: object
-    EmailSourceEnum:
-      enum:
-      - abnormal
-      - quarantine
-      title: EmailSourceEnum
-      type: string
-    ActionReasonEnum:
-      enum:
-      - false_negative
-      - unsolicited
-      - other
-      - groups_remediation
-      - quarantine_release
-      title: ActionReasonEnum
-      type: string
     SearchRequest:
       properties:
         source:
@@ -1003,96 +1222,84 @@ components:
       - filters
       title: SearchRequest
       type: object
-    SearchResponse:
+    JudgementEnum:
+      enum:
+      - attack
+      - borderline
+      - spam
+      - graymail
+      - safe
+      title: JudgementEnum
+      type: string
+    JudgementSourceEnum:
+      enum:
+      - ABNORMAL_SYSTEM
+      - CUSTOMER_AI_MODEL
+      title: JudgementSourceEnum
+      type: string
+    ActionReasonEnum:
+      enum:
+      - false_negative
+      - unsolicited
+      - other
+      - groups_remediation
+      - quarantine_release
+      title: ActionReasonEnum
+      type: string
+    ActivityStatusResponse:
       properties:
-        results:
-          items:
-            $ref: '#/components/schemas/SearchResult'
-          title: Results
-          type: array
-        total:
-          title: Total
+        activity_id:
+          title: Activity Id
           type: integer
-        pageNumber:
-          title: Pagenumber
-          type: integer
-        pageSize:
-          title: Pagesize
-          type: integer
-        nextPageNumber:
+        action:
           anyOf:
-          - type: integer
+          - $ref: '#/components/schemas/ActionEnum'
           - type: 'null'
           default: null
-          title: Nextpagenumber
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-      required:
-      - results
-      - total
-      - pageNumber
-      - pageSize
-      - metadata
-      title: SearchResponse
-      type: object
-    RemediationRequest:
-      properties:
-        action:
-          $ref: '#/components/schemas/RemediationActionEnum'
-          description: Remediation action
-        source:
-          $ref: '#/components/schemas/EmailSourceEnum'
-          description: Source of the messages
-        remediation_reason:
-          $ref: '#/components/schemas/ActionReasonEnum'
-          description: Reason for remediation
-        target_folder:
+        status:
+          anyOf:
+          - $ref: '#/components/schemas/ActionStatusEnum'
+          - type: 'null'
+          default: null
+        performed_by:
           anyOf:
           - type: string
           - type: 'null'
           default: null
-          description: Target folder for move actions
-          title: Target Folder
-        submit_d360_case:
+          title: Performed By
+        timestamp:
           anyOf:
-          - type: boolean
+          - format: date-time
+            type: string
           - type: 'null'
-          default: false
-          title: Submit D360 Case
-        messages:
+          default: null
+          title: Timestamp
+        result_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Result Count
+        remediation_details:
           anyOf:
           - items:
-              $ref: '#/components/schemas/MessageToRemediate'
+              $ref: '#/components/schemas/RemediationDetail'
             type: array
           - type: 'null'
           default: null
-          title: Messages
-        remediate_all:
+          title: Remediation Details
+        total:
           anyOf:
-          - type: boolean
-          - type: 'null'
-          default: false
-          title: Remediate All
-        search_filters:
-          anyOf:
-          - $ref: '#/components/schemas/SearchFilters'
+          - type: integer
           - type: 'null'
           default: null
-        tenant_ids:
-          anyOf:
-          - items:
-              type: integer
-            minItems: 1
-            type: array
-          - type: 'null'
-          default: null
-          description: Optional list of tenant IDs to filter remediation. If not provided, all authorized tenants are included.
-          title: Tenant Ids
+          title: Total
+        metadata:
+          $ref: '#/components/schemas/MetaData'
       required:
-      - action
-      - source
-      - remediation_reason
-      title: RemediationRequest
+      - activity_id
+      - metadata
+      title: ActivityStatusResponse
       type: object
     DecisionCategoryEnum:
       enum:
@@ -1155,58 +1362,6 @@ components:
       - received_time
       title: MessageToRemediate
       type: object
-    ActivitiesResponse:
-      properties:
-        activities:
-          items:
-            $ref: '#/components/schemas/ActivityLogEntry'
-          title: Activities
-          type: array
-        total:
-          title: Total
-          type: integer
-        pageNumber:
-          title: Pagenumber
-          type: integer
-        pageSize:
-          title: Pagesize
-          type: integer
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-      required:
-      - activities
-      - total
-      - pageNumber
-      - pageSize
-      - metadata
-      title: ActivitiesResponse
-      type: object
-    ActionEnum:
-      enum:
-      - search
-      - remediation
-      - csv_export
-      title: ActionEnum
-      type: string
-    MetaData:
-      properties:
-        trace_id:
-          title: Trace Id
-          type: string
-        response_time:
-          title: Response Time
-          type: string
-      required:
-      - trace_id
-      - response_time
-      title: MetaData
-      type: object
-    JudgementSourceEnum:
-      enum:
-      - ABNORMAL_SYSTEM
-      - CUSTOMER_AI_MODEL
-      title: JudgementSourceEnum
-      type: string
     ActionStatusEnum:
       enum:
       - pending
@@ -1215,161 +1370,6 @@ components:
       - error
       title: ActionStatusEnum
       type: string
-    SearchFilters:
-      properties:
-        start_time:
-          description: Start time in ISO 8601 format
-          format: date-time
-          title: Start Time
-          type: string
-        end_time:
-          description: End time in ISO 8601 format
-          format: date-time
-          title: End Time
-          type: string
-        subject:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Subject
-        sender_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Sender Email
-        sender_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Sender Name
-        recipient_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Recipient Email
-        recipient_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Recipient Name
-        attachment_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Attachment Name
-        attachment_md5_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Attachment Md5 Hash
-        internet_message_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Internet Message Id
-        body_link:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Body Link
-        sender_ip:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Sender Ip
-        judgement:
-          anyOf:
-          - $ref: '#/components/schemas/JudgementEnum'
-          - type: 'null'
-          default: null
-        judgement_source:
-          anyOf:
-          - $ref: '#/components/schemas/JudgementSourceEnum'
-          - type: 'null'
-          default: null
-        judgement_source_model_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          default: null
-          title: Judgement Source Model Ids
-        judgement_source_model_versions:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          default: null
-          title: Judgement Source Model Versions
-        use_sender_regex:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          default: false
-          title: Use Sender Regex
-        use_recipient_regex:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          default: false
-          title: Use Recipient Regex
-      required:
-      - start_time
-      - end_time
-      title: SearchFilters
-      type: object
-    RemediationResponse:
-      properties:
-        activity_log_id:
-          title: Activity Log Id
-          type: integer
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-      required:
-      - activity_log_id
-      - metadata
-      title: RemediationResponse
-      type: object
-    RemediationActionEnum:
-      enum:
-      - delete
-      - move_to_inbox
-      title: RemediationActionEnum
-      type: string
-    JudgementEnum:
-      enum:
-      - attack
-      - borderline
-      - spam
-      - graymail
-      - safe
-      title: JudgementEnum
-      type: string
-    Attachment:
-      properties:
-        name:
-          title: Name
-          type: string
-        md5_hash:
-          title: Md5 Hash
-          type: string
-      required:
-      - name
-      - md5_hash
-      title: Attachment
-      type: object
   securitySchemes:
     BearerAuth:
       type: http

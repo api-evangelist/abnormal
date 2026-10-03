@@ -284,188 +284,30 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
   schemas:
-    BenchmarksEnum:
-      enum:
-      - CIS
-      type: string
-    ResponseMetadata:
-      type: object
-      description: Serializer for response metadata containing pagination information.
-      properties:
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/PaginationMetadata'
-          description: Pagination information for the response
-      required:
-      - pagination
-    PaginationMetadata:
-      type: object
-      description: Serializer for pagination metadata.
-      properties:
-        page:
-          type: integer
-          description: Current page number
-          example: 1
-        pageSize:
-          type: integer
-          description: Number of items per page
-          example: 10
-        totalResults:
-          type: integer
-          description: Total number of items available
-          example: 42
-        totalPages:
-          type: integer
-          description: Total number of pages
-          example: 5
-      required:
-      - page
-      - pageSize
-      - totalPages
-      - totalResults
-    TimelineEntryDetail:
+    Actor:
       type: object
       properties:
-        id:
-          type: integer
-          description: Unique identifier for the timeline entry
-          example: 175
-        title:
-          type: string
-          description: Title of the timeline event
-          example: Posture Workflow Status Updated
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the event was created
-          example: '2025-04-29T15:51:46.564185Z'
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the event was last updated
-          example: '2025-04-29T15:51:46.564185Z'
-        description:
-          type: array
-          items:
-            $ref: '#/components/schemas/TextBlock'
-          description: Structured description of the event as text blocks
-        category:
-          allOf:
-          - $ref: '#/components/schemas/DisplayId'
-          description: Category classification for the event
-        event_id:
-          type: string
-          description: External event identifier
-          example: 33646635-3331-6332-3964-363137646630
-        risk:
-          allOf:
-          - $ref: '#/components/schemas/DisplayId'
-          description: Risk level associated with the event
-        abnormality:
-          allOf:
-          - $ref: '#/components/schemas/DisplayId'
-          description: Abnormality level of the event
-    PostureCatalogResponse:
-      type: object
-      description: Paginated response serializer for posture catalog.
-      properties:
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-          description: Response metadata including pagination information
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PostureItem'
-          description: List of available postures in the catalog
-    SPMReport:
-      type: object
-      properties:
-        sections:
-          type: array
-          items:
-            $ref: '#/components/schemas/Section'
-          description: List of security posture sections organized by platform area
-    PostureListItem:
-      type: object
-      properties:
-        posture_id:
-          type: integer
-          description: Unique identifier for the posture
-          example: 421
-        posture_name:
-          type: string
-          description: Name of the security posture
-          example: Ensure that collaboration invitations are sent to allowed domains only
-        status:
-          type: string
-          description: Current compliance status
-          example: PENDING_EVALUATION
-        workflow_status:
-          type: string
-          description: Current workflow status
-          example: UNTRIAGED
-        risk_level:
-          allOf:
-          - $ref: '#/components/schemas/DisplayId'
-          description: Risk level of the posture
-        last_updated_time:
-          type: string
-          format: date-time
-          description: Timestamp when the posture was last updated
-          example: '2025-04-24T07:50:04.086534Z'
-        last_evaluated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the posture was last evaluated
-          example: '2025-04-24T07:50:04.087191Z'
-        posture_type:
-          type: string
-          description: Type of posture evaluation
-          example: MANUAL
-        benchmarks:
-          type: array
-          items:
-            $ref: '#/components/schemas/DisplayId'
-          description: List of security benchmarks this posture belongs to
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/DisplayId'
-          description: List of tags associated with the posture
-    Section:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the section
-          example: ADMIN_CENTER
-        platform_type:
-          type: string
-          description: Platform type for this section
-          example: M365
         display_name:
           type: string
-          description: Human-readable name for the section
-          example: Admin Center
-        stats:
-          allOf:
-          - $ref: '#/components/schemas/PostureStats'
-          description: Statistics about postures in this section
-        posture_area:
-          allOf:
-          - $ref: '#/components/schemas/PostureArea'
-          description: Detailed information about the posture area
+          description: Display name of the actor who performed the action
+          example: ABNORMAL_SECURITY
+    PostureArea:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the posture area
+          example: Admin Center Highlights
+        description:
+          type: string
+          description: Description of the posture area with security grade information
+          example: <p>Abnormal rates the security grade of Admin Center as &quot;B-&quot; because less than 25% of postures in this area are resolved...</p>
+        highlights:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostureHighlight'
+          description: List of highlighted security postures in this area
     PostureItem:
       type: object
       description: Serializer for individual posture items in the catalog.
@@ -527,6 +369,123 @@ components:
           format: date-time
           description: Timestamp when the posture was last updated
           example: '2025-04-29T15:51:41.560354Z'
+    TextBlock:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of text block (TEXT, LINK, or STATUS)
+          example: TEXT
+        text:
+          type: string
+          description: Text content of the block
+          example: Abnormal Security
+        href:
+          type: string
+          description: URL for link type blocks
+          example: /home/knowledge/tenant/41ef22d1-8ada-4f0b-a384-5d78274bcedb
+    ResponseMetadata:
+      type: object
+      description: Serializer for response metadata containing pagination information.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMetadata'
+          description: Pagination information for the response
+      required:
+      - pagination
+    PostureListResponse:
+      type: object
+      description: Paginated response serializer for posture list.
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+          description: Response metadata including pagination information
+        postures:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostureListItem'
+          description: List of postures
+    StatusesEnum:
+      enum:
+      - NON_COMPLIANT
+      - COMPLIANT
+      - PENDING_EVALUATION
+      - PERMISSIONS_NEEDED
+      type: string
+    PostureCatalogResponse:
+      type: object
+      description: Paginated response serializer for posture catalog.
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+          description: Response metadata including pagination information
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostureItem'
+          description: List of available postures in the catalog
+    WorkflowLogRawJson:
+      type: object
+      description: Serializer for the workflow log raw json response.
+      properties:
+        raw_json:
+          type: string
+          description: Raw JSON data from the workflow log
+          example: '{"status": "updated", "workflow_status": "UNTRIAGED", "timestamp": "2025-04-29T15:51:46.564185Z"}'
+    PostureListItem:
+      type: object
+      properties:
+        posture_id:
+          type: integer
+          description: Unique identifier for the posture
+          example: 421
+        posture_name:
+          type: string
+          description: Name of the security posture
+          example: Ensure that collaboration invitations are sent to allowed domains only
+        status:
+          type: string
+          description: Current compliance status
+          example: PENDING_EVALUATION
+        workflow_status:
+          type: string
+          description: Current workflow status
+          example: UNTRIAGED
+        risk_level:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Risk level of the posture
+        last_updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was last updated
+          example: '2025-04-24T07:50:04.086534Z'
+        last_evaluated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was last evaluated
+          example: '2025-04-24T07:50:04.087191Z'
+        posture_type:
+          type: string
+          description: Type of posture evaluation
+          example: MANUAL
+        benchmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisplayId'
+          description: List of security benchmarks this posture belongs to
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisplayId'
+          description: List of tags associated with the posture
+    BenchmarksEnum:
+      enum:
+      - CIS
+      type: string
     DisplayId:
       type: object
       properties:
@@ -538,13 +497,91 @@ components:
           type: string
           description: Internal identifier for the item
           example: high
-    StatusesEnum:
-      enum:
-      - NON_COMPLIANT
-      - COMPLIANT
-      - PENDING_EVALUATION
-      - PERMISSIONS_NEEDED
-      type: string
+    Section:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the section
+          example: ADMIN_CENTER
+        platform_type:
+          type: string
+          description: Platform type for this section
+          example: M365
+        display_name:
+          type: string
+          description: Human-readable name for the section
+          example: Admin Center
+        stats:
+          allOf:
+          - $ref: '#/components/schemas/PostureStats'
+          description: Statistics about postures in this section
+        posture_area:
+          allOf:
+          - $ref: '#/components/schemas/PostureArea'
+          description: Detailed information about the posture area
+    PostureTimelineResponse:
+      type: object
+      description: Paginated response serializer for posture timeline events.
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ResponseMetadata'
+          description: Response metadata including pagination information
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineEntry'
+          description: List of timeline events for the posture
+    DateRange:
+      type: object
+      properties:
+        from_date:
+          type: string
+          format: date-time
+          description: Start date for the range filter
+          example: '2025-01-01T00:00:00Z'
+        to_date:
+          type: string
+          format: date-time
+          description: End date for the range filter
+          example: '2025-12-31T23:59:59Z'
+    PostureDetail:
+      type: object
+      properties:
+        last_updated_time:
+          type: string
+          format: date-time
+          description: Timestamp when the posture was last updated
+          example: '2025-04-29T15:51:41.560354Z'
+        posture_name:
+          type: string
+          description: Name of the security posture
+          example: Ensure Microsoft Authenticator is configured to protect against MFA fatigue
+        status:
+          type: string
+          description: Current compliance status of the posture
+          example: NON_COMPLIANT
+        workflow_status:
+          type: string
+          description: Current workflow status for remediation
+          example: UNTRIAGED
+        actor:
+          allOf:
+          - $ref: '#/components/schemas/Actor'
+          description: Actor who last modified the posture
+        posture_type:
+          type: string
+          description: Type of posture evaluation (AUTO or MANUAL)
+          example: AUTO
+        description:
+          type: string
+          description: Detailed description of the security posture requirement
+          example: '**Microsoft Authenticator** should be configured to prevent MFA fatigue attacks...'
+        risk_level:
+          type: string
+          description: Risk level associated with this posture
+          example: HIGH
     PostureStats:
       type: object
       properties:
@@ -560,32 +597,37 @@ components:
           type: integer
           description: Number of postures that are non-compliant
           example: 13
-    PostureListResponse:
+    RiskLevelsEnum:
+      enum:
+      - LOW
+      - MED
+      - HIGH
+      type: string
+    PaginationMetadata:
       type: object
-      description: Paginated response serializer for posture list.
+      description: Serializer for pagination metadata.
       properties:
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-          description: Response metadata including pagination information
-        postures:
-          type: array
-          items:
-            $ref: '#/components/schemas/PostureListItem'
-          description: List of postures
-    DateRange:
-      type: object
-      properties:
-        from_date:
-          type: string
-          format: date-time
-          description: Start date for the range filter
-          example: '2025-01-01T00:00:00Z'
-        to_date:
-          type: string
-          format: date-time
-          description: End date for the range filter
-          example: '2025-12-31T23:59:59Z'
+        page:
+          type: integer
+          description: Current page number
+          example: 1
+        pageSize:
+          type: integer
+          description: Number of items per page
+          example: 10
+        totalResults:
+          type: integer
+          description: Total number of items available
+          example: 42
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 5
+      required:
+      - page
+      - pageSize
+      - totalPages
+      - totalResults
     PostureHighlight:
       type: object
       properties:
@@ -605,21 +647,6 @@ components:
           type: string
           description: Risk level of the highlighted posture
           example: HIGH
-    TextBlock:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Type of text block (TEXT, LINK, or STATUS)
-          example: TEXT
-        text:
-          type: string
-          description: Text content of the block
-          example: Abnormal Security
-        href:
-          type: string
-          description: URL for link type blocks
-          example: /home/knowledge/tenant/41ef22d1-8ada-4f0b-a384-5d78274bcedb
     PostureListParams:
       type: object
       properties:
@@ -673,42 +700,6 @@ components:
           example:
           - MANUAL
           - AUTO
-    PostureDetail:
-      type: object
-      properties:
-        last_updated_time:
-          type: string
-          format: date-time
-          description: Timestamp when the posture was last updated
-          example: '2025-04-29T15:51:41.560354Z'
-        posture_name:
-          type: string
-          description: Name of the security posture
-          example: Ensure Microsoft Authenticator is configured to protect against MFA fatigue
-        status:
-          type: string
-          description: Current compliance status of the posture
-          example: NON_COMPLIANT
-        workflow_status:
-          type: string
-          description: Current workflow status for remediation
-          example: UNTRIAGED
-        actor:
-          allOf:
-          - $ref: '#/components/schemas/Actor'
-          description: Actor who last modified the posture
-        posture_type:
-          type: string
-          description: Type of posture evaluation (AUTO or MANUAL)
-          example: AUTO
-        description:
-          type: string
-          description: Detailed description of the security posture requirement
-          example: '**Microsoft Authenticator** should be configured to prevent MFA fatigue attacks...'
-        risk_level:
-          type: string
-          description: Risk level associated with this posture
-          example: HIGH
     TimelineEntry:
       type: object
       properties:
@@ -720,56 +711,65 @@ components:
           allOf:
           - $ref: '#/components/schemas/TimelineEntryDetail'
           description: Detailed information about the timeline entry
-    Actor:
+    TimelineEntryDetail:
       type: object
       properties:
-        display_name:
-          type: string
-          description: Display name of the actor who performed the action
-          example: ABNORMAL_SECURITY
-    RiskLevelsEnum:
-      enum:
-      - LOW
-      - MED
-      - HIGH
-      type: string
-    PostureArea:
-      type: object
-      properties:
+        id:
+          type: integer
+          description: Unique identifier for the timeline entry
+          example: 175
         title:
           type: string
-          description: Title of the posture area
-          example: Admin Center Highlights
+          description: Title of the timeline event
+          example: Posture Workflow Status Updated
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the event was created
+          example: '2025-04-29T15:51:46.564185Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the event was last updated
+          example: '2025-04-29T15:51:46.564185Z'
         description:
-          type: string
-          description: Description of the posture area with security grade information
-          example: <p>Abnormal rates the security grade of Admin Center as &quot;B-&quot; because less than 25% of postures in this area are resolved...</p>
-        highlights:
           type: array
           items:
-            $ref: '#/components/schemas/PostureHighlight'
-          description: List of highlighted security postures in this area
-    WorkflowLogRawJson:
-      type: object
-      description: Serializer for the workflow log raw json response.
-      properties:
-        raw_json:
-          type: string
-          description: Raw JSON data from the workflow log
-          example: '{"status": "updated", "workflow_status": "UNTRIAGED", "timestamp": "2025-04-29T15:51:46.564185Z"}'
-    PostureTimelineResponse:
-      type: object
-      description: Paginated response serializer for posture timeline events.
-      properties:
-        metadata:
+            $ref: '#/components/schemas/TextBlock'
+          description: Structured description of the event as text blocks
+        category:
           allOf:
-          - $ref: '#/components/schemas/ResponseMetadata'
-          description: Response metadata including pagination information
-        events:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Category classification for the event
+        event_id:
+          type: string
+          description: External event identifier
+          example: 33646635-3331-6332-3964-363137646630
+        risk:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Risk level associated with the event
+        abnormality:
+          allOf:
+          - $ref: '#/components/schemas/DisplayId'
+          description: Abnormality level of the event
+    SPMReport:
+      type: object
+      properties:
+        sections:
           type: array
           items:
-            $ref: '#/components/schemas/TimelineEntry'
-          description: List of timeline events for the posture
+            $ref: '#/components/schemas/Section'
+          description: List of security posture sections organized by platform area
+  responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
   securitySchemes:
     BearerAuth:
       type: http

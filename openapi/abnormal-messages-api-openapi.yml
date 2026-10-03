@@ -208,17 +208,37 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   responses:
-    ThreatDoesNotExistError:
-      description: Threat does not exist
     TooManyRequestsError:
       description: Request count exceeds allowed number of concurrent requests for this resource type
     ForbiddenError:
       description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
     UnauthorizedError:
       description: Access token is missing or invalid
+    ThreatDoesNotExistError:
+      description: Threat does not exist
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
+    RemediationHistory:
+      type: object
+      properties:
+        remediation_history:
+          type: object
+          additionalProperties:
+            type: string
+            format: date-time
+          description: Remediation history of a threat.
+          example: '"Auto-Remediated": "2023-04-11T20:54:56.244716+00:00"'
+        folder_locations:
+          type: array
+          items:
+            type: string
+          description: Folder locations.
+          example:
+          - Junk
+      required:
+      - folder_locations
+      - remediation_history
     SoarAttachmentSignalsStruct:
       type: object
       description: Serializes a AttachmentSignalsPortalStruct object for Soar payload
@@ -308,26 +328,6 @@ components:
       - size
       - type
       - url
-    RemediationHistory:
-      type: object
-      properties:
-        remediation_history:
-          type: object
-          additionalProperties:
-            type: string
-            format: date-time
-          description: Remediation history of a threat.
-          example: '"Auto-Remediated": "2023-04-11T20:54:56.244716+00:00"'
-        folder_locations:
-          type: array
-          items:
-            type: string
-          description: Folder locations.
-          example:
-          - Junk
-      required:
-      - folder_locations
-      - remediation_history
   securitySchemes:
     BearerAuth:
       type: http

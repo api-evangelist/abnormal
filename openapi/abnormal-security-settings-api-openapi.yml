@@ -59,28 +59,11 @@ components:
   responses:
     TooManyRequestsError:
       description: Request count exceeds allowed number of concurrent requests for this resource type
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
     UnauthorizedError:
       description: Access token is missing or invalid
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
-    SessionSettingsSwagger:
-      type: object
-      description: Swagger serializer for session settings.
-      properties:
-        inactivity_timeout_minutes:
-          type:
-          - integer
-          - 'null'
-          description: Inactivity timeout in minutes (time before session expires due to inactivity)
-        max_session_time_minutes:
-          type:
-          - integer
-          - 'null'
-          description: Maximum session time in minutes (absolute max time before re-authentication required)
-      required:
-      - inactivity_timeout_minutes
-      - max_session_time_minutes
     SecuritySettingsResponse:
       type: object
       description: Swagger serializer for security settings response.
@@ -99,6 +82,23 @@ components:
           description: Security settings data
       required:
       - data
+    SessionSettingsSwagger:
+      type: object
+      description: Swagger serializer for session settings.
+      properties:
+        inactivity_timeout_minutes:
+          type:
+          - integer
+          - 'null'
+          description: Inactivity timeout in minutes (time before session expires due to inactivity)
+        max_session_time_minutes:
+          type:
+          - integer
+          - 'null'
+          description: Maximum session time in minutes (absolute max time before re-authentication required)
+      required:
+      - inactivity_timeout_minutes
+      - max_session_time_minutes
     SecuritySettingsDataSwagger:
       type: object
       description: Swagger serializer for security settings data.
