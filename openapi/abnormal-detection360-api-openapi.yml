@@ -115,6 +115,25 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   schemas:
+    PortalVisibleRootCause:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+      - description
+      - name
+    MissedGraymailReportTypeEnum:
+      enum:
+      - missed-graymail
+      type: string
+    InquiryTypeEnum:
+      enum:
+      - MISSED_ATTACK
+      - FALSE_POSITIVE
+      type: string
     FalseNegative:
       type: object
       properties:
@@ -146,34 +165,6 @@ components:
       - report_type
       - sender_email
       - subject
-    MissedGraymail:
-      type: object
-      properties:
-        report_type:
-          $ref: '#/components/schemas/MissedGraymailReportTypeEnum'
-          description: Type of report
-        recipient_email:
-          type: string
-        sender_email:
-          type: string
-        subject:
-          type: string
-        received_date:
-          type: string
-          description: Date the email was received in YYYY-MM-DD format.
-        description:
-          type: string
-          description: Free text to provide more context on the issue.
-          example: Alice does not want to see this email in her inbox.
-      required:
-      - recipient_email
-      - report_type
-      - sender_email
-      - subject
-    MissedGraymailReportTypeEnum:
-      enum:
-      - missed-graymail
-      type: string
     User:
       type: object
       properties:
@@ -187,20 +178,10 @@ components:
           example: lhching@bigcompany.com
       required:
       - name
-    MissedSpamReportTypeEnum:
+    MissedAttackReportTypeEnum:
       enum:
-      - missed-spam
+      - missed-attack
       type: string
-    PortalVisibleRootCause:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-      required:
-      - description
-      - name
     Detection360ReportRequest:
       oneOf:
       - $ref: '#/components/schemas/FalsePositive'
@@ -212,47 +193,6 @@ components:
         propertyName: report_type
         mapping:
           null: '#/components/schemas/MissedGraymail'
-    Detection360Report:
-      type: object
-      properties:
-        analysis:
-          type: string
-        root_causes:
-          type: array
-          items:
-            $ref: '#/components/schemas/PortalVisibleRootCause'
-      required:
-      - analysis
-      - root_causes
-    InquiryTypeEnum:
-      enum:
-      - MISSED_ATTACK
-      - FALSE_POSITIVE
-      type: string
-    MissedSpam:
-      type: object
-      properties:
-        report_type:
-          $ref: '#/components/schemas/MissedSpamReportTypeEnum'
-          description: Type of report
-        recipient_email:
-          type: string
-        sender_email:
-          type: string
-        subject:
-          type: string
-        received_date:
-          type: string
-          description: Date the email was received in YYYY-MM-DD format.
-        description:
-          type: string
-          description: Free text to provide more context on the issue.
-          example: Alice reported this email looked like spam.
-      required:
-      - recipient_email
-      - report_type
-      - sender_email
-      - subject
     Detection360Case:
       type: object
       properties:
@@ -284,42 +224,33 @@ components:
       enum:
       - false-negative
       type: string
-    FalsePositive:
+    MissedGraymail:
       type: object
       properties:
         report_type:
-          $ref: '#/components/schemas/FalsePositiveReportTypeEnum'
+          $ref: '#/components/schemas/MissedGraymailReportTypeEnum'
           description: Type of report
-        portal_link:
+        recipient_email:
           type: string
-          description: Link in Portal of the False Positive Threat
-          example: https://portal.abnormalsecurity.com/home/threat-center/remediation-history/1234567890
+        sender_email:
+          type: string
+        subject:
+          type: string
         received_date:
           type: string
           description: Date the email was received in YYYY-MM-DD format.
-          example: 2020/02/01
         description:
           type: string
           description: Free text to provide more context on the issue.
-          example: Alice reported this email was missing from their inbox.
+          example: Alice does not want to see this email in her inbox.
       required:
-      - portal_link
+      - recipient_email
       - report_type
+      - sender_email
+      - subject
     FalsePositiveReportTypeEnum:
       enum:
       - false-positive
-      type: string
-    Detection360CaseStatusEnum:
-      enum:
-      - UNREVIEWED
-      - CONTAINING_ATTACK
-      - IMPROVING_PLATFORM
-      - RESOLVED
-      - CORRECTING_JUDGEMENT
-      type: string
-    MissedAttackReportTypeEnum:
-      enum:
-      - missed-attack
       type: string
     MissedAttack:
       type: object
@@ -351,6 +282,75 @@ components:
       - report_type
       - sender_email
       - subject
+    Detection360Report:
+      type: object
+      properties:
+        analysis:
+          type: string
+        root_causes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortalVisibleRootCause'
+      required:
+      - analysis
+      - root_causes
+    MissedSpam:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/MissedSpamReportTypeEnum'
+          description: Type of report
+        recipient_email:
+          type: string
+        sender_email:
+          type: string
+        subject:
+          type: string
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice reported this email looked like spam.
+      required:
+      - recipient_email
+      - report_type
+      - sender_email
+      - subject
+    FalsePositive:
+      type: object
+      properties:
+        report_type:
+          $ref: '#/components/schemas/FalsePositiveReportTypeEnum'
+          description: Type of report
+        portal_link:
+          type: string
+          description: Link in Portal of the False Positive Threat
+          example: https://portal.abnormalsecurity.com/home/threat-center/remediation-history/1234567890
+        received_date:
+          type: string
+          description: Date the email was received in YYYY-MM-DD format.
+          example: 2020/02/01
+        description:
+          type: string
+          description: Free text to provide more context on the issue.
+          example: Alice reported this email was missing from their inbox.
+      required:
+      - portal_link
+      - report_type
+    Detection360CaseStatusEnum:
+      enum:
+      - UNREVIEWED
+      - CONTAINING_ATTACK
+      - IMPROVING_PLATFORM
+      - RESOLVED
+      - CORRECTING_JUDGEMENT
+      type: string
+    MissedSpamReportTypeEnum:
+      enum:
+      - missed-spam
+      type: string
   responses:
     TooManyRequestsError:
       description: Request count exceeds allowed number of concurrent requests for this resource type

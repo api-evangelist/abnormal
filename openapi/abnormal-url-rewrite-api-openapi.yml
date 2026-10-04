@@ -73,23 +73,36 @@ paths:
         '500':
           $ref: '#/components/schemas/Error'
 components:
-  responses:
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    UnauthorizedError:
-      description: Access token is missing or invalid
   schemas:
-    Error:
+    SoarUserAddress:
       type: object
-      description: Serializer for bad request error response.
+      description: Serializer for user address information.
       properties:
-        error:
+        name:
+          type:
+          - string
+          - 'null'
+          description: Display name of the user
+        emailAddress:
           type: string
-          description: Error message
+          description: Email address of the user who clicked the link
       required:
-      - error
+      - emailAddress
+    ClickedEventsResponseMetadata:
+      type: object
+      description: Serializer for response metadata containing pagination information.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/ClickedEventsPaginationMetadata'
+          description: Pagination information for the response
+        requestId:
+          type:
+          - string
+          - 'null'
+          description: Request ID for the API request
+      required:
+      - pagination
     ClickedEventsPaginationMetadata:
       type: object
       description: Serializer for pagination metadata on the clicked events response.
@@ -141,20 +154,6 @@ components:
       - from
       - sender
       - to
-    SoarUserAddress:
-      type: object
-      description: Serializer for user address information.
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          description: Display name of the user
-        emailAddress:
-          type: string
-          description: Email address of the user who clicked the link
-      required:
-      - emailAddress
     SoarClickedEvent:
       type: object
       description: Serializer for clicked event representation in responses.
@@ -211,21 +210,22 @@ components:
       required:
       - data
       - metadata
-    ClickedEventsResponseMetadata:
+    Error:
       type: object
-      description: Serializer for response metadata containing pagination information.
+      description: Serializer for bad request error response.
       properties:
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/ClickedEventsPaginationMetadata'
-          description: Pagination information for the response
-        requestId:
-          type:
-          - string
-          - 'null'
-          description: Request ID for the API request
+        error:
+          type: string
+          description: Error message
       required:
-      - pagination
+      - error
+  responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
   securitySchemes:
     BearerAuth:
       type: http

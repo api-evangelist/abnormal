@@ -64,24 +64,6 @@ components:
     NotFoundError:
       description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
-    SecuritySettingsResponse:
-      type: object
-      description: Swagger serializer for security settings response.
-      properties:
-        status:
-          type: string
-          default: success
-          description: Status of the response
-        status_code:
-          type: integer
-          default: 200
-          description: HTTP status code
-        data:
-          allOf:
-          - $ref: '#/components/schemas/SecuritySettingsDataSwagger'
-          description: Security settings data
-      required:
-      - data
     SessionSettingsSwagger:
       type: object
       description: Swagger serializer for session settings.
@@ -109,6 +91,24 @@ components:
           description: Session timeout settings
       required:
       - session_settings
+    SecuritySettingsResponse:
+      type: object
+      description: Swagger serializer for security settings response.
+      properties:
+        status:
+          type: string
+          default: success
+          description: Status of the response
+        status_code:
+          type: integer
+          default: 200
+          description: HTTP status code
+        data:
+          allOf:
+          - $ref: '#/components/schemas/SecuritySettingsDataSwagger'
+          description: Security settings data
+      required:
+      - data
   securitySchemes:
     BearerAuth:
       type: http

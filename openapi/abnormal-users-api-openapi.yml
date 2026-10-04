@@ -51,48 +51,7 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
-    PolicySwagger:
-      type: object
-      description: Swagger serializer for policy object within a role.
-      properties:
-        resource:
-          type: string
-          description: The resource name (e.g., 'threats', 'cases')
-        permissions:
-          type: array
-          items:
-            type: string
-          description: List of permissions granted on this resource
-      required:
-      - permissions
-      - resource
-    UserListResponse:
-      type: object
-      description: Swagger serializer for user list response.
-      properties:
-        status:
-          type: string
-          default: success
-          description: Status of the response
-        status_code:
-          type: integer
-          default: 200
-          description: HTTP status code
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserSwagger'
-          description: List of users from RBAC system with their roles and resource permissions
-      required:
-      - data
     UserSwagger:
       type: object
       description: Swagger serializer for user object.
@@ -130,21 +89,25 @@ components:
       required:
       - email
       - user_id
-    ResourcePermissionSwagger:
+    UserListResponse:
       type: object
-      description: Swagger serializer for resource permissions.
+      description: Swagger serializer for user list response.
       properties:
-        resource:
+        status:
           type: string
-          description: Name of the resource (e.g., 'ato', 'threat_log')
-        permissions:
+          default: success
+          description: Status of the response
+        status_code:
+          type: integer
+          default: 200
+          description: HTTP status code
+        data:
           type: array
           items:
-            type: string
-          description: List of permissions for this resource (e.g., 'view', 'write', 'manage')
+            $ref: '#/components/schemas/UserSwagger'
+          description: List of users from RBAC system with their roles and resource permissions
       required:
-      - permissions
-      - resource
+      - data
     RoleSwagger:
       type: object
       description: Swagger serializer for role object.
@@ -168,6 +131,43 @@ components:
       - id
       - name
       - policies
+    ResourcePermissionSwagger:
+      type: object
+      description: Swagger serializer for resource permissions.
+      properties:
+        resource:
+          type: string
+          description: Name of the resource (e.g., 'ato', 'threat_log')
+        permissions:
+          type: array
+          items:
+            type: string
+          description: List of permissions for this resource (e.g., 'view', 'write', 'manage')
+      required:
+      - permissions
+      - resource
+    PolicySwagger:
+      type: object
+      description: Swagger serializer for policy object within a role.
+      properties:
+        resource:
+          type: string
+          description: The resource name (e.g., 'threats', 'cases')
+        permissions:
+          type: array
+          items:
+            type: string
+          description: List of permissions granted on this resource
+      required:
+      - permissions
+      - resource
+  responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
   securitySchemes:
     BearerAuth:
       type: http

@@ -201,17 +201,6 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    InvalidDateError:
-      description: A date provided is in the wrong format or the date range is wider than the allowed range for this endpoint
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
     AbuseMailboxUnanalyzedMessage:
       type: object
@@ -238,56 +227,6 @@ components:
       - reported_datetime
       - reporter
       - subject
-    User:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the user
-          example: Ching Li-Hsieh
-        email:
-          type: string
-          description: The email address of the user
-          example: lhching@bigcompany.com
-      required:
-      - name
-    AbuseCampaign:
-      type: object
-      properties:
-        campaignId:
-          type: string
-          description: An id which maps to an abuse campaign.
-          example: fff51768-c446-34e1-97a8-9802c29c3ebd
-      required:
-      - campaignId
-    AbuseMailboxUnanalyzedResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AbuseMailboxUnanalyzedMessage'
-          description: A list of representations of messages that were reported to AI Security Mailbox (formerly known as Abuse Mailbox) but not analyzed.
-      required:
-      - results
-    PaginatedAbuseCampaings:
-      type: object
-      properties:
-        campaigns:
-          type: array
-          items:
-            $ref: '#/components/schemas/AbuseCampaign'
-          description: List of abuse campaign IDs.
-        pageNumber:
-          type: integer
-          default: 1
-          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
-        nextPageNumber:
-          type: integer
-          default: 2
-          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
-      required:
-      - campaigns
     AbuseCampaignDetails:
       type: object
       properties:
@@ -369,6 +308,67 @@ components:
       - NOT_ANALYZED_POV_QUOTA_REACHED
       - AI_CONVERSATION
       type: string
+    AbuseMailboxUnanalyzedResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbuseMailboxUnanalyzedMessage'
+          description: A list of representations of messages that were reported to AI Security Mailbox (formerly known as Abuse Mailbox) but not analyzed.
+      required:
+      - results
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: Ching Li-Hsieh
+        email:
+          type: string
+          description: The email address of the user
+          example: lhching@bigcompany.com
+      required:
+      - name
+    PaginatedAbuseCampaings:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbuseCampaign'
+          description: List of abuse campaign IDs.
+        pageNumber:
+          type: integer
+          default: 1
+          description: The current page number. Will not be be in the response if no filter query parameter is passed in via the request.
+        nextPageNumber:
+          type: integer
+          default: 2
+          description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
+      required:
+      - campaigns
+    AbuseCampaign:
+      type: object
+      properties:
+        campaignId:
+          type: string
+          description: An id which maps to an abuse campaign.
+          example: fff51768-c446-34e1-97a8-9802c29c3ebd
+      required:
+      - campaignId
+  responses:
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    InvalidDateError:
+      description: A date provided is in the wrong format or the date range is wider than the allowed range for this endpoint
   securitySchemes:
     BearerAuth:
       type: http

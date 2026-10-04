@@ -97,15 +97,40 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   responses:
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
     ForbiddenError:
       description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
     UnauthorizedError:
       description: Access token is missing or invalid
     NotFoundError:
       description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
+    AuditLogUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address of the user.
+      required:
+      - email
+    AuditLogResponse:
+      type: object
+      properties:
+        auditLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+        pageNumber:
+          type: integer
+          description: Current page number of the results
+        nextPageNumber:
+          type: integer
+          description: (Optional) Next page number to query for. Would not be returned if it was the last page
+      required:
+      - auditLogs
+      - pageNumber
     AuditLog:
       type: object
       properties:
@@ -142,22 +167,6 @@ components:
       - tenantName
       - timestamp
       - user
-    AuditLogResponse:
-      type: object
-      properties:
-        auditLogs:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditLog'
-        pageNumber:
-          type: integer
-          description: Current page number of the results
-        nextPageNumber:
-          type: integer
-          description: (Optional) Next page number to query for. Would not be returned if it was the last page
-      required:
-      - auditLogs
-      - pageNumber
     AuditLogActionDetails:
       type: object
       properties:
@@ -170,15 +179,6 @@ components:
         requestUrl:
           type: string
           description: URL for the request.
-    AuditLogUser:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          description: Email address of the user.
-      required:
-      - email
   securitySchemes:
     BearerAuth:
       type: http

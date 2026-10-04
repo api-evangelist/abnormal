@@ -137,6 +137,23 @@ components:
       - status
       - token_id
       - version
+    PaginationSwagger:
+      type: object
+      description: Swagger serializer for pagination metadata.
+      properties:
+        total:
+          type: integer
+          description: Total number of tokens matching criteria
+        limit:
+          type: integer
+          description: Maximum tokens returned in this response
+        offset:
+          type: integer
+          description: Number of tokens skipped
+      required:
+      - limit
+      - offset
+      - total
     TokenListResponseSwagger:
       type: object
       description: Swagger serializer for token list response.
@@ -161,23 +178,6 @@ components:
       required:
       - data
       - pagination
-    PaginationSwagger:
-      type: object
-      description: Swagger serializer for pagination metadata.
-      properties:
-        total:
-          type: integer
-          description: Total number of tokens matching criteria
-        limit:
-          type: integer
-          description: Maximum tokens returned in this response
-        offset:
-          type: integer
-          description: Number of tokens skipped
-      required:
-      - limit
-      - offset
-      - total
   securitySchemes:
     BearerAuth:
       type: http

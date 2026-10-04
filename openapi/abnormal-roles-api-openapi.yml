@@ -66,21 +66,25 @@ components:
     NotFoundError:
       description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
-    PolicySwagger:
+    RoleListResponse:
       type: object
-      description: Swagger serializer for policy object within a role.
+      description: Swagger serializer for role list response.
       properties:
-        resource:
+        status:
           type: string
-          description: The resource name (e.g., 'threats', 'cases')
-        permissions:
+          default: success
+          description: Status of the response
+        status_code:
+          type: integer
+          default: 200
+          description: HTTP status code
+        data:
           type: array
           items:
-            type: string
-          description: List of permissions granted on this resource
+            $ref: '#/components/schemas/RoleSwagger'
+          description: List of global roles from RBAC system
       required:
-      - permissions
-      - resource
+      - data
     RoleSwagger:
       type: object
       description: Swagger serializer for role object.
@@ -104,25 +108,21 @@ components:
       - id
       - name
       - policies
-    RoleListResponse:
+    PolicySwagger:
       type: object
-      description: Swagger serializer for role list response.
+      description: Swagger serializer for policy object within a role.
       properties:
-        status:
+        resource:
           type: string
-          default: success
-          description: Status of the response
-        status_code:
-          type: integer
-          default: 200
-          description: HTTP status code
-        data:
+          description: The resource name (e.g., 'threats', 'cases')
+        permissions:
           type: array
           items:
-            $ref: '#/components/schemas/RoleSwagger'
-          description: List of global roles from RBAC system
+            type: string
+          description: List of permissions granted on this resource
       required:
-      - data
+      - permissions
+      - resource
   securitySchemes:
     BearerAuth:
       type: http

@@ -192,37 +192,81 @@ paths:
           description: An unexpected error occurred on the server
 components:
   schemas:
-    BadRequestError:
+    CreateResource:
       type: object
-      description: 400 Bad Request error response.
+      description: Serializer for creating a new resource.
       properties:
-        error:
+        name:
           type: string
-          default: Bad request
-          description: The request was invalid or malformed
-    NotFoundError:
+          description: Name of the resource
+          maxLength: 255
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description of the resource
+          maxLength: 1000
+      required:
+      - name
+    ListResourcesResponse:
       type: object
-      description: 404 Not Found error response.
+      description: Serializer for list resources response.
       properties:
-        error:
-          type: string
-          default: Resource not found
-          description: Resource with the specified ID was not found
-    PerformActionResponse:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+          description: List of resources
+        total:
+          type: integer
+          description: Total number of resources matching the query
+        pageNumber:
+          type: integer
+          description: Current page number
+        nextPageNumber:
+          type:
+          - integer
+          - 'null'
+          description: Next page number if more pages exist
+      required:
+      - pageNumber
+      - resources
+      - total
+    Resource:
       type: object
-      description: Serializer for perform action response.
+      description: Serializer for resource representation in responses.
       properties:
-        actionId:
-          type: string
-          description: Unique ID for the action request
         resourceId:
           type: string
-          description: ID of the resource the action was performed on
+          description: Unique identifier for the resource
+        name:
+          type: string
+          description: Human-readable name of the resource
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description of the resource
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags
+      required:
+      - name
+      - resourceId
+    CreateResourceResponse:
+      type: object
+      description: Serializer for create resource response.
+      properties:
+        resourceId:
+          type: string
+          description: ID of the newly created resource
         status:
           type: string
-          description: Status of the action
+          description: Status of the creation operation
       required:
-      - actionId
       - resourceId
       - status
     GetResourceResponse:
@@ -248,29 +292,40 @@ components:
           type: string
           description: Updated description (can be empty string to clear)
           maxLength: 1000
-    Resource:
+    PerformActionResponse:
       type: object
-      description: Serializer for resource representation in responses.
+      description: Serializer for perform action response.
       properties:
+        actionId:
+          type: string
+          description: Unique ID for the action request
         resourceId:
           type: string
-          description: Unique identifier for the resource
-        name:
+          description: ID of the resource the action was performed on
+        status:
           type: string
-          description: Human-readable name of the resource
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional description of the resource
-        tags:
-          type: array
-          items:
-            type: string
-          description: List of tags
+          description: Status of the action
       required:
-      - name
+      - actionId
       - resourceId
+      - status
+    PerformAction:
+      type: object
+      description: Serializer for performing an action on a resource.
+      properties:
+        action:
+          $ref: '#/components/schemas/PerformActionActionEnum'
+          description: 'Action to perform: refresh or validate'
+      required:
+      - action
+    BadRequestError:
+      type: object
+      description: 400 Bad Request error response.
+      properties:
+        error:
+          type: string
+          default: Bad request
+          description: The request was invalid or malformed
     UpdateResourceResponse:
       type: object
       description: Serializer for update resource response.
@@ -284,69 +339,14 @@ components:
       required:
       - resourceId
       - status
-    ListResourcesResponse:
+    NotFoundError:
       type: object
-      description: Serializer for list resources response.
+      description: 404 Not Found error response.
       properties:
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/Resource'
-          description: List of resources
-        total:
-          type: integer
-          description: Total number of resources matching the query
-        pageNumber:
-          type: integer
-          description: Current page number
-        nextPageNumber:
-          type:
-          - integer
-          - 'null'
-          description: Next page number if more pages exist
-      required:
-      - pageNumber
-      - resources
-      - total
-    PerformAction:
-      type: object
-      description: Serializer for performing an action on a resource.
-      properties:
-        action:
-          $ref: '#/components/schemas/PerformActionActionEnum'
-          description: 'Action to perform: refresh or validate'
-      required:
-      - action
-    CreateResource:
-      type: object
-      description: Serializer for creating a new resource.
-      properties:
-        name:
+        error:
           type: string
-          description: Name of the resource
-          maxLength: 255
-          minLength: 1
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional description of the resource
-          maxLength: 1000
-      required:
-      - name
-    CreateResourceResponse:
-      type: object
-      description: Serializer for create resource response.
-      properties:
-        resourceId:
-          type: string
-          description: ID of the newly created resource
-        status:
-          type: string
-          description: Status of the creation operation
-      required:
-      - resourceId
-      - status
+          default: Resource not found
+          description: Resource with the specified ID was not found
   securitySchemes:
     BearerAuth:
       type: http

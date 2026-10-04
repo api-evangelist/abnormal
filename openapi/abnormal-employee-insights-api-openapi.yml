@@ -147,25 +147,7 @@ paths:
                 $ref: '#/components/responses/TooManyRequestsError'
           description: ''
 components:
-  responses:
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
-    EmployeeIdentityDetails:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmployeeGenomeDetails'
-      required:
-      - data
     EmployeeDetails:
       type: object
       properties:
@@ -190,26 +172,6 @@ components:
       - manager
       - name
       - title
-    EmployeeGenomeCategory:
-      type: object
-      properties:
-        value:
-          type: string
-          description: Category value
-          example: 203.12.172.182
-        percentage:
-          type: number
-          format: double
-          description: Ratio of this category relative to others
-          example: 0.9
-        total_count:
-          type: integer
-          description: Number of occurences for this category
-          example: 9
-      required:
-      - percentage
-      - total_count
-      - value
     EmployeeGenomeDetails:
       type: object
       properties:
@@ -234,6 +196,44 @@ components:
       - key
       - name
       - values
+    EmployeeIdentityDetails:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeGenomeDetails'
+      required:
+      - data
+    EmployeeGenomeCategory:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Category value
+          example: 203.12.172.182
+        percentage:
+          type: number
+          format: double
+          description: Ratio of this category relative to others
+          example: 0.9
+        total_count:
+          type: integer
+          description: Number of occurences for this category
+          example: 9
+      required:
+      - percentage
+      - total_count
+      - value
+  responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
   securitySchemes:
     BearerAuth:
       type: http

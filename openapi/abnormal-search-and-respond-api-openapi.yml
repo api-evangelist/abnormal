@@ -594,187 +594,6 @@ paths:
           description: Internal server error
 components:
   schemas:
-    ActivityLogEntry:
-      properties:
-        activity_id:
-          title: Activity Id
-          type: integer
-        action:
-          $ref: '#/components/schemas/ActionEnum'
-        status:
-          $ref: '#/components/schemas/ActionStatusEnum'
-        performed_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Performed By
-        timestamp:
-          format: date-time
-          title: Timestamp
-          type: string
-        result_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: null
-          title: Result Count
-        parameters:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          default: null
-          title: Parameters
-        submit_d360_case:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          default: null
-          title: Submit D360 Case
-      required:
-      - activity_id
-      - action
-      - status
-      - timestamp
-      title: ActivityLogEntry
-      type: object
-    RemediationRequest:
-      properties:
-        action:
-          $ref: '#/components/schemas/RemediationActionEnum'
-          description: Remediation action
-        source:
-          $ref: '#/components/schemas/EmailSourceEnum'
-          description: Source of the messages
-        remediation_reason:
-          $ref: '#/components/schemas/ActionReasonEnum'
-          description: Reason for remediation
-        target_folder:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          description: Target folder for move actions
-          title: Target Folder
-        submit_d360_case:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          default: false
-          title: Submit D360 Case
-        messages:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/MessageToRemediate'
-            type: array
-          - type: 'null'
-          default: null
-          title: Messages
-        remediate_all:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          default: false
-          title: Remediate All
-        search_filters:
-          anyOf:
-          - $ref: '#/components/schemas/SearchFilters'
-          - type: 'null'
-          default: null
-        tenant_ids:
-          anyOf:
-          - items:
-              type: integer
-            minItems: 1
-            type: array
-          - type: 'null'
-          default: null
-          description: Optional list of tenant IDs to filter remediation. If not provided, all authorized tenants are included.
-          title: Tenant Ids
-      required:
-      - action
-      - source
-      - remediation_reason
-      title: RemediationRequest
-      type: object
-    RemediationResponse:
-      properties:
-        activity_log_id:
-          title: Activity Log Id
-          type: integer
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-      required:
-      - activity_log_id
-      - metadata
-      title: RemediationResponse
-      type: object
-    MetaData:
-      properties:
-        trace_id:
-          title: Trace Id
-          type: string
-        response_time:
-          title: Response Time
-          type: string
-      required:
-      - trace_id
-      - response_time
-      title: MetaData
-      type: object
-    EmailSourceEnum:
-      enum:
-      - abnormal
-      - quarantine
-      title: EmailSourceEnum
-      type: string
-    Attachment:
-      properties:
-        name:
-          title: Name
-          type: string
-        md5_hash:
-          title: Md5 Hash
-          type: string
-      required:
-      - name
-      - md5_hash
-      title: Attachment
-      type: object
-    ActionEnum:
-      enum:
-      - search
-      - remediation
-      - csv_export
-      title: ActionEnum
-      type: string
-    ActivitiesResponse:
-      properties:
-        activities:
-          items:
-            $ref: '#/components/schemas/ActivityLogEntry'
-          title: Activities
-          type: array
-        total:
-          title: Total
-          type: integer
-        pageNumber:
-          title: Pagenumber
-          type: integer
-        pageSize:
-          title: Pagesize
-          type: integer
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-      required:
-      - activities
-      - total
-      - pageNumber
-      - pageSize
-      - metadata
-      title: ActivitiesResponse
-      type: object
     RemediationDetail:
       properties:
         tenant_id:
@@ -848,53 +667,20 @@ components:
       - status
       title: RemediationDetail
       type: object
-    QuarantineInfo:
-      properties:
-        identity:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Identity
-        message_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Message Id
-        policy_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Policy Type
-        quarantine_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Quarantine Reason
-        release_status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Release Status
-        type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: null
-          title: Type
-        processed_at:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          default: null
-          title: Processed At
-      title: QuarantineInfo
-      type: object
+    JudgementSourceEnum:
+      enum:
+      - ABNORMAL_SYSTEM
+      - CUSTOMER_AI_MODEL
+      title: JudgementSourceEnum
+      type: string
+    ActionStatusEnum:
+      enum:
+      - pending
+      - success
+      - partial_success
+      - error
+      title: ActionStatusEnum
+      type: string
     SearchFilters:
       properties:
         start_time:
@@ -1009,44 +795,6 @@ components:
       - start_time
       - end_time
       title: SearchFilters
-      type: object
-    RemediationActionEnum:
-      enum:
-      - delete
-      - move_to_inbox
-      title: RemediationActionEnum
-      type: string
-    SearchResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/SearchResult'
-          title: Results
-          type: array
-        total:
-          title: Total
-          type: integer
-        pageNumber:
-          title: Pagenumber
-          type: integer
-        pageSize:
-          title: Pagesize
-          type: integer
-        nextPageNumber:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: null
-          title: Nextpagenumber
-        metadata:
-          $ref: '#/components/schemas/MetaData'
-      required:
-      - results
-      - total
-      - pageNumber
-      - pageSize
-      - metadata
-      title: SearchResponse
       type: object
     SearchResult:
       properties:
@@ -1199,6 +947,105 @@ components:
           default: null
       title: SearchResult
       type: object
+    MetaData:
+      properties:
+        trace_id:
+          title: Trace Id
+          type: string
+        response_time:
+          title: Response Time
+          type: string
+      required:
+      - trace_id
+      - response_time
+      title: MetaData
+      type: object
+    ActivityLogEntry:
+      properties:
+        activity_id:
+          title: Activity Id
+          type: integer
+        action:
+          $ref: '#/components/schemas/ActionEnum'
+        status:
+          $ref: '#/components/schemas/ActionStatusEnum'
+        performed_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Performed By
+        timestamp:
+          format: date-time
+          title: Timestamp
+          type: string
+        result_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Result Count
+        parameters:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          default: null
+          title: Parameters
+        submit_d360_case:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          title: Submit D360 Case
+      required:
+      - activity_id
+      - action
+      - status
+      - timestamp
+      title: ActivityLogEntry
+      type: object
+    ActionEnum:
+      enum:
+      - search
+      - remediation
+      - csv_export
+      title: ActionEnum
+      type: string
+    ActivitiesResponse:
+      properties:
+        activities:
+          items:
+            $ref: '#/components/schemas/ActivityLogEntry'
+          title: Activities
+          type: array
+        total:
+          title: Total
+          type: integer
+        pageNumber:
+          title: Pagenumber
+          type: integer
+        pageSize:
+          title: Pagesize
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - activities
+      - total
+      - pageNumber
+      - pageSize
+      - metadata
+      title: ActivitiesResponse
+      type: object
+    DecisionCategoryEnum:
+      enum:
+      - malicious
+      - spam
+      - safe
+      - graymail
+      title: DecisionCategoryEnum
+      type: string
     SearchRequest:
       properties:
         source:
@@ -1222,30 +1069,38 @@ components:
       - filters
       title: SearchRequest
       type: object
-    JudgementEnum:
-      enum:
-      - attack
-      - borderline
-      - spam
-      - graymail
-      - safe
-      title: JudgementEnum
-      type: string
-    JudgementSourceEnum:
-      enum:
-      - ABNORMAL_SYSTEM
-      - CUSTOMER_AI_MODEL
-      title: JudgementSourceEnum
-      type: string
-    ActionReasonEnum:
-      enum:
-      - false_negative
-      - unsolicited
-      - other
-      - groups_remediation
-      - quarantine_release
-      title: ActionReasonEnum
-      type: string
+    SearchResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/SearchResult'
+          title: Results
+          type: array
+        total:
+          title: Total
+          type: integer
+        pageNumber:
+          title: Pagenumber
+          type: integer
+        pageSize:
+          title: Pagesize
+          type: integer
+        nextPageNumber:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          title: Nextpagenumber
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - results
+      - total
+      - pageNumber
+      - pageSize
+      - metadata
+      title: SearchResponse
+      type: object
     ActivityStatusResponse:
       properties:
         activity_id:
@@ -1301,14 +1156,118 @@ components:
       - metadata
       title: ActivityStatusResponse
       type: object
-    DecisionCategoryEnum:
+    EmailSourceEnum:
       enum:
-      - malicious
-      - spam
-      - safe
-      - graymail
-      title: DecisionCategoryEnum
+      - abnormal
+      - quarantine
+      title: EmailSourceEnum
       type: string
+    QuarantineInfo:
+      properties:
+        identity:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Identity
+        message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Message Id
+        policy_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Policy Type
+        quarantine_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Quarantine Reason
+        release_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Release Status
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Type
+        processed_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Processed At
+      title: QuarantineInfo
+      type: object
+    RemediationRequest:
+      properties:
+        action:
+          $ref: '#/components/schemas/RemediationActionEnum'
+          description: Remediation action
+        source:
+          $ref: '#/components/schemas/EmailSourceEnum'
+          description: Source of the messages
+        remediation_reason:
+          $ref: '#/components/schemas/ActionReasonEnum'
+          description: Reason for remediation
+        target_folder:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Target folder for move actions
+          title: Target Folder
+        submit_d360_case:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Submit D360 Case
+        messages:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MessageToRemediate'
+            type: array
+          - type: 'null'
+          default: null
+          title: Messages
+        remediate_all:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          title: Remediate All
+        search_filters:
+          anyOf:
+          - $ref: '#/components/schemas/SearchFilters'
+          - type: 'null'
+          default: null
+        tenant_ids:
+          anyOf:
+          - items:
+              type: integer
+            minItems: 1
+            type: array
+          - type: 'null'
+          default: null
+          description: Optional list of tenant IDs to filter remediation. If not provided, all authorized tenants are included.
+          title: Tenant Ids
+      required:
+      - action
+      - source
+      - remediation_reason
+      title: RemediationRequest
+      type: object
     MessageToRemediate:
       properties:
         tenant_id:
@@ -1362,13 +1321,54 @@ components:
       - received_time
       title: MessageToRemediate
       type: object
-    ActionStatusEnum:
+    JudgementEnum:
       enum:
-      - pending
-      - success
-      - partial_success
-      - error
-      title: ActionStatusEnum
+      - attack
+      - borderline
+      - spam
+      - graymail
+      - safe
+      title: JudgementEnum
+      type: string
+    RemediationActionEnum:
+      enum:
+      - delete
+      - move_to_inbox
+      title: RemediationActionEnum
+      type: string
+    Attachment:
+      properties:
+        name:
+          title: Name
+          type: string
+        md5_hash:
+          title: Md5 Hash
+          type: string
+      required:
+      - name
+      - md5_hash
+      title: Attachment
+      type: object
+    RemediationResponse:
+      properties:
+        activity_log_id:
+          title: Activity Log Id
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/MetaData'
+      required:
+      - activity_log_id
+      - metadata
+      title: RemediationResponse
+      type: object
+    ActionReasonEnum:
+      enum:
+      - false_negative
+      - unsolicited
+      - other
+      - groups_remediation
+      - quarantine_release
+      title: ActionReasonEnum
       type: string
   securitySchemes:
     BearerAuth:
