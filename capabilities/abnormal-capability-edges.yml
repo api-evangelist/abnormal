@@ -1,0 +1,121 @@
+slug: abnormal
+provider: Abnormal AI
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 10
+edges:
+- tag: Threats
+  spec_file: abnormal-threats-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.95
+  evidence: '"Get a list of threats", "Manage a Threat identified by Abnormal Security", "Check the status
+    of an action requested on a threat", "Download data from Threat Log in .csv format"'
+  reason: Operations enumerate, investigate and remediate detected email security threats with action
+    status tracking — textbook threat detection and response.
+- tag: Cases
+  spec_file: abnormal-cases-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.9
+  evidence: GET /cases 'Get a list of Abnormal cases identified by Abnormal Security'; schemas RemediationStatusEnum,
+    MFAFailureEvent, RiskEvent, CaseAnalysis
+  reason: Cases are account-takeover/risk investigations with analysis timelines, severity, confidence
+    and remediation actions — security incident investigation and response, i.e. SOC-style detection and
+    response.
+- tag: Search and Respond
+  spec_file: abnormal-search-and-respond-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.9
+  evidence: POST /search 'Search for email messages'; POST /search/remediate 'Remediate email messages';
+    schemas RemediationRequest, QuarantineInfo
+  reason: Threat hunting across email plus bulk remediation/quarantine actions and activity logs for those
+    actions — classic security detection and response tooling, not a generic search feature.
+- tag: AI Security Mailbox (formerly known as Abuse Mailbox)
+  spec_file: abnormal-ai-security-mailbox-formerly-known-as-abuse-mailbox-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.85
+  evidence: GET /abusecampaigns  'Get a list of campaigns submitted to AI Security Mailbox'; schema AbuseCampaignDetails
+  reason: Operations expose user-reported phishing/abuse submissions and the resulting abuse campaigns
+    analysed by the platform — email threat triage and response, squarely Threat Detection & Response.
+- tag: URL Rewrite
+  spec_file: abnormal-url-rewrite-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.8
+  evidence: GET /url-rewrite/clicked-events — "Get URL rewrite click and clickthrough events"; schemas
+    SoarClickedEvent, SoarMessageMetadata
+  reason: Exposes click telemetry from the phishing-link rewrite control, feeding SOC detection and investigation
+    of malicious link activity; SOAR-prefixed schemas confirm the security-operations context rather than
+    marketing click tracking.
+- tag: Users
+  spec_file: abnormal-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: GET /users — "Get a list of users from RBAC user management system"; schemas RoleSwagger,
+    PolicySwagger, ResourcePermissionSwagger
+  reason: Users here are console accounts in an RBAC system with roles, policies and resource permissions
+    — identity and access management, not HR employee records.
+- tag: Messages
+  spec_file: abnormal-messages-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.78
+  evidence: GET /messages/{message_id}/remediation_history 'Get details of the remediation history for
+    a threat log message'
+  reason: Retrieval of threat-log email messages, attachments and their remediation history supports security
+    investigation and response workflows; the remediation-history operation grounds the detection-and-response
+    reading.
+- tag: Detection360
+  spec_file: abnormal-detection360-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.72
+  evidence: POST /detection360/reports 'Submit a detection misclassification report'; schemas FalseNegative,
+    FalsePositive, MissedAttack
+  reason: Submission and tracking of missed-attack / false-positive reports to tune the email threat detection
+    engine — a detection-quality feedback loop within threat detection and response. Could arguably be
+    read as product feedback, so confidence is moderate.
+- tag: Dashboard Aggregations
+  spec_file: abnormal-dashboard-aggregations-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.7
+  evidence: GET /aggregations/attack_frequency 'Retrieve the frequency of specific attack types'; GET
+    /aggregations/attacker_origin; schema TrendingAttacks
+  reason: Aggregated reporting on attacks detected and stopped, attack vectors, strategies and impersonation
+    targets. This is security-operations reporting over detection data; some ambiguity as to whether it
+    belongs under detection/response or security governance reporting, hence moderate confidence.
+- tag: Vendors
+  spec_file: abnormal-vendors-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.7
+  evidence: '"Get a list of vendor cases", "Get details of a vendor case", "Get activity of a vendor your
+    organization has interacted with"; schemas VendorCaseInsights, VendorInvestigationEventTimeline'
+  reason: 'Homograph: these are vendor email compromise/fraud cases investigated by the security platform
+    (case insights, investigation event timelines), not supplier onboarding or performance management.
+    Maps to security detection and investigation; some residual overlap with supplier risk keeps confidence
+    moderate.'
