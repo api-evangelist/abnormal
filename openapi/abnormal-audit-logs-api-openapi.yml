@@ -96,25 +96,19 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
-    AuditLogUser:
+    AuditLogActionDetails:
       type: object
       properties:
-        email:
+        messageId:
           type: string
-          format: email
-          description: Email address of the user.
-      required:
-      - email
+          description: ID of the message on which an action was performed.
+        providedReason:
+          type: string
+          description: Reason provided for performing the action.
+        requestUrl:
+          type: string
+          description: URL for the request.
     AuditLogResponse:
       type: object
       properties:
@@ -131,6 +125,15 @@ components:
       required:
       - auditLogs
       - pageNumber
+    AuditLogUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address of the user.
+      required:
+      - email
     AuditLog:
       type: object
       properties:
@@ -167,18 +170,15 @@ components:
       - tenantName
       - timestamp
       - user
-    AuditLogActionDetails:
-      type: object
-      properties:
-        messageId:
-          type: string
-          description: ID of the message on which an action was performed.
-        providedReason:
-          type: string
-          description: Reason provided for performing the action.
-        requestUrl:
-          type: string
-          description: URL for the request.
+  responses:
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http

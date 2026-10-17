@@ -56,14 +56,25 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequestsError'
 components:
-  responses:
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
   schemas:
+    SecuritySettingsResponse:
+      type: object
+      description: Swagger serializer for security settings response.
+      properties:
+        status:
+          type: string
+          default: success
+          description: Status of the response
+        status_code:
+          type: integer
+          default: 200
+          description: HTTP status code
+        data:
+          allOf:
+          - $ref: '#/components/schemas/SecuritySettingsDataSwagger'
+          description: Security settings data
+      required:
+      - data
     SessionSettingsSwagger:
       type: object
       description: Swagger serializer for session settings.
@@ -91,24 +102,13 @@ components:
           description: Session timeout settings
       required:
       - session_settings
-    SecuritySettingsResponse:
-      type: object
-      description: Swagger serializer for security settings response.
-      properties:
-        status:
-          type: string
-          default: success
-          description: Status of the response
-        status_code:
-          type: integer
-          default: 200
-          description: HTTP status code
-        data:
-          allOf:
-          - $ref: '#/components/schemas/SecuritySettingsDataSwagger'
-          description: Security settings data
-      required:
-      - data
+  responses:
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http

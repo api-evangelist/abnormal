@@ -293,31 +293,15 @@ components:
       - recipientAddress
       - recipientName
       - subject
-    NotAnalyzedReasonEnum:
-      enum:
-      - PHISHING_SIMULATION
-      - EXCLUDED_SENDER
-      - CUSTOM_FILTER
-      - INVALID_MAILBOX
-      - ORIGINAL_EMAIL_NOT_LOCATED
-      - UNKNOWN_REPORTER
-      - INVALID_SUBMISSION
-      - ROUTED_SUBMISSION
-      - COULD_NOT_EXTRACT
-      - FROM_PHISHING_MAILBOX
-      - NOT_ANALYZED_POV_QUOTA_REACHED
-      - AI_CONVERSATION
-      type: string
-    AbuseMailboxUnanalyzedResponse:
+    AbuseCampaign:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AbuseMailboxUnanalyzedMessage'
-          description: A list of representations of messages that were reported to AI Security Mailbox (formerly known as Abuse Mailbox) but not analyzed.
+        campaignId:
+          type: string
+          description: An id which maps to an abuse campaign.
+          example: fff51768-c446-34e1-97a8-9802c29c3ebd
       required:
-      - results
+      - campaignId
     User:
       type: object
       properties:
@@ -349,26 +333,42 @@ components:
           description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
       required:
       - campaigns
-    AbuseCampaign:
+    AbuseMailboxUnanalyzedResponse:
       type: object
       properties:
-        campaignId:
-          type: string
-          description: An id which maps to an abuse campaign.
-          example: fff51768-c446-34e1-97a8-9802c29c3ebd
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbuseMailboxUnanalyzedMessage'
+          description: A list of representations of messages that were reported to AI Security Mailbox (formerly known as Abuse Mailbox) but not analyzed.
       required:
-      - campaignId
+      - results
+    NotAnalyzedReasonEnum:
+      enum:
+      - PHISHING_SIMULATION
+      - EXCLUDED_SENDER
+      - CUSTOM_FILTER
+      - INVALID_MAILBOX
+      - ORIGINAL_EMAIL_NOT_LOCATED
+      - UNKNOWN_REPORTER
+      - INVALID_SUBMISSION
+      - ROUTED_SUBMISSION
+      - COULD_NOT_EXTRACT
+      - FROM_PHISHING_MAILBOX
+      - NOT_ANALYZED_POV_QUOTA_REACHED
+      - AI_CONVERSATION
+      type: string
   responses:
-    NotFoundError:
-      description: Invalid user input when using the filter query parameter. Will return various error messages
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
     ForbiddenError:
       description: Access to the resource is forbidden (e.g. IP not in allowlist)
     InvalidDateError:
       description: A date provided is in the wrong format or the date range is wider than the allowed range for this endpoint
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
+    NotFoundError:
+      description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
   securitySchemes:
     BearerAuth:
       type: http

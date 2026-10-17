@@ -74,20 +74,52 @@ paths:
           $ref: '#/components/schemas/Error'
 components:
   schemas:
-    SoarUserAddress:
+    ClickedEventsPaginationMetadata:
       type: object
-      description: Serializer for user address information.
+      description: Serializer for pagination metadata on the clicked events response.
       properties:
-        name:
+        nextOffset:
           type:
           - string
           - 'null'
-          description: Display name of the user
-        emailAddress:
-          type: string
-          description: Email address of the user who clicked the link
+          description: Offset token for the next page if more results exist
+        limit:
+          type:
+          - integer
+          - 'null'
+          description: Limit of the results
+    ClickedEventsResponse:
+      type: object
+      description: 'Serializer for clicked events response.
+
+
+        Note: the "data" field is injected below via `_declared_fields` because a
+
+        class attribute named `data` would shadow DRF''s `Serializer.data` property
+
+        (basedpyright also flags the conflict).'
+      properties:
+        metadata:
+          allOf:
+          - $ref: '#/components/schemas/ClickedEventsResponseMetadata'
+          description: Response metadata including pagination
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SoarClickedEvent'
+          description: List of clicked events
       required:
-      - emailAddress
+      - data
+      - metadata
+    Error:
+      type: object
+      description: Serializer for bad request error response.
+      properties:
+        error:
+          type: string
+          description: Error message
+      required:
+      - error
     ClickedEventsResponseMetadata:
       type: object
       description: Serializer for response metadata containing pagination information.
@@ -103,20 +135,6 @@ components:
           description: Request ID for the API request
       required:
       - pagination
-    ClickedEventsPaginationMetadata:
-      type: object
-      description: Serializer for pagination metadata on the clicked events response.
-      properties:
-        nextOffset:
-          type:
-          - string
-          - 'null'
-          description: Offset token for the next page if more results exist
-        limit:
-          type:
-          - integer
-          - 'null'
-          description: Limit of the results
     SoarMessageMetadata:
       type: object
       description: 'Serializer for message metadata.
@@ -187,45 +205,27 @@ components:
       - messageMetadata
       - type
       - user
-    ClickedEventsResponse:
+    SoarUserAddress:
       type: object
-      description: 'Serializer for clicked events response.
-
-
-        Note: the "data" field is injected below via `_declared_fields` because a
-
-        class attribute named `data` would shadow DRF''s `Serializer.data` property
-
-        (basedpyright also flags the conflict).'
+      description: Serializer for user address information.
       properties:
-        metadata:
-          allOf:
-          - $ref: '#/components/schemas/ClickedEventsResponseMetadata'
-          description: Response metadata including pagination
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SoarClickedEvent'
-          description: List of clicked events
-      required:
-      - data
-      - metadata
-    Error:
-      type: object
-      description: Serializer for bad request error response.
-      properties:
-        error:
+        name:
+          type:
+          - string
+          - 'null'
+          description: Display name of the user
+        emailAddress:
           type: string
-          description: Error message
+          description: Email address of the user who clicked the link
       required:
-      - error
+      - emailAddress
   responses:
+    ForbiddenError:
+      description: Access to the resource is forbidden (e.g. IP not in allowlist)
     TooManyRequestsError:
       description: Request count exceeds allowed number of concurrent requests for this resource type
     UnauthorizedError:
       description: Access token is missing or invalid
-    ForbiddenError:
-      description: Access to the resource is forbidden (e.g. IP not in allowlist)
   securitySchemes:
     BearerAuth:
       type: http

@@ -192,23 +192,23 @@ paths:
           description: An unexpected error occurred on the server
 components:
   schemas:
-    CreateResource:
+    PerformAction:
       type: object
-      description: Serializer for creating a new resource.
+      description: Serializer for performing an action on a resource.
       properties:
-        name:
-          type: string
-          description: Name of the resource
-          maxLength: 255
-          minLength: 1
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional description of the resource
-          maxLength: 1000
+        action:
+          $ref: '#/components/schemas/PerformActionActionEnum'
+          description: 'Action to perform: refresh or validate'
       required:
-      - name
+      - action
+    PatchedUpdateResource:
+      type: object
+      description: Serializer for updating an existing resource.
+      properties:
+        description:
+          type: string
+          description: Updated description (can be empty string to clear)
+          maxLength: 1000
     ListResourcesResponse:
       type: object
       description: Serializer for list resources response.
@@ -233,6 +233,61 @@ components:
       - pageNumber
       - resources
       - total
+    PerformActionResponse:
+      type: object
+      description: Serializer for perform action response.
+      properties:
+        actionId:
+          type: string
+          description: Unique ID for the action request
+        resourceId:
+          type: string
+          description: ID of the resource the action was performed on
+        status:
+          type: string
+          description: Status of the action
+      required:
+      - actionId
+      - resourceId
+      - status
+    CreateResource:
+      type: object
+      description: Serializer for creating a new resource.
+      properties:
+        name:
+          type: string
+          description: Name of the resource
+          maxLength: 255
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description of the resource
+          maxLength: 1000
+      required:
+      - name
+    UpdateResourceResponse:
+      type: object
+      description: Serializer for update resource response.
+      properties:
+        resourceId:
+          type: string
+          description: ID of the updated resource
+        status:
+          type: string
+          description: Status of the update operation
+      required:
+      - resourceId
+      - status
+    NotFoundError:
+      type: object
+      description: 404 Not Found error response.
+      properties:
+        error:
+          type: string
+          default: Resource not found
+          description: Resource with the specified ID was not found
     Resource:
       type: object
       description: Serializer for resource representation in responses.
@@ -279,45 +334,6 @@ components:
           description: The requested resource
       required:
       - resource
-    PerformActionActionEnum:
-      enum:
-      - refresh
-      - validate
-      type: string
-    PatchedUpdateResource:
-      type: object
-      description: Serializer for updating an existing resource.
-      properties:
-        description:
-          type: string
-          description: Updated description (can be empty string to clear)
-          maxLength: 1000
-    PerformActionResponse:
-      type: object
-      description: Serializer for perform action response.
-      properties:
-        actionId:
-          type: string
-          description: Unique ID for the action request
-        resourceId:
-          type: string
-          description: ID of the resource the action was performed on
-        status:
-          type: string
-          description: Status of the action
-      required:
-      - actionId
-      - resourceId
-      - status
-    PerformAction:
-      type: object
-      description: Serializer for performing an action on a resource.
-      properties:
-        action:
-          $ref: '#/components/schemas/PerformActionActionEnum'
-          description: 'Action to perform: refresh or validate'
-      required:
-      - action
     BadRequestError:
       type: object
       description: 400 Bad Request error response.
@@ -326,27 +342,11 @@ components:
           type: string
           default: Bad request
           description: The request was invalid or malformed
-    UpdateResourceResponse:
-      type: object
-      description: Serializer for update resource response.
-      properties:
-        resourceId:
-          type: string
-          description: ID of the updated resource
-        status:
-          type: string
-          description: Status of the update operation
-      required:
-      - resourceId
-      - status
-    NotFoundError:
-      type: object
-      description: 404 Not Found error response.
-      properties:
-        error:
-          type: string
-          default: Resource not found
-          description: Resource with the specified ID was not found
+    PerformActionActionEnum:
+      enum:
+      - refresh
+      - validate
+      type: string
   securitySchemes:
     BearerAuth:
       type: http

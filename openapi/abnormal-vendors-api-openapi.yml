@@ -234,15 +234,6 @@ paths:
           $ref: '#/components/responses/TooManyRequestsError'
 components:
   schemas:
-    Vendors:
-      type: object
-      properties:
-        vendorDomain:
-          type: string
-          description: The domain used by the vendor.
-          example: vendor.com
-      required:
-      - vendorDomain
     VendorCaseInsights:
       type: object
       properties:
@@ -255,23 +246,51 @@ components:
       required:
       - description
       - highlight
-    VendorActivity:
+    VendorCaseTimeline:
       type: object
       properties:
-        eventTimeline:
-          type: array
-          items:
-            $ref: '#/components/schemas/VendorActivityEvent'
+        eventTimestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp of event
+          example: '2021-01-01T00:00:00Z'
+        senderAddress:
+          type: string
+          description: Sender Address
+          example: alice@vendor.com
+        recipientAddress:
+          type: string
+          description: Recipient Address
+          example: bob@company.com
+        subject:
+          type: string
+          description: Subject of the event
+          example: Click Me!
+        markedAs:
+          type: string
+          readOnly: true
+          description: Indication if your organisation has interacted with email
+          example: Malicious
+        threatId:
+          type: string
+          description: Unique ID of email threat. May be used in /threats endpoint
+          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
       required:
-      - eventTimeline
-    PaginatedVendorCases:
+      - eventTimestamp
+      - markedAs
+      - recipientAddress
+      - senderAddress
+      - subject
+      - threatId
+    PaginatedVendors:
       type: object
       properties:
-        vendorCases:
+        vendors:
           type: array
           items:
-            $ref: '#/components/schemas/VendorCases'
-          description: List of vendor cases.
+            $ref: '#/components/schemas/Vendors'
+          description: List of vendors.
         pageNumber:
           type: integer
           default: 1
@@ -281,7 +300,78 @@ components:
           default: 2
           description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
       required:
-      - vendorCases
+      - vendors
+    VendorActivityEvent:
+      oneOf:
+      - $ref: '#/components/schemas/VendorFederatedEventTimeline'
+      - $ref: '#/components/schemas/VendorInvestigationEventTimeline'
+    VendorFederatedEventTimeline:
+      type: object
+      properties:
+        eventTimestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp of event
+          example: '2021-01-01T00:00:00Z'
+        eventType:
+          type: string
+          readOnly: true
+          description: Type of event detected
+          example: Federated Signal
+        suspiciousDomain:
+          type: string
+          readOnly: true
+          description: Domain which event originated from
+          example: alice@vendor.com
+        domainIp:
+          type: string
+          readOnly: true
+          description: IP address which event originated from
+          example: 127.0.0.1
+        ipGeolocation:
+          type: string
+          readOnly: true
+          description: Country Code which event originated from
+          example: US
+        attackGoal:
+          type: string
+          readOnly: true
+          description: Objectives behind event
+          example: malware and ransom
+      required:
+      - attackGoal
+      - domainIp
+      - eventTimestamp
+      - eventType
+      - ipGeolocation
+      - suspiciousDomain
+    Vendors:
+      type: object
+      properties:
+        vendorDomain:
+          type: string
+          description: The domain used by the vendor.
+          example: vendor.com
+      required:
+      - vendorDomain
+    VendorCases:
+      type: object
+      properties:
+        vendorCaseId:
+          type: integer
+          description: Unique ID of vendor case.
+      required:
+      - vendorCaseId
+    VendorActivity:
+      type: object
+      properties:
+        eventTimeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorActivityEvent'
+      required:
+      - eventTimeline
     VendorDetail:
       type: object
       properties:
@@ -343,95 +433,14 @@ components:
       - vendorCountries
       - vendorDomain
       - vendorIpAddresses
-    VendorCaseTimeline:
+    PaginatedVendorCases:
       type: object
       properties:
-        eventTimestamp:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Timestamp of event
-          example: '2021-01-01T00:00:00Z'
-        senderAddress:
-          type: string
-          description: Sender Address
-          example: alice@vendor.com
-        recipientAddress:
-          type: string
-          description: Recipient Address
-          example: bob@company.com
-        subject:
-          type: string
-          description: Subject of the event
-          example: Click Me!
-        markedAs:
-          type: string
-          readOnly: true
-          description: Indication if your organisation has interacted with email
-          example: Malicious
-        threatId:
-          type: string
-          description: Unique ID of email threat. May be used in /threats endpoint
-          example: 184712ab-6d8b-47b3-89d3-a314efef79e2
-      required:
-      - eventTimestamp
-      - markedAs
-      - recipientAddress
-      - senderAddress
-      - subject
-      - threatId
-    VendorCaseDetails:
-      type: object
-      properties:
-        vendorCaseId:
-          type: integer
-          description: Unique ID of vendor case.
-          example: 0
-        vendorDomain:
-          type: string
-          description: Domain of vendor.
-          example: vendor.com
-        firstObservedTime:
-          type: string
-          format: date-time
-          description: The timestamp at which the first message associated with this vendor case arrived.
-          example: '2020-06-09T17:42:59Z'
-        lastModifiedTime:
-          type: string
-          format: date-time
-          description: The latest timestamp when details of the vendor case was last modified.
-          example: '2020-06-09T17:42:59Z'
-        insights:
+        vendorCases:
           type: array
           items:
-            $ref: '#/components/schemas/VendorCaseInsights'
-          readOnly: true
-          description: List of insights generated by Abnormal Security.
-        timeline:
-          type: array
-          items:
-            $ref: '#/components/schemas/VendorCaseTimeline'
-          readOnly: true
-          description: List of timeline events relevant to case.
-      required:
-      - firstObservedTime
-      - insights
-      - lastModifiedTime
-      - timeline
-      - vendorCaseId
-      - vendorDomain
-    VendorActivityEvent:
-      oneOf:
-      - $ref: '#/components/schemas/VendorFederatedEventTimeline'
-      - $ref: '#/components/schemas/VendorInvestigationEventTimeline'
-    PaginatedVendors:
-      type: object
-      properties:
-        vendors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vendors'
-          description: List of vendors.
+            $ref: '#/components/schemas/VendorCases'
+          description: List of vendor cases.
         pageNumber:
           type: integer
           default: 1
@@ -441,56 +450,7 @@ components:
           default: 2
           description: The next page number. Wil not be included in the response if there are no more pages of data or if no filter query parameter is passed in via the request
       required:
-      - vendors
-    VendorCases:
-      type: object
-      properties:
-        vendorCaseId:
-          type: integer
-          description: Unique ID of vendor case.
-      required:
-      - vendorCaseId
-    VendorFederatedEventTimeline:
-      type: object
-      properties:
-        eventTimestamp:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Timestamp of event
-          example: '2021-01-01T00:00:00Z'
-        eventType:
-          type: string
-          readOnly: true
-          description: Type of event detected
-          example: Federated Signal
-        suspiciousDomain:
-          type: string
-          readOnly: true
-          description: Domain which event originated from
-          example: alice@vendor.com
-        domainIp:
-          type: string
-          readOnly: true
-          description: IP address which event originated from
-          example: 127.0.0.1
-        ipGeolocation:
-          type: string
-          readOnly: true
-          description: Country Code which event originated from
-          example: US
-        attackGoal:
-          type: string
-          readOnly: true
-          description: Objectives behind event
-          example: malware and ransom
-      required:
-      - attackGoal
-      - domainIp
-      - eventTimestamp
-      - eventType
-      - ipGeolocation
-      - suspiciousDomain
+      - vendorCases
     VendorInvestigationEventTimeline:
       type: object
       properties:
@@ -544,15 +504,55 @@ components:
       - recipient
       - suspiciousDomain
       - threatId
+    VendorCaseDetails:
+      type: object
+      properties:
+        vendorCaseId:
+          type: integer
+          description: Unique ID of vendor case.
+          example: 0
+        vendorDomain:
+          type: string
+          description: Domain of vendor.
+          example: vendor.com
+        firstObservedTime:
+          type: string
+          format: date-time
+          description: The timestamp at which the first message associated with this vendor case arrived.
+          example: '2020-06-09T17:42:59Z'
+        lastModifiedTime:
+          type: string
+          format: date-time
+          description: The latest timestamp when details of the vendor case was last modified.
+          example: '2020-06-09T17:42:59Z'
+        insights:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorCaseInsights'
+          readOnly: true
+          description: List of insights generated by Abnormal Security.
+        timeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorCaseTimeline'
+          readOnly: true
+          description: List of timeline events relevant to case.
+      required:
+      - firstObservedTime
+      - insights
+      - lastModifiedTime
+      - timeline
+      - vendorCaseId
+      - vendorDomain
   responses:
-    TooManyRequestsError:
-      description: Request count exceeds allowed number of concurrent requests for this resource type
-    UnauthorizedError:
-      description: Access token is missing or invalid
     ForbiddenError:
       description: Access to the resource is forbidden (e.g. IP not in allowlist)
     NotFoundError:
       description: Invalid user input when using the filter query parameter. Will return various error messages
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    TooManyRequestsError:
+      description: Request count exceeds allowed number of concurrent requests for this resource type
   securitySchemes:
     BearerAuth:
       type: http
