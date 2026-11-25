@@ -134,16 +134,22 @@ Postman and Open Collection request collections.
 
 OpenAPI overlays, including conversational phrasing for each operation.
 
-- [Abnormal Client Api Overlay](https://apis.io/overlays/abnormal/abnormal-client-api-overlay/)
+- [Abnormal AI Client Api Overlay](https://apis.io/overlays/abnormal/abnormal-client-api-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Abnormal AI API Rules](https://apis.io/rules/abnormal/abnormal-rules/)
 
 #### Security (4)
 
 Authentication, trust centre, and vulnerability disclosure.
 
-- [Abnormal Authentication](https://apis.io/security/abnormal/abnormal-authentication/)
-- [Abnormal Domain Security](https://apis.io/security/abnormal/abnormal-domain-security/)
-- [Abnormal Trust Center](https://apis.io/security/abnormal/abnormal-trust-center/)
-- [Abnormal Vulnerability Disclosure](https://apis.io/security/abnormal/abnormal-vulnerability-disclosure/)
+- [Abnormal AI Authentication](https://apis.io/security/abnormal/abnormal-authentication/)
+- [Abnormal AI Domain Security](https://apis.io/security/abnormal/abnormal-domain-security/)
+- [Abnormal AI Trust Center](https://apis.io/security/abnormal/abnormal-trust-center/)
+- [Abnormal AI Vulnerability Disclosure](https://apis.io/security/abnormal/abnormal-vulnerability-disclosure/)
 
 ## Where to find this API
 
@@ -165,18 +171,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 53.2** — developing · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 55.5** — strong · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
 | Discoverability | 73.2 |
 | Contract quality | 57.8 |
-| Contract governance | 4.5 |
-| Operational transparency | 52.6 |
+| Contract governance | 18.2 |
+| Operational transparency | 50.0 |
 | Developer ergonomics | 57.7 |
-| Access clarity | 50.0 |
+| Access clarity | 55.3 |
 
-**Agent readiness 41.3** — agent-ready (gated down from agent-native)
+**Agent readiness 40.5** — agent-ready (gated down from agent-native)
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -201,6 +207,10 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agentic Commerce | — |
 | Pagination Ratio | — |
 | Operation Distinctiveness | distinct |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | na |
 
 **Regulatory alignment 36.4** — Horizontal (data, software, accessibility, platform)
 
